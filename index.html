@@ -314,6 +314,12 @@
       border: 1px solid #eab308;
     }
 
+    .status-ignore {
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+      border: 1px solid #ef4444;
+    }
+
     .mt-2 {
       margin-top: 0.5rem;
     }
@@ -344,6 +350,38 @@
 
     .text-sm {
       font-size: 0.875rem;
+    }
+
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid #3b82f6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
     }
   </style>
 </head>
@@ -549,7 +587,7 @@
             total: data.length,
             worthDoing: data.filter(g => g.isCandidate).length,
             ignore: data.filter(g => !g.isCandidate).length,
-            pending: data.filter(g => g.status === 'pending').length
+            pending: 0 // 不再使用status字段
           });
           setMessage(`✅ 加载了 ${data.length} 个游戏`);
           const timestamp = new Date().toLocaleString('zh-CN');
@@ -584,7 +622,8 @@
             headers: {
               'Content-Type': 'application/json',
             },
-            mode: 'cors'
+            mode: 'cors',
+            credentials: 'omit'
           });
           if (response.ok) {
             setMessage('✅ 完整检测执行成功！正在更新游戏数据...');
@@ -759,6 +798,43 @@
         setLoading(false);
       };
 
+      // 筛选和排序游戏数据
+      const filteredAndSortedGames = React.useMemo(() => {
+        let result = [...games];
+
+        // 筛选
+        if (statusFilter === 'worth') {
+          result = result.filter(game => game.isCandidate);
+        } else if (statusFilter === 'ignore') {
+          result = result.filter(game => !game.isCandidate);
+        }
+
+        // 排序
+        result.sort((a, b) => {
+          let aValue, bValue;
+          switch (sortBy) {
+            case '总分':
+              aValue = a.newWordScore || 0;
+              bValue = b.newWordScore || 0;
+              break;
+            case '趋势分':
+              aValue = a.trendScore || 0;
+              bValue = b.trendScore || 0;
+              break;
+            case 'YouTube分':
+              aValue = a.youtubeCount || 0;
+              bValue = b.youtubeCount || 0;
+              break;
+            default:
+              aValue = 0;
+              bValue = 0;
+          }
+          return sortOrder === '降序' ? bValue - aValue : aValue - bValue;
+        });
+
+        return result;
+      }, [games, statusFilter, sortBy, sortOrder]);
+
       // 组件加载时获取游戏数据
       React.useEffect(() => {
         fetchGames();
@@ -820,6 +896,14 @@
             fontWeight: 'bold'
           }
         }, message),
+
+        // 加载中遮罩
+        loading && React.createElement('div', {
+          key: 'loading',
+          className: 'loading-overlay'
+        }, React.createElement('div', {
+          className: 'loading-spinner'
+        })),
 
         // Main Content
         React.createElement('main', {
@@ -974,7 +1058,7 @@
           // Game List Table
           React.createElement(GameTable, {
             key: 'game-table',
-            games: games
+            games: filteredAndSortedGames
           }),
 
           // Task Log

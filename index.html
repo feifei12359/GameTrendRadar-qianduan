@@ -377,7 +377,7 @@
     function ActionButton({ icon, label, onClick }) {
       return React.createElement('button', {
         onClick: onClick,
-        className: 'bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 flex items-center gap-2 hover:bg-gray-700 transition-colors'
+        className: 'bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 flex items-center gap-2 hover:bg-gray-700 transition-colors text-white'
       }, [
         typeof icon === 'string' ?
           React.createElement('span', { key: 'icon' }, icon) :
@@ -831,13 +831,13 @@
             }, [
               React.createElement('label', {
                 key: 'status-label',
-                className: 'text-sm text-gray-400'
+                className: 'text-sm text-white'
               }, '状态筛选:'),
               React.createElement('select', {
                 key: 'status-select',
                 value: statusFilter,
                 onChange: (e) => setStatusFilter(e.target.value),
-                className: 'bg-gray-900 border border-gray-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500'
+                className: 'bg-gray-900 border border-gray-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500 text-white'
               }, [
                 React.createElement('option', { key: 'all' }, '全部'),
                 React.createElement('option', { key: 'worth' }, '值得做'),
@@ -852,13 +852,13 @@
             }, [
               React.createElement('label', {
                 key: 'sort-label',
-                className: 'text-sm text-gray-400'
+                className: 'text-sm text-white'
               }, '排序:'),
               React.createElement('select', {
                 key: 'sort-select',
                 value: sortBy,
                 onChange: (e) => setSortBy(e.target.value),
-                className: 'bg-gray-900 border border-gray-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500'
+                className: 'bg-gray-900 border border-gray-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500 text-white'
               }, [
                 React.createElement('option', { key: 'total' }, '总分'),
                 React.createElement('option', { key: 'trend' }, '趋势分'),
@@ -874,7 +874,7 @@
                 key: 'order-select',
                 value: sortOrder,
                 onChange: (e) => setSortOrder(e.target.value),
-                className: 'bg-gray-900 border border-gray-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500'
+                className: 'bg-gray-900 border border-gray-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500 text-white'
               }, [
                 React.createElement('option', { key: 'desc' }, '降序'),
                 React.createElement('option', { key: 'asc' }, '升序')

@@ -68,7 +68,7 @@
     }
 
     .text-gray-400 {
-      color: white;
+      color: #9ca3af;
     }
 
     .mt-1 {
@@ -368,7 +368,7 @@
         }, value),
         React.createElement('div', {
           key: 'label',
-          className: 'text-sm text-gray-400'
+          className: 'text-sm text-white'
         }, label)
       ]);
     }
@@ -474,7 +474,7 @@
           className: 'p-4 max-h-60 overflow-y-auto'
         }, tasks.length === 0 ?
           React.createElement('div', {
-            className: 'text-gray-400 text-center py-8'
+            className: 'text-white text-center py-8'
           }, '暂无任务记录') :
           tasks.map((task, index) => {
             const isError = task.includes('失败') || task.includes('错误');
@@ -736,7 +736,7 @@
             }, '📊 GameTrend Radar'),
             React.createElement('p', {
               key: 'subtitle',
-              className: 'text-sm text-gray-400 mt-1'
+              className: 'text-sm text-white mt-1'
             }, 'HTML5 游戏趋势检测工具')
           ]),
           React.createElement('button', {

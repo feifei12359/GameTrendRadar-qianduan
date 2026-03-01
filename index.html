@@ -1191,12 +1191,22 @@
     try {
       var root = document.getElementById('root');
       if (root) {
-        ReactDOM.render(React.createElement(App), root);
+        // 先测试简单的React元素
+        var testElement = React.createElement('div', {
+          style: { color: 'white', padding: '20px', fontSize: '24px' }
+        }, 'GameTrend Radar 正在加载...');
+        ReactDOM.render(testElement, root);
+
+        // 延迟加载主应用组件
+        setTimeout(function () {
+          ReactDOM.render(React.createElement(App, null), root);
+        }, 100);
       } else {
         document.body.innerHTML = '<div style="color: red; padding: 20px;">错误: 找不到根元素 #root</div>';
       }
     } catch (error) {
       document.body.innerHTML = '<div style="color: red; padding: 20px;">React渲染错误: ' + error.message + '</div>';
+      console.error('React渲染错误:', error);
     }
   </script>
 </body>

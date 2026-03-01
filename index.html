@@ -527,7 +527,13 @@
       // 从后端API获取游戏数据
       const fetchGames = async () => {
         try {
-          const response = await fetch(`${API_BASE_URL}/api/games`);
+          const response = await fetch(`${API_BASE_URL}/api/games`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            mode: 'cors'
+          });
           if (response.ok) {
             const data = await response.json();
             setGames(data);
@@ -564,7 +570,13 @@
         setTasks(prev => [...prev, `${timestamp} - 开始完整检测...`]);
 
         try {
-          const response = await fetch(`${API_BASE_URL}/api/daily-job`, { method: 'POST' });
+          const response = await fetch(`${API_BASE_URL}/api/daily-job`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            mode: 'cors'
+          });
           if (response.ok) {
             setMessage('✅ 完整检测执行成功！正在更新游戏数据...');
             setTasks(prev => [...prev, `${timestamp} - 完整检测执行成功`]);
@@ -593,7 +605,13 @@
         setTasks(prev => [...prev, `${timestamp} - 开始抓取游戏...`]);
 
         try {
-          const response = await fetch(`${API_BASE_URL}/api/grab-games`, { method: 'POST' });
+          const response = await fetch(`${API_BASE_URL}/api/grab-games`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            mode: 'cors'
+          });
           if (response.ok) {
             setTasks(prev => [...prev, `${timestamp} - 抓取游戏成功`]);
             setTimeout(fetchGames, 1000);
@@ -614,7 +632,13 @@
         setTasks(prev => [...prev, `${timestamp} - 开始趋势检测...`]);
 
         try {
-          const response = await fetch(`${API_BASE_URL}/api/detect-trends`, { method: 'POST' });
+          const response = await fetch(`${API_BASE_URL}/api/detect-trends`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            mode: 'cors'
+          });
           if (response.ok) {
             setTasks(prev => [...prev, `${timestamp} - 趋势检测成功`]);
             setTimeout(fetchGames, 1000);
@@ -635,7 +659,13 @@
         setTasks(prev => [...prev, `${timestamp} - 开始YouTube检测...`]);
 
         try {
-          const response = await fetch(`${API_BASE_URL}/api/detect-youtube`, { method: 'POST' });
+          const response = await fetch(`${API_BASE_URL}/api/detect-youtube`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            mode: 'cors'
+          });
           if (response.ok) {
             setTasks(prev => [...prev, `${timestamp} - YouTube检测成功`]);
             setTimeout(fetchGames, 1000);
@@ -656,7 +686,13 @@
         setTasks(prev => [...prev, `${timestamp} - 开始更新评分...`]);
 
         try {
-          const response = await fetch(`${API_BASE_URL}/api/update-scores`, { method: 'POST' });
+          const response = await fetch(`${API_BASE_URL}/api/update-scores`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            mode: 'cors'
+          });
           if (response.ok) {
             setTasks(prev => [...prev, `${timestamp} - 更新评分成功`]);
             setTimeout(fetchGames, 1000);

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>React Test</title>
+</head>
+
+<body>
+  <div id="root"></div>
+  <div id="debug" style="padding:20px; color:white; background:#333; border:2px solid #666;">
+    <h3>React测试</h3>
+    <p id="status">等待加载...</p>
+  </div>
+
+  <!-- 使用CDN加载React和ReactDOM -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+  <script>
+    console.log('=== test-react.html loaded ===');
+    document.getElementById('status').textContent = 'HTML已加载';
+
+    // 检查React和ReactDOM是否可用
+    console.log('React:', typeof React);
+    console.log('ReactDOM:', typeof ReactDOM);
+
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('=== DOMContentLoaded ===');
+      document.getElementById('status').textContent = 'DOM已就绪，等待React应用...';
+
+      // 尝试渲染一个简单的React组件
+      try {
+        const root = document.getElementById('root');
+        if (root) {
+          console.log('Rendering React app...');
+
+          // 创建一个简单的React组件
+          function TestComponent() {
+            return React.createElement('div', {
+              style: {
+                padding: '20px',
+                backgroundColor: '#444',
+                color: 'white',
+                textAlign: 'center'
+              }
+            }, 'React测试成功！');
+          }
+
+          // 渲染组件
+          ReactDOM.createRoot(root).render(React.createElement(TestComponent));
+
+          document.getElementById('status').textContent = 'React测试成功！';
+          console.log('React test successful');
+        } else {
+          console.error('Root element not found');
+          document.getElementById('status').textContent = 'Root元素未找到';
+        }
+      } catch (e) {
+        console.error('React test failed:', e);
+        document.getElementById('status').textContent = 'React测试失败: ' + e.message;
+      }
+    });
+  </script>
+</body>
+
+</html>

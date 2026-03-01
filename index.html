@@ -442,15 +442,14 @@
                 key: game.id || index,
                 className: 'tr'
               }, [
-                React.createElement('td', { key: 'name', className: 'td' }, game.gameName || '未知'),
-                React.createElement('td', { key: 'source', className: 'td' }, game.source || '未知'),
+                React.createElement('td', { key: 'name', className: 'td' }, game.name || '未知'),
                 React.createElement('td', { key: 'trend', className: 'td' }, game.trendScore || 0),
-                React.createElement('td', { key: 'youtube', className: 'td' }, game.ytScore || 0),
-                React.createElement('td', { key: 'total', className: 'td' }, game.totalScore || 0),
+                React.createElement('td', { key: 'youtube', className: 'td' }, game.youtubeCount || 0),
+                React.createElement('td', { key: 'total', className: 'td' }, game.newWordScore || 0),
                 React.createElement('td', { key: 'status', className: 'td' },
                   React.createElement('span', {
-                    className: `status-badge ${getStatusClass(game.status)}`
-                  }, getStatusText(game.status))
+                    className: `status-badge ${game.isCandidate ? 'status-worth' : 'status-ignore'}`
+                  }, game.isCandidate ? '候选' : '忽略')
                 )
               ]))
           )
@@ -611,6 +610,8 @@
       // 抓取游戏
       const handleGrabGames = async () => {
         setLoading(true);
+        setError(null);
+        setMessage('🔄 正在抓取游戏...');
         const timestamp = new Date().toLocaleString('zh-CN');
         setTasks(prev => [...prev, `${timestamp} - 开始抓取游戏...`]);
 
@@ -620,15 +621,24 @@
             headers: {
               'Content-Type': 'application/json',
             },
-            mode: 'cors'
+            mode: 'cors',
+            credentials: 'omit'
           });
           if (response.ok) {
+            setMessage('✅ 抓取游戏成功！');
             setTasks(prev => [...prev, `${timestamp} - 抓取游戏成功`]);
-            setTimeout(fetchGames, 1000);
+            setTimeout(() => {
+              fetchGames();
+            }, 1000);
           } else {
+            setMessage('❌ 抓取游戏失败');
+            setError(`HTTP错误: ${response.status}`);
             setTasks(prev => [...prev, `${timestamp} - 抓取游戏失败`]);
           }
         } catch (err) {
+          console.error('抓取游戏错误:', err);
+          setMessage('❌ 抓取游戏出错');
+          setError(err.message);
           setTasks(prev => [...prev, `${timestamp} - 抓取游戏出错: ${err.message}`]);
         }
 
@@ -638,6 +648,8 @@
       // 趋势检测
       const handleTrendDetection = async () => {
         setLoading(true);
+        setError(null);
+        setMessage('🔄 正在执行趋势检测...');
         const timestamp = new Date().toLocaleString('zh-CN');
         setTasks(prev => [...prev, `${timestamp} - 开始趋势检测...`]);
 
@@ -647,15 +659,24 @@
             headers: {
               'Content-Type': 'application/json',
             },
-            mode: 'cors'
+            mode: 'cors',
+            credentials: 'omit'
           });
           if (response.ok) {
+            setMessage('✅ 趋势检测成功！');
             setTasks(prev => [...prev, `${timestamp} - 趋势检测成功`]);
-            setTimeout(fetchGames, 1000);
+            setTimeout(() => {
+              fetchGames();
+            }, 1000);
           } else {
+            setMessage('❌ 趋势检测失败');
+            setError(`HTTP错误: ${response.status}`);
             setTasks(prev => [...prev, `${timestamp} - 趋势检测失败`]);
           }
         } catch (err) {
+          console.error('趋势检测错误:', err);
+          setMessage('❌ 趋势检测出错');
+          setError(err.message);
           setTasks(prev => [...prev, `${timestamp} - 趋势检测出错: ${err.message}`]);
         }
 
@@ -665,6 +686,8 @@
       // YouTube检测
       const handleYouTubeDetection = async () => {
         setLoading(true);
+        setError(null);
+        setMessage('🔄 正在执行YouTube检测...');
         const timestamp = new Date().toLocaleString('zh-CN');
         setTasks(prev => [...prev, `${timestamp} - 开始YouTube检测...`]);
 
@@ -674,15 +697,24 @@
             headers: {
               'Content-Type': 'application/json',
             },
-            mode: 'cors'
+            mode: 'cors',
+            credentials: 'omit'
           });
           if (response.ok) {
+            setMessage('✅ YouTube检测成功！');
             setTasks(prev => [...prev, `${timestamp} - YouTube检测成功`]);
-            setTimeout(fetchGames, 1000);
+            setTimeout(() => {
+              fetchGames();
+            }, 1000);
           } else {
+            setMessage('❌ YouTube检测失败');
+            setError(`HTTP错误: ${response.status}`);
             setTasks(prev => [...prev, `${timestamp} - YouTube检测失败`]);
           }
         } catch (err) {
+          console.error('YouTube检测错误:', err);
+          setMessage('❌ YouTube检测出错');
+          setError(err.message);
           setTasks(prev => [...prev, `${timestamp} - YouTube检测出错: ${err.message}`]);
         }
 
@@ -692,6 +724,8 @@
       // 更新评分
       const handleUpdateScore = async () => {
         setLoading(true);
+        setError(null);
+        setMessage('🔄 正在更新评分...');
         const timestamp = new Date().toLocaleString('zh-CN');
         setTasks(prev => [...prev, `${timestamp} - 开始更新评分...`]);
 
@@ -701,15 +735,24 @@
             headers: {
               'Content-Type': 'application/json',
             },
-            mode: 'cors'
+            mode: 'cors',
+            credentials: 'omit'
           });
           if (response.ok) {
+            setMessage('✅ 更新评分成功！');
             setTasks(prev => [...prev, `${timestamp} - 更新评分成功`]);
-            setTimeout(fetchGames, 1000);
+            setTimeout(() => {
+              fetchGames();
+            }, 1000);
           } else {
+            setMessage('❌ 更新评分失败');
+            setError(`HTTP错误: ${response.status}`);
             setTasks(prev => [...prev, `${timestamp} - 更新评分失败`]);
           }
         } catch (err) {
+          console.error('更新评分错误:', err);
+          setMessage('❌ 更新评分出错');
+          setError(err.message);
           setTasks(prev => [...prev, `${timestamp} - 更新评分出错: ${err.message}`]);
         }
 

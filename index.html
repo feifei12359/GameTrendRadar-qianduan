@@ -532,31 +532,37 @@
             headers: {
               'Content-Type': 'application/json',
             },
-            mode: 'cors'
+            mode: 'cors',
+            credentials: 'omit'
           });
-          if (response.ok) {
-            const data = await response.json();
-            setGames(data);
-            setStats({
-              total: data.length,
-              worthDoing: data.filter(g => g.status === 'worth_doing').length,
-              ignore: data.filter(g => g.status === 'observe').length,
-              pending: data.filter(g => g.status === 'pending').length
-            });
-            setMessage(`✅ 加载了 ${data.length} 个游戏`);
-            const timestamp = new Date().toLocaleString('zh-CN');
-            setTasks(prev => [...prev, `${timestamp} - 成功加载游戏数据`]);
-          } else {
-            setMessage('❌ 获取游戏数据失败');
-            setError(`HTTP错误: ${response.status}`);
-            const timestamp = new Date().toLocaleString('zh-CN');
-            setTasks(prev => [...prev, `${timestamp} - 获取游戏数据失败`]);
+
+          if (!response.ok) {
+            throw new Error(`HTTP错误: ${response.status}`);
           }
+
+          const data = await response.json();
+          setGames(data);
+          setStats({
+            total: data.length,
+            worthDoing: data.filter(g => g.status === 'worth_doing').length,
+            ignore: data.filter(g => g.status === 'observe').length,
+            pending: data.filter(g => g.status === 'pending').length
+          });
+          setMessage(`✅ 加载了 ${data.length} 个游戏`);
+          const timestamp = new Date().toLocaleString('zh-CN');
+          setTasks(prev => [...prev, `${timestamp} - 成功加载游戏数据`]);
         } catch (err) {
+          console.error('获取游戏数据错误:', err);
           setMessage('❌ 获取游戏数据出错');
           setError(err.message);
           const timestamp = new Date().toLocaleString('zh-CN');
           setTasks(prev => [...prev, `${timestamp} - 获取游戏数据出错: ${err.message}`]);
+
+          // 3秒后重试
+          setTimeout(() => {
+            setMessage('🔄 正在重试连接...');
+            fetchGames();
+          }, 3000);
         }
       };
 

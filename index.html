@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 
 <head>
   <meta charset="UTF-8" />
@@ -9,119 +9,297 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #0a0f14;
+      background: #0f1419;
       color: white;
     }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
+    .min-h-screen {
+      min-height: 100vh;
     }
 
-    .header {
-      text-align: center;
-      margin-bottom: 30px;
+    .bg-gray-900 {
+      background-color: #0f1419;
     }
 
-    .button {
-      background: #007acc;
+    .text-white {
       color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
+    }
+
+    .border-b {
+      border-bottom: 1px solid;
+    }
+
+    .border-gray-800 {
+      border-color: #2a3a4a;
+    }
+
+    .px-6 {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+
+    .py-4 {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+
+    .flex {
+      display: flex;
+    }
+
+    .items-center {
+      align-items: center;
+    }
+
+    .justify-between {
+      justify-content: space-between;
+    }
+
+    .gap-2 {
+      gap: 0.5rem;
+    }
+
+    .text-2xl {
+      font-size: 1.5rem;
+    }
+
+    .text-sm {
+      font-size: 0.875rem;
+    }
+
+    .text-gray-400 {
+      color: #9ca3af;
+    }
+
+    .mt-1 {
+      margin-top: 0.25rem;
+    }
+
+    .bg-blue-600 {
+      background-color: #007acc;
+    }
+
+    .hover\:bg-blue-700:hover {
+      background-color: #005a9e;
+    }
+
+    .px-6 {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+
+    .py-2 {
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+    }
+
+    .rounded-lg {
+      border-radius: 0.5rem;
+    }
+
+    .transition-colors {
+      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      transition-duration: 150ms;
+    }
+
+    .cursor-pointer {
       cursor: pointer;
     }
 
-    .button:disabled {
-      background: #666;
-      cursor: not-allowed;
+    .p-6 {
+      padding: 1.5rem;
     }
 
-    .error {
-      background: #ff4444;
-      color: white;
-      padding: 10px;
-      border-radius: 5px;
-      margin: 10px 0;
+    .space-y-6 {
+      gap: 1.5rem;
     }
 
-    .success {
-      background: #44ff44;
-      color: black;
-      padding: 10px;
-      border-radius: 5px;
-      margin: 10px 0;
-    }
-
-    .stats-grid {
+    .grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 20px;
-      margin-bottom: 30px;
     }
 
-    .stat-card {
-      background: #1a2332;
-      border-radius: 10px;
-      padding: 20px;
+    .grid-cols-1 {
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+
+    @media (min-width: 768px) {
+      .md\:grid-cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .lg\:grid-cols-4 {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    .gap-4 {
+      gap: 1rem;
+    }
+
+    .bg-gray-800 {
+      background-color: #1a2332;
+    }
+
+    .border {
+      border: 1px solid;
+    }
+
+    .p-4 {
+      padding: 1rem;
+    }
+
+    .text-center {
       text-align: center;
-      border: 2px solid;
     }
 
-    .stat-value {
-      font-size: 2.5rem;
-      font-weight: bold;
-      margin-bottom: 10px;
+    .text-3xl {
+      font-size: 1.875rem;
     }
 
-    .stat-label {
-      color: #aaa;
-      font-size: 0.9rem;
+    .font-bold {
+      font-weight: 700;
     }
 
-    .games-table {
-      background: #1a2332;
-      border-radius: 10px;
-      overflow: hidden;
+    .mb-2 {
+      margin-bottom: 0.5rem;
     }
 
-    .games-header {
-      padding: 20px;
-      border-bottom: 1px solid #2a3a4a;
+    .border-gray-700 {
+      border-color: #374151;
     }
 
-    table {
+    .border-green-600 {
+      border-color: #10b981;
+    }
+
+    .border-red-600 {
+      border-color: #ef4444;
+    }
+
+    .border-yellow-600 {
+      border-color: #eab308;
+    }
+
+    .text-green-500 {
+      color: #10b981;
+    }
+
+    .text-red-500 {
+      color: #ef4444;
+    }
+
+    .text-yellow-500 {
+      color: #eab308;
+    }
+
+    .rounded-lg {
+      border-radius: 0.5rem;
+    }
+
+    .mb-4 {
+      margin-bottom: 1rem;
+    }
+
+    .flex-wrap {
+      flex-wrap: wrap;
+    }
+
+    .gap-3 {
+      gap: 0.75rem;
+    }
+
+    .text-lg {
+      font-size: 1.125rem;
+    }
+
+    .w-4 {
+      width: 1rem;
+    }
+
+    .h-4 {
+      height: 1rem;
+    }
+
+    .flex-wrap {
+      flex-wrap: wrap;
+    }
+
+    .gap-4 {
+      gap: 1rem;
+    }
+
+    .text-gray-400 {
+      color: #9ca3af;
+    }
+
+    .bg-gray-900 {
+      background-color: #0f1419;
+    }
+
+    .border-gray-700 {
+      border-color: #374151;
+    }
+
+    .px-3 {
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+    }
+
+    .py-1\.5 {
+      padding-top: 0.375rem;
+      padding-bottom: 0.375rem;
+    }
+
+    .focus\:outline-none {
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+    }
+
+    .focus\:border-blue-500 {
+      border-color: #3b82f6;
+    }
+
+    .overflow-x-auto {
+      overflow-x: auto;
+    }
+
+    .w-full {
       width: 100%;
+    }
+
+    .border-collapse {
       border-collapse: collapse;
     }
 
-    th,
-    td {
-      padding: 12px 16px;
+    .th,
+    .td {
+      padding: 0.75rem 1rem;
       text-align: left;
       border-bottom: 1px solid #2a3a4a;
     }
 
-    th {
-      color: #aaa;
+    .th {
+      color: #9ca3af;
       font-weight: normal;
     }
 
-    tr:hover {
+    .tr:hover {
       background: #1e2a3a;
     }
 
     .status-badge {
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 0.8rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.75rem;
     }
 
     .status-worth {
-      background: rgba(34, 197, 94, 0.2);
-      color: #22c55e;
-      border: 1px solid #22c55e;
+      background: rgba(16, 185, 129, 0.2);
+      color: #10b981;
+      border: 1px solid #10b981;
     }
 
     .status-observe {
@@ -135,6 +313,38 @@
       color: #eab308;
       border: 1px solid #eab308;
     }
+
+    .mt-2 {
+      margin-top: 0.5rem;
+    }
+
+    .bg-red-500 {
+      background-color: #ef4444;
+    }
+
+    .text-white {
+      color: white;
+    }
+
+    .p-3 {
+      padding: 0.75rem;
+    }
+
+    .rounded-md {
+      border-radius: 0.375rem;
+    }
+
+    .bg-blue-500 {
+      background-color: #3b82f6;
+    }
+
+    .bg-green-500 {
+      background-color: #10b981;
+    }
+
+    .text-sm {
+      font-size: 0.875rem;
+    }
   </style>
 </head>
 
@@ -144,73 +354,40 @@
   <!-- 加载React和ReactDOM -->
   <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/lucide-react@latest"></script>
 
   <script>
-    // 完整的GameTrend Radar应用
-    function App() {
-      const [games, setGames] = React.useState([]);
-      const [loading, setLoading] = React.useState(false);
-      const [message, setMessage] = React.useState('页面加载中...');
-      const [error, setError] = React.useState(null);
+    // 组件：统计卡片
+    function StatCard({ value, label, borderColor, valueColor }) {
+      return React.createElement('div', {
+        className: `bg-gray-800 border ${borderColor} rounded-lg p-4 text-center`
+      }, [
+        React.createElement('div', {
+          key: 'value',
+          className: `text-3xl font-bold mb-2 ${valueColor}`
+        }, value),
+        React.createElement('div', {
+          key: 'label',
+          className: 'text-sm text-gray-400'
+        }, label)
+      ]);
+    }
 
-      // 配置后端API地址
-      const API_BASE_URL = 'https://game-trend-radar-backend.railway.app';
+    // 组件：操作按钮
+    function ActionButton({ icon, label, onClick }) {
+      return React.createElement('button', {
+        onClick: onClick,
+        className: 'bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 flex items-center gap-2 hover:bg-gray-700 transition-colors'
+      }, [
+        typeof icon === 'string' ?
+          React.createElement('span', { key: 'icon' }, icon) :
+          icon,
+        React.createElement('span', { key: 'label' }, label)
+      ]);
+    }
 
-      // 从后端API获取游戏数据
-      const fetchGames = async () => {
-        try {
-          const response = await fetch(`${API_BASE_URL}/api/games`);
-          if (response.ok) {
-            const data = await response.json();
-            setGames(data);
-            setMessage(`✅ 加载了 ${data.length} 个游戏`);
-          } else {
-            setMessage('❌ 获取游戏数据失败');
-            setError(`HTTP错误: ${response.status}`);
-          }
-        } catch (err) {
-          setMessage('❌ 获取游戏数据出错');
-          setError(err.message);
-        }
-      };
-
-      // 执行完整检测
-      const runFullCheck = async () => {
-        setLoading(true);
-        setError(null);
-        setMessage('🔄 正在执行完整检测...');
-
-        try {
-          const response = await fetch(`${API_BASE_URL}/api/daily-job`, { method: 'POST' });
-          if (response.ok) {
-            setMessage('✅ 完整检测执行成功！正在更新游戏数据...');
-            // 检测完成后重新获取游戏数据
-            setTimeout(fetchGames, 1000);
-          } else {
-            setMessage('❌ 完整检测执行失败');
-            setError(`HTTP错误: ${response.status}`);
-          }
-        } catch (err) {
-          setMessage('❌ 完整检测出错');
-          setError(err.message);
-        }
-
-        setLoading(false);
-      };
-
-      // 组件加载时获取游戏数据
-      React.useEffect(() => {
-        fetchGames();
-      }, []);
-
-      // 统计数据
-      const stats = {
-        total: games.length,
-        worthDoing: games.filter(g => g.status === 'worth_doing').length,
-        observe: games.filter(g => g.status === 'observe').length,
-        pending: games.filter(g => g.status === 'pending').length
-      };
-
+    // 组件：游戏表格
+    function GameTable({ games }) {
       const getStatusClass = (status) => {
         switch (status) {
           case 'worth_doing': return 'status-worth';
@@ -227,221 +404,495 @@
         }
       };
 
-      // 渲染完整的界面
       return React.createElement('div', {
-        style: {
-          minHeight: '100vh',
-          background: '#0a0f14',
-          color: 'white',
-          padding: '20px'
-        }
+        className: 'bg-gray-800 border border-gray-700 rounded-lg overflow-hidden'
       }, [
-        // 头部
         React.createElement('div', {
           key: 'header',
-          style: {
-            textAlign: 'center',
-            marginBottom: '30px',
-            borderBottom: '1px solid #2a3a4a',
-            paddingBottom: '20px'
-          }
+          className: 'p-4 border-b border-gray-700'
+        }, React.createElement('h2', {
+          className: 'text-lg font-semibold'
+        }, `游戏列表 (${games.length})`)),
+        React.createElement('div', {
+          key: 'content',
+          className: 'overflow-x-auto'
+        }, React.createElement('table', {
+          className: 'w-full border-collapse'
         }, [
-          React.createElement('h1', {
-            key: 'title',
-            style: { fontSize: '2.5rem', marginBottom: '10px' }
-          }, '🎮 GameTrend Radar'),
-          React.createElement('p', {
-            key: 'subtitle',
-            style: { color: '#aaa', fontSize: '1.1rem' }
-          }, 'HTML5 游戏趋势检测工具')
-        ]),
+          React.createElement('thead', { key: 'thead' }, React.createElement('tr', {}, [
+            React.createElement('th', { key: 'name', className: 'th' }, '游戏名称'),
+            React.createElement('th', { key: 'source', className: 'th' }, '来源'),
+            React.createElement('th', { key: 'trend', className: 'th' }, '趋势分'),
+            React.createElement('th', { key: 'youtube', className: 'th' }, 'YOUTUBE'),
+            React.createElement('th', { key: 'total', className: 'th' }, '总分'),
+            React.createElement('th', { key: 'status', className: 'th' }, '状态')
+          ])),
+          React.createElement('tbody', { key: 'tbody' },
+            games.length === 0 ?
+              React.createElement('tr', { key: 'empty' }, React.createElement('td', {
+                colSpan: 6,
+                className: 'td',
+                style: {
+                  textAlign: 'center',
+                  padding: '40px',
+                  color: '#9ca3af'
+                }
+              }, '暂无游戏数据，请点击"运行完整检测"开始抓取')) :
+              games.map((game, index) => React.createElement('tr', {
+                key: game.id || index,
+                className: 'tr'
+              }, [
+                React.createElement('td', { key: 'name', className: 'td' }, game.gameName || '未知'),
+                React.createElement('td', { key: 'source', className: 'td' }, game.source || '未知'),
+                React.createElement('td', { key: 'trend', className: 'td' }, game.trendScore || 0),
+                React.createElement('td', { key: 'youtube', className: 'td' }, game.ytScore || 0),
+                React.createElement('td', { key: 'total', className: 'td' }, game.totalScore || 0),
+                React.createElement('td', { key: 'status', className: 'td' },
+                  React.createElement('span', {
+                    className: `status-badge ${getStatusClass(game.status)}`
+                  }, getStatusText(game.status))
+                )
+              ]))
+          )
+        ]))
+      ]);
+    }
+
+    // 组件：任务日志
+    function TaskLog({ tasks }) {
+      return React.createElement('div', {
+        className: 'bg-gray-800 border border-gray-700 rounded-lg'
+      }, [
+        React.createElement('div', {
+          key: 'header',
+          className: 'p-4 border-b border-gray-700'
+        }, React.createElement('h2', {
+          className: 'text-lg font-semibold'
+        }, '任务日志')),
+        React.createElement('div', {
+          key: 'content',
+          className: 'p-4 max-h-60 overflow-y-auto'
+        }, tasks.length === 0 ?
+          React.createElement('div', {
+            className: 'text-gray-400 text-center py-8'
+          }, '暂无任务记录') :
+          tasks.map((task, index) => {
+            const isError = task.includes('失败') || task.includes('错误');
+            const isSuccess = task.includes('成功');
+            const isInfo = !isError && !isSuccess;
+
+            let bgColor = 'bg-blue-500';
+            if (isError) bgColor = 'bg-red-500';
+            if (isSuccess) bgColor = 'bg-green-500';
+
+            return React.createElement('div', {
+              key: index,
+              className: `flex items-start gap-2 mb-2`
+            }, [
+              React.createElement('div', {
+                key: 'indicator',
+                className: `${bgColor} w-2 h-2 rounded-full mt-2`
+              }),
+              React.createElement('div', {
+                key: 'task',
+                className: 'text-sm flex-1'
+              }, task)
+            ]);
+          })
+        )
+      ]);
+    }
+
+    // 主应用组件
+    function App() {
+      const [stats, setStats] = React.useState({
+        total: 0,
+        worthDoing: 0,
+        ignore: 0,
+        pending: 0,
+      });
+
+      const [games, setGames] = React.useState([]);
+      const [tasks, setTasks] = React.useState([]);
+      const [statusFilter, setStatusFilter] = React.useState('全部');
+      const [sortBy, setSortBy] = React.useState('总分');
+      const [sortOrder, setSortOrder] = React.useState('降序');
+      const [loading, setLoading] = React.useState(false);
+      const [message, setMessage] = React.useState('页面加载中...');
+      const [error, setError] = React.useState(null);
+
+      // 配置后端API地址
+      const API_BASE_URL = 'https://game-trend-radar-backend.railway.app';
+
+      // 从后端API获取游戏数据
+      const fetchGames = async () => {
+        try {
+          const response = await fetch(`${API_BASE_URL}/api/games`);
+          if (response.ok) {
+            const data = await response.json();
+            setGames(data);
+            setStats({
+              total: data.length,
+              worthDoing: data.filter(g => g.status === 'worth_doing').length,
+              ignore: data.filter(g => g.status === 'observe').length,
+              pending: data.filter(g => g.status === 'pending').length
+            });
+            setMessage(`✅ 加载了 ${data.length} 个游戏`);
+            const timestamp = new Date().toLocaleString('zh-CN');
+            setTasks(prev => [...prev, `${timestamp} - 成功加载游戏数据`]);
+          } else {
+            setMessage('❌ 获取游戏数据失败');
+            setError(`HTTP错误: ${response.status}`);
+            const timestamp = new Date().toLocaleString('zh-CN');
+            setTasks(prev => [...prev, `${timestamp} - 获取游戏数据失败`]);
+          }
+        } catch (err) {
+          setMessage('❌ 获取游戏数据出错');
+          setError(err.message);
+          const timestamp = new Date().toLocaleString('zh-CN');
+          setTasks(prev => [...prev, `${timestamp} - 获取游戏数据出错: ${err.message}`]);
+        }
+      };
+
+      // 执行完整检测
+      const handleFullDetection = async () => {
+        setLoading(true);
+        setError(null);
+        setMessage('🔄 正在执行完整检测...');
+
+        const timestamp = new Date().toLocaleString('zh-CN');
+        setTasks(prev => [...prev, `${timestamp} - 开始完整检测...`]);
+
+        try {
+          const response = await fetch(`${API_BASE_URL}/api/daily-job`, { method: 'POST' });
+          if (response.ok) {
+            setMessage('✅ 完整检测执行成功！正在更新游戏数据...');
+            setTasks(prev => [...prev, `${timestamp} - 完整检测执行成功`]);
+            // 检测完成后重新获取游戏数据
+            setTimeout(() => {
+              fetchGames();
+            }, 1000);
+          } else {
+            setMessage('❌ 完整检测执行失败');
+            setError(`HTTP错误: ${response.status}`);
+            setTasks(prev => [...prev, `${timestamp} - 完整检测执行失败`]);
+          }
+        } catch (err) {
+          setMessage('❌ 完整检测出错');
+          setError(err.message);
+          setTasks(prev => [...prev, `${timestamp} - 完整检测出错: ${err.message}`]);
+        }
+
+        setLoading(false);
+      };
+
+      // 抓取游戏
+      const handleGrabGames = async () => {
+        setLoading(true);
+        const timestamp = new Date().toLocaleString('zh-CN');
+        setTasks(prev => [...prev, `${timestamp} - 开始抓取游戏...`]);
+
+        try {
+          const response = await fetch(`${API_BASE_URL}/api/grab-games`, { method: 'POST' });
+          if (response.ok) {
+            setTasks(prev => [...prev, `${timestamp} - 抓取游戏成功`]);
+            setTimeout(fetchGames, 1000);
+          } else {
+            setTasks(prev => [...prev, `${timestamp} - 抓取游戏失败`]);
+          }
+        } catch (err) {
+          setTasks(prev => [...prev, `${timestamp} - 抓取游戏出错: ${err.message}`]);
+        }
+
+        setLoading(false);
+      };
+
+      // 趋势检测
+      const handleTrendDetection = async () => {
+        setLoading(true);
+        const timestamp = new Date().toLocaleString('zh-CN');
+        setTasks(prev => [...prev, `${timestamp} - 开始趋势检测...`]);
+
+        try {
+          const response = await fetch(`${API_BASE_URL}/api/detect-trends`, { method: 'POST' });
+          if (response.ok) {
+            setTasks(prev => [...prev, `${timestamp} - 趋势检测成功`]);
+            setTimeout(fetchGames, 1000);
+          } else {
+            setTasks(prev => [...prev, `${timestamp} - 趋势检测失败`]);
+          }
+        } catch (err) {
+          setTasks(prev => [...prev, `${timestamp} - 趋势检测出错: ${err.message}`]);
+        }
+
+        setLoading(false);
+      };
+
+      // YouTube检测
+      const handleYouTubeDetection = async () => {
+        setLoading(true);
+        const timestamp = new Date().toLocaleString('zh-CN');
+        setTasks(prev => [...prev, `${timestamp} - 开始YouTube检测...`]);
+
+        try {
+          const response = await fetch(`${API_BASE_URL}/api/detect-youtube`, { method: 'POST' });
+          if (response.ok) {
+            setTasks(prev => [...prev, `${timestamp} - YouTube检测成功`]);
+            setTimeout(fetchGames, 1000);
+          } else {
+            setTasks(prev => [...prev, `${timestamp} - YouTube检测失败`]);
+          }
+        } catch (err) {
+          setTasks(prev => [...prev, `${timestamp} - YouTube检测出错: ${err.message}`]);
+        }
+
+        setLoading(false);
+      };
+
+      // 更新评分
+      const handleUpdateScore = async () => {
+        setLoading(true);
+        const timestamp = new Date().toLocaleString('zh-CN');
+        setTasks(prev => [...prev, `${timestamp} - 开始更新评分...`]);
+
+        try {
+          const response = await fetch(`${API_BASE_URL}/api/update-scores`, { method: 'POST' });
+          if (response.ok) {
+            setTasks(prev => [...prev, `${timestamp} - 更新评分成功`]);
+            setTimeout(fetchGames, 1000);
+          } else {
+            setTasks(prev => [...prev, `${timestamp} - 更新评分失败`]);
+          }
+        } catch (err) {
+          setTasks(prev => [...prev, `${timestamp} - 更新评分出错: ${err.message}`]);
+        }
+
+        setLoading(false);
+      };
+
+      // 组件加载时获取游戏数据
+      React.useEffect(() => {
+        fetchGames();
+      }, []);
+
+      return React.createElement('div', {
+        className: 'min-h-screen bg-gray-900 text-white'
+      }, [
+        // Header
+        React.createElement('header', {
+          key: 'header',
+          className: 'border-b border-gray-800 px-6 py-4'
+        }, React.createElement('div', {
+          className: 'flex items-center justify-between'
+        }, [
+          React.createElement('div', {
+            key: 'title'
+          }, [
+            React.createElement('h1', {
+              key: 'main-title',
+              className: 'text-2xl flex items-center gap-2'
+            }, '📊 GameTrend Radar'),
+            React.createElement('p', {
+              key: 'subtitle',
+              className: 'text-sm text-gray-400 mt-1'
+            }, 'HTML5 游戏趋势检测工具')
+          ]),
+          React.createElement('button', {
+            key: 'run-check',
+            onClick: handleFullDetection,
+            disabled: loading,
+            className: 'bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg flex items-center gap-2 transition-colors'
+          }, [
+            React.createElement('span', { key: 'icon' }, '🔍'),
+            React.createElement('span', { key: 'text' }, loading ? '执行中...' : '运行完整检测')
+          ])
+        ])),
 
         // 状态信息
         error && React.createElement('div', {
           key: 'error',
           style: {
-            background: '#ff4444',
+            background: '#ef4444',
             color: 'white',
             padding: '10px',
             borderRadius: '5px',
-            marginBottom: '20px'
+            margin: '20px 20px 0 20px'
           }
         }, `错误信息: ${error}`),
 
         React.createElement('div', {
           key: 'message',
           style: {
-            background: message.includes('✅') ? '#44ff44' : message.includes('❌') ? '#ff4444' : '#007acc',
-            color: message.includes('✅') ? 'black' : 'white',
+            background: message.includes('✅') ? '#10b981' : message.includes('❌') ? '#ef4444' : '#3b82f6',
+            color: 'white',
             padding: '10px',
             borderRadius: '5px',
-            marginBottom: '20px',
+            margin: '10px 20px',
             fontWeight: 'bold'
           }
         }, message),
 
-        // 操作按钮
-        React.createElement('div', {
-          key: 'buttons',
-          style: {
-            display: 'flex',
-            gap: '10px',
-            justifyContent: 'center',
-            marginBottom: '30px'
-          }
+        // Main Content
+        React.createElement('main', {
+          key: 'main',
+          className: 'p-6 space-y-6'
         }, [
-          React.createElement('button', {
-            key: 'refresh',
-            onClick: fetchGames,
-            disabled: loading,
-            style: {
-              background: '#007acc',
-              color: 'white',
-              border: 'none',
-              padding: '12px 24px',
-              borderRadius: '5px',
-              cursor: 'pointer',
-              fontSize: '1rem'
-            }
-          }, '刷新数据'),
-
-          React.createElement('button', {
-            key: 'run-check',
-            onClick: runFullCheck,
-            disabled: loading,
-            style: {
-              background: '#28a745',
-              color: 'white',
-              border: 'none',
-              padding: '12px 24px',
-              borderRadius: '5px',
-              cursor: 'pointer',
-              fontSize: '1rem'
-            }
-          }, loading ? '执行中...' : '执行完整检测')
-        ]),
-
-        // 统计数据
-        React.createElement('div', {
-          key: 'stats',
-          className: 'stats-grid'
-        }, [
+          // Stats Cards
           React.createElement('div', {
-            key: 'total',
-            className: 'stat-card',
-            style: { borderColor: '#666' }
+            key: 'stats',
+            className: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'
           }, [
-            React.createElement('div', {
-              key: 'total-value',
-              className: 'stat-value',
-              style: { color: 'white' }
-            }, stats.total),
-            React.createElement('div', {
-              key: 'total-label',
-              className: 'stat-label'
-            }, '总游戏数')
+            React.createElement(StatCard, {
+              key: 'total',
+              value: stats.total,
+              label: '总游戏数',
+              borderColor: 'border-gray-700',
+              valueColor: 'text-white'
+            }),
+            React.createElement(StatCard, {
+              key: 'worth-doing',
+              value: stats.worthDoing,
+              label: '值得做',
+              borderColor: 'border-green-600',
+              valueColor: 'text-green-500'
+            }),
+            React.createElement(StatCard, {
+              key: 'ignore',
+              value: stats.ignore,
+              label: '忽略',
+              borderColor: 'border-red-600',
+              valueColor: 'text-red-500'
+            }),
+            React.createElement(StatCard, {
+              key: 'pending',
+              value: stats.pending,
+              label: '待检测',
+              borderColor: 'border-yellow-600',
+              valueColor: 'text-yellow-500'
+            })
           ]),
 
+          // Quick Actions
           React.createElement('div', {
-            key: 'worth-doing',
-            className: 'stat-card',
-            style: { borderColor: '#22c55e' }
+            key: 'actions',
+            className: 'bg-gray-800 rounded-lg border border-gray-700 p-6'
           }, [
+            React.createElement('h2', {
+              key: 'actions-title',
+              className: 'text-lg mb-4'
+            }, '快速操作'),
             React.createElement('div', {
-              key: 'worth-doing-value',
-              className: 'stat-value',
-              style: { color: '#22c55e' }
-            }, stats.worthDoing),
-            React.createElement('div', {
-              key: 'worth-doing-label',
-              className: 'stat-label'
-            }, '值得做')
+              key: 'actions-buttons',
+              className: 'flex flex-wrap gap-3'
+            }, [
+              React.createElement(ActionButton, {
+                key: 'grab',
+                icon: '📊',
+                label: '抓取游戏',
+                onClick: handleGrabGames
+              }),
+              React.createElement(ActionButton, {
+                key: 'trend',
+                icon: '🔍',
+                label: '趋势检测',
+                onClick: handleTrendDetection
+              }),
+              React.createElement(ActionButton, {
+                key: 'youtube',
+                icon: '🎬',
+                label: 'YouTube检测',
+                onClick: handleYouTubeDetection
+              }),
+              React.createElement(ActionButton, {
+                key: 'update',
+                icon: '🔄',
+                label: '更新评分',
+                onClick: handleUpdateScore
+              }),
+              React.createElement(ActionButton, {
+                key: 'refresh',
+                icon: '🔃',
+                label: '刷新数据',
+                onClick: fetchGames
+              })
+            ])
           ]),
 
+          // Filters and Sorting
           React.createElement('div', {
-            key: 'observe',
-            className: 'stat-card',
-            style: { borderColor: '#ef4444' }
+            key: 'filters',
+            className: 'bg-gray-800 rounded-lg border border-gray-700 p-6'
+          }, React.createElement('div', {
+            className: 'flex flex-wrap items-center gap-4'
           }, [
             React.createElement('div', {
-              key: 'observe-value',
-              className: 'stat-value',
-              style: { color: '#ef4444' }
-            }, stats.observe),
+              key: 'status-filter',
+              className: 'flex items-center gap-2'
+            }, [
+              React.createElement('label', {
+                key: 'status-label',
+                className: 'text-sm text-gray-400'
+              }, '状态筛选:'),
+              React.createElement('select', {
+                key: 'status-select',
+                value: statusFilter,
+                onChange: (e) => setStatusFilter(e.target.value),
+                className: 'bg-gray-900 border border-gray-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500'
+              }, [
+                React.createElement('option', { key: 'all' }, '全部'),
+                React.createElement('option', { key: 'worth' }, '值得做'),
+                React.createElement('option', { key: 'ignore' }, '忽略'),
+                React.createElement('option', { key: 'pending' }, '待检测')
+              ])
+            ]),
+
             React.createElement('div', {
-              key: 'observe-label',
-              className: 'stat-label'
-            }, '观察')
-          ]),
+              key: 'sort-by',
+              className: 'flex items-center gap-2'
+            }, [
+              React.createElement('label', {
+                key: 'sort-label',
+                className: 'text-sm text-gray-400'
+              }, '排序:'),
+              React.createElement('select', {
+                key: 'sort-select',
+                value: sortBy,
+                onChange: (e) => setSortBy(e.target.value),
+                className: 'bg-gray-900 border border-gray-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500'
+              }, [
+                React.createElement('option', { key: 'total' }, '总分'),
+                React.createElement('option', { key: 'trend' }, '趋势分'),
+                React.createElement('option', { key: 'youtube' }, 'YouTube分')
+              ])
+            ]),
 
-          React.createElement('div', {
-            key: 'pending',
-            className: 'stat-card',
-            style: { borderColor: '#eab308' }
-          }, [
             React.createElement('div', {
-              key: 'pending-value',
-              className: 'stat-value',
-              style: { color: '#eab308' }
-            }, stats.pending),
-            React.createElement('div', {
-              key: 'pending-label',
-              className: 'stat-label'
-            }, '待检测')
-          ])
-        ]),
+              key: 'sort-order',
+              className: 'flex items-center gap-2'
+            }, [
+              React.createElement('select', {
+                key: 'order-select',
+                value: sortOrder,
+                onChange: (e) => setSortOrder(e.target.value),
+                className: 'bg-gray-900 border border-gray-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500'
+              }, [
+                React.createElement('option', { key: 'desc' }, '降序'),
+                React.createElement('option', { key: 'asc' }, '升序')
+              ])
+            ])
+          ])),
 
-        // 游戏列表
-        React.createElement('div', {
-          key: 'games',
-          className: 'games-table'
-        }, [
-          React.createElement('div', {
-            key: 'games-header',
-            className: 'games-header'
-          }, React.createElement('h2', {
-            style: { margin: 0 }
-          }, `游戏列表 (${games.length})`)),
+          // Game List Table
+          React.createElement(GameTable, {
+            key: 'game-table',
+            games: games
+          }),
 
-          React.createElement('div', {
-            key: 'games-content',
-            style: { overflowX: 'auto' }
-          }, React.createElement('table', {}, [
-            React.createElement('thead', { key: 'thead' }, React.createElement('tr', {}, [
-              React.createElement('th', { key: 'name' }, '游戏名称'),
-              React.createElement('th', { key: 'source' }, '来源'),
-              React.createElement('th', { key: 'trend' }, '趋势分'),
-              React.createElement('th', { key: 'youtube' }, 'YOUTUBE'),
-              React.createElement('th', { key: 'total' }, '总分'),
-              React.createElement('th', { key: 'status' }, '状态')
-            ])),
-
-            React.createElement('tbody', { key: 'tbody' },
-              games.length === 0 ?
-                React.createElement('tr', { key: 'empty' }, React.createElement('td', {
-                  colSpan: 6,
-                  style: {
-                    textAlign: 'center',
-                    padding: '40px',
-                    color: '#aaa'
-                  }
-                }, '暂无游戏数据，请点击"执行完整检测"开始抓取')) :
-                games.map((game, index) => React.createElement('tr', {
-                  key: game.id || index
-                }, [
-                  React.createElement('td', { key: 'name' }, game.gameName || '未知'),
-                  React.createElement('td', { key: 'source' }, game.source || '未知'),
-                  React.createElement('td', { key: 'trend' }, game.trendScore || 0),
-                  React.createElement('td', { key: 'youtube' }, game.ytScore || 0),
-                  React.createElement('td', { key: 'total' }, game.totalScore || 0),
-                  React.createElement('td', { key: 'status' },
-                    React.createElement('span', {
-                      className: getStatusClass(game.status)
-                    }, getStatusText(game.status))
-                  )
-                ]))
-            )
-          ]))
+          // Task Log
+          React.createElement(TaskLog, {
+            key: 'task-log',
+            tasks: tasks
+          })
         ])
       ]);
     }

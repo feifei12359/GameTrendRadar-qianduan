@@ -358,7 +358,15 @@
     var games = [];
     var tasks = [];
     var stats = { total: 0, worthDoing: 0, ignore: 0, pending: 0 };
-    var API_BASE = (window.API_BASE || localStorage.getItem('API_BASE') || 'https://game-trend-radar-backend.railway.app/api');
+    var API_BASE = (function () {
+      var v = window.API_BASE || localStorage.getItem('API_BASE');
+      if (v) return v;
+      var h = location.hostname;
+      var p = location.protocol;
+      if (h.endsWith('vercel.app')) return 'https://game-trend-radar-backend.railway.app/api';
+      if (h === 'localhost') return 'http://localhost:4000/api';
+      return p === 'https:' ? 'https://game-trend-radar-backend.railway.app/api' : 'http://localhost:4000/api';
+    })();
 
     function showMessage(text, type) {
       var container = document.getElementById('message-container');

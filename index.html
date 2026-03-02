@@ -471,15 +471,13 @@
       showMessage('🔄 正在加载游戏数据...', 'info');
       addTaskLog('开始加载游戏数据...');
 
-      fetch(API_BASE + '/games?candidate=true', {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-        mode: 'cors',
-        credentials: 'omit'
-      })
+      var urlCandidate = API_BASE + '/games?candidate=true';
+      var urlAll = API_BASE + '/games';
+      addTaskLog('请求候选列表: ' + urlCandidate);
+      fetch(urlCandidate, { method: 'GET' })
         .then(function (response) {
           if (!response.ok) {
-            throw new Error('HTTP错误: ' + response.status);
+            throw new Error('HTTP错误: ' + response.status + ' ' + response.statusText);
           }
           return response.json();
         })
@@ -497,14 +495,33 @@
           addTaskLog('成功加载游戏数据');
         })
         .catch(function (err) {
-          console.error('获取游戏数据错误:', err);
-          showMessage('❌ 获取游戏数据出错: ' + err.message, 'error');
-          addTaskLog('获取游戏数据出错: ' + err.message);
-
-          setTimeout(function () {
-            showMessage('🔄 正在重试连接...', 'info');
-            fetchGames();
-          }, 3000);
+          console.error('候选列表错误:', err);
+          addTaskLog('候选列表错误: ' + err.message + '，尝试全部列表: ' + urlAll);
+          fetch(urlAll, { method: 'GET' })
+            .then(function (response) {
+              if (!response.ok) {
+                throw new Error('HTTP错误: ' + response.status + ' ' + response.statusText);
+              }
+              return response.json();
+            })
+            .then(function (data) {
+              games = data;
+              stats = {
+                total: data.length,
+                worthDoing: data.filter(function (g) { return g.isCandidate || g.status === 'worth_doing'; }).length,
+                ignore: data.filter(function (g) { return !g.isCandidate && g.status !== 'worth_doing' && g.status !== 'pending'; }).length,
+                pending: data.filter(function (g) { return g.status === 'pending'; }).length
+              };
+              updateStats();
+              renderGames();
+              showMessage('✅ 加载了 ' + data.length + ' 个游戏', 'success');
+              addTaskLog('成功加载全部列表数据');
+            })
+            .catch(function (err2) {
+              console.error('获取游戏数据错误:', err2);
+              showMessage('❌ 获取游戏数据出错: ' + err2.message, 'error');
+              addTaskLog('获取游戏数据出错: ' + err2.message + '，API_BASE=' + API_BASE);
+            });
         });
     }
 
@@ -562,15 +579,12 @@
     function fetchNewWords() {
       showMessage('🔄 正在加载新词...', 'info');
       addTaskLog('开始加载新词...');
-      fetch(API_BASE + '/new-words', {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-        mode: 'cors',
-        credentials: 'omit'
-      })
+      var url = API_BASE + '/new-words';
+      addTaskLog('请求新词: ' + url);
+      fetch(url, { method: 'GET' })
         .then(function (response) {
           if (!response.ok) {
-            throw new Error('HTTP错误: ' + response.status);
+            throw new Error('HTTP错误: ' + response.status + ' ' + response.statusText);
           }
           return response.json();
         })

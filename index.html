@@ -402,10 +402,19 @@
           statusText = '观察';
         }
 
+        var trendScoreValue = 0;
+        if (typeof game.trendScore === 'object' && game.trendScore !== null) {
+          trendScoreValue = game.trendScore.averageScore || game.trendScore.maxValue || 0;
+        } else if (typeof game.trendScore === 'number') {
+          trendScoreValue = game.trendScore;
+        }
+
+        var youtubeValue = game.ytScore || game.youtubeCount || 0;
+
         return '<tr>' +
           '<td>' + (game.gameName || game.name || '未知') + '</td>' +
-          '<td>' + (game.trendScore || 0) + '</td>' +
-          '<td>' + (game.youtubeCount || 0) + '</td>' +
+          '<td>' + trendScoreValue + '</td>' +
+          '<td>' + youtubeValue + '</td>' +
           '<td>' + (game.newWordScore || game.totalScore || 0) + '</td>' +
           '<td><span class="status-badge ' + statusClass + '">' + statusText + '</span></td>' +
           '</tr>';

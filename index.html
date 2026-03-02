@@ -298,6 +298,10 @@
           <button class="btn-action" id="btn-update">🔄 更新评分</button>
           <button class="btn-action" id="btn-new-words">🆕 新词</button>
           <button class="btn-action" id="btn-refresh">🔃 刷新数据</button>
+          <div style="display:flex;gap:0.5rem;align-items:center;flex:1;min-width:260px">
+            <input id="api-base-input" placeholder="API_BASE，例如 https://your-backend/api" style="flex:1;background:#111827;border:1px solid #4b5563;border-radius:0.5rem;padding:0.5rem;color:white" />
+            <button class="btn-action" id="btn-save-api-base">💾 保存地址</button>
+          </div>
         </div>
       </div>
 
@@ -605,6 +609,24 @@
       document.getElementById('btn-new-words').addEventListener('click', function () {
         fetchNewWords();
       });
+      document.getElementById('btn-save-api-base').addEventListener('click', function () {
+        var input = document.getElementById('api-base-input');
+        var url = (input && input.value || '').trim();
+        if (!url) {
+          showMessage('❌ API_BASE 为空', 'error');
+          addTaskLog('API_BASE 为空');
+          return;
+        }
+        API_BASE = url;
+        localStorage.setItem('API_BASE', url);
+        showMessage('✅ 已保存 API_BASE', 'success');
+        addTaskLog('已设置 API_BASE 为 ' + url);
+        setTimeout(fetchGames, 500);
+      });
+      var input = document.getElementById('api-base-input');
+      if (input) {
+        input.value = API_BASE;
+      }
 
       fetchGames();
     });

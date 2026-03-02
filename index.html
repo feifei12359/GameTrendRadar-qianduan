@@ -409,6 +409,10 @@
           trendScoreValue = game.trendScore;
         }
 
+        if (trendScoreValue === 0 && game.newScore) {
+          trendScoreValue = game.newScore;
+        }
+
         var youtubeValue = game.ytScore || game.youtubeCount || 0;
 
         return '<tr>' +

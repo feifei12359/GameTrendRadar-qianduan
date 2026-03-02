@@ -388,14 +388,25 @@
       }
 
       tbody.innerHTML = games.map(function (game) {
-        var statusClass = game.isCandidate ? 'worth' : 'ignore';
-        var statusText = game.isCandidate ? '候选' : '忽略';
+        var statusClass = 'ignore';
+        var statusText = '忽略';
+
+        if (game.isCandidate || game.status === 'worth_doing') {
+          statusClass = 'worth';
+          statusText = '候选';
+        } else if (game.status === 'pending') {
+          statusClass = 'pending';
+          statusText = '待检测';
+        } else if (game.status === 'observe') {
+          statusClass = 'observe';
+          statusText = '观察';
+        }
 
         return '<tr>' +
-          '<td>' + (game.name || '未知') + '</td>' +
+          '<td>' + (game.gameName || game.name || '未知') + '</td>' +
           '<td>' + (game.trendScore || 0) + '</td>' +
           '<td>' + (game.youtubeCount || 0) + '</td>' +
-          '<td>' + (game.newWordScore || 0) + '</td>' +
+          '<td>' + (game.newWordScore || game.totalScore || 0) + '</td>' +
           '<td><span class="status-badge ' + statusClass + '">' + statusText + '</span></td>' +
           '</tr>';
       }).join('');
@@ -421,9 +432,9 @@
           games = data;
           stats = {
             total: data.length,
-            worthDoing: data.filter(function (g) { return g.isCandidate; }).length,
-            ignore: data.filter(function (g) { return !g.isCandidate; }).length,
-            pending: 0
+            worthDoing: data.filter(function (g) { return g.isCandidate || g.status === 'worth_doing'; }).length,
+            ignore: data.filter(function (g) { return !g.isCandidate && g.status !== 'worth_doing' && g.status !== 'pending'; }).length,
+            pending: data.filter(function (g) { return g.status === 'pending'; }).length
           };
           updateStats();
           renderGames();

@@ -301,6 +301,7 @@
           <div style="display:flex;gap:0.5rem;align-items:center;flex:1;min-width:260px">
             <input id="api-base-input" placeholder="API_BASE，例如 https://your-backend/api" style="flex:1;background:#111827;border:1px solid #4b5563;border-radius:0.5rem;padding:0.5rem;color:white" />
             <button class="btn-action" id="btn-save-api-base">💾 保存地址</button>
+            <button class="btn-action" id="btn-test-api">🧪 测试连接</button>
           </div>
         </div>
       </div>
@@ -648,6 +649,24 @@
       if (input) {
         input.value = API_BASE;
       }
+
+      document.getElementById('btn-test-api').addEventListener('click', function () {
+        var url = API_BASE + '/health';
+        addTaskLog('测试后端连接: ' + url);
+        fetch(url, { method: 'GET' })
+          .then(function (response) {
+            if (!response.ok) throw new Error('HTTP错误: ' + response.status + ' ' + response.statusText);
+            return response.json();
+          })
+          .then(function (data) {
+            showMessage('✅ 后端健康: ' + (data.ok ? 'OK' : 'FAIL') + ' ' + (data.time || ''), 'success');
+            addTaskLog('后端健康检查成功');
+          })
+          .catch(function (err) {
+            showMessage('❌ 连接失败: ' + err.message, 'error');
+            addTaskLog('连接失败: ' + err.message);
+          });
+      });
 
       fetchGames();
     });

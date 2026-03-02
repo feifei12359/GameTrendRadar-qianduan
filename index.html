@@ -296,6 +296,7 @@
           <button class="btn-action" id="btn-trend">🔍 趋势检测</button>
           <button class="btn-action" id="btn-youtube">🎬 YouTube检测</button>
           <button class="btn-action" id="btn-update">🔄 更新评分</button>
+          <button class="btn-action" id="btn-new-words">🆕 新词</button>
           <button class="btn-action" id="btn-refresh">🔃 刷新数据</button>
         </div>
       </div>
@@ -323,6 +324,28 @@
       </div>
 
       <div class="panel">
+        <h2>新词列表 (<span id="new-words-count">0</span>)</h2>
+        <div class="table-container">
+          <table id="new-words-table">
+            <thead>
+              <tr>
+                <th>词</th>
+                <th>新颖分</th>
+                <th>最近出现</th>
+                <th>总出现</th>
+                <th>首次出现</th>
+              </tr>
+            </thead>
+            <tbody id="new-words-tbody">
+              <tr>
+                <td colspan="5" class="empty-state">暂无新词数据，请点击“新词”加载</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel">
         <h2>任务日志</h2>
         <div class="task-log" id="task-log">
           <div style="text-align: center; padding: 2rem; color: white;">暂无任务记录</div>
@@ -335,7 +358,7 @@
     var games = [];
     var tasks = [];
     var stats = { total: 0, worthDoing: 0, ignore: 0, pending: 0 };
-    var API_BASE = 'https://gametrendradar-backend-production.up.railway.app/api';
+    var API_BASE = (window.API_BASE || localStorage.getItem('API_BASE') || 'https://gametrendradar-backend-production.up.railway.app/api');
 
     function showMessage(text, type) {
       var container = document.getElementById('message-container');
@@ -429,7 +452,7 @@
       showMessage('🔄 正在加载游戏数据...', 'info');
       addTaskLog('开始加载游戏数据...');
 
-      fetch(API_BASE + '/games', {
+      fetch(API_BASE + '/games?candidate=true', {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
         mode: 'cors',
@@ -495,6 +518,58 @@
         });
     }
 
+    function renderNewWords(items) {
+      var tbody = document.getElementById('new-words-tbody');
+      if (!items || items.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="empty-state">暂无新词数据，请点击“新词”加载</td></tr>';
+        return;
+      }
+      tbody.innerHTML = items.map(function (it) {
+        var token = it.token || '';
+        var novelty = it.noveltyScore || 0;
+        var recent = it.recentCount || 0;
+        var total = it.totalCount || 0;
+        var first = it.firstSeenAt ? new Date(it.firstSeenAt).toLocaleString('zh-CN') : '';
+        return '<tr>' +
+          '<td>' + token + '</td>' +
+          '<td>' + novelty + '</td>' +
+          '<td>' + recent + '</td>' +
+          '<td>' + total + '</td>' +
+          '<td>' + first + '</td>' +
+          '</tr>';
+      }).join('');
+    }
+
+    function fetchNewWords() {
+      showMessage('🔄 正在加载新词...', 'info');
+      addTaskLog('开始加载新词...');
+      fetch(API_BASE + '/new-words', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        mode: 'cors',
+        credentials: 'omit'
+      })
+        .then(function (response) {
+          if (!response.ok) {
+            throw new Error('HTTP错误: ' + response.status);
+          }
+          return response.json();
+        })
+        .then(function (data) {
+          var items = Array.isArray(data.items) ? data.items.slice() : [];
+          items.sort(function (a, b) { return (b.noveltyScore || 0) - (a.noveltyScore || 0); });
+          renderNewWords(items);
+          document.getElementById('new-words-count').textContent = items.length;
+          showMessage('✅ 加载了 ' + items.length + ' 个新词', 'success');
+          addTaskLog('成功加载新词');
+        })
+        .catch(function (err) {
+          console.error('获取新词错误:', err);
+          showMessage('❌ 获取新词出错: ' + err.message, 'error');
+          addTaskLog('获取新词出错: ' + err.message);
+        });
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
       document.getElementById('btn-full-detection').addEventListener('click', function () {
         callApi('/daily-job', '执行完整检测');
@@ -518,6 +593,9 @@
 
       document.getElementById('btn-refresh').addEventListener('click', function () {
         fetchGames();
+      });
+      document.getElementById('btn-new-words').addEventListener('click', function () {
+        fetchNewWords();
       });
 
       fetchGames();

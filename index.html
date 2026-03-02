@@ -362,14 +362,21 @@
     var games = [];
     var tasks = [];
     var stats = { total: 0, worthDoing: 0, ignore: 0, pending: 0 };
+    function normalizeApiBase(u) {
+      var s = String(u || '').trim();
+      if (!s) return '';
+      if (s.endsWith('/')) s = s.slice(0, -1);
+      if (!/\/api$/.test(s)) s = s + '/api';
+      return s;
+    }
     var API_BASE = (function () {
       var v = window.API_BASE || localStorage.getItem('API_BASE');
-      if (v) return v;
+      if (v) return normalizeApiBase(v);
       var h = location.hostname;
       var p = location.protocol;
-      if (h.endsWith('vercel.app')) return 'https://game-trend-radar-backend.railway.app/api';
-      if (h === 'localhost') return 'http://localhost:4000/api';
-      return p === 'https:' ? 'https://game-trend-radar-backend.railway.app/api' : 'http://localhost:4000/api';
+      if (h.endsWith('vercel.app')) return normalizeApiBase('https://game-trend-radar-backend.railway.app');
+      if (h === 'localhost') return normalizeApiBase('http://localhost:4000');
+      return normalizeApiBase(p === 'https:' ? 'https://game-trend-radar-backend.railway.app' : 'http://localhost:4000');
     })();
 
     function showMessage(text, type) {
@@ -617,10 +624,10 @@
           addTaskLog('API_BASE 为空');
           return;
         }
-        API_BASE = url;
-        localStorage.setItem('API_BASE', url);
+        API_BASE = normalizeApiBase(url);
+        localStorage.setItem('API_BASE', API_BASE);
         showMessage('✅ 已保存 API_BASE', 'success');
-        addTaskLog('已设置 API_BASE 为 ' + url);
+        addTaskLog('已设置 API_BASE 为 ' + API_BASE);
         setTimeout(fetchGames, 500);
       });
       var input = document.getElementById('api-base-input');

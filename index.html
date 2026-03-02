@@ -259,7 +259,7 @@
       <div class="header-content">
         <div class="title-section">
           <h1>📊 GameTrend Radar</h1>
-          <p>HTML5 游戏趋势检测工具</p>
+          <p>跨平台新标签监控 + 爆发预测</p>
         </div>
         <button class="btn-primary" id="btn-full-detection">
           🔍 运行完整检测
@@ -290,14 +290,11 @@
       </div>
 
       <div class="panel">
-        <h2>快速操作</h2>
+        <h2>趋势数据</h2>
         <div class="button-group">
-          <button class="btn-action" id="btn-grab">📊 抓取游戏</button>
-          <button class="btn-action" id="btn-trend">🔍 趋势检测</button>
-          <button class="btn-action" id="btn-youtube">🎬 YouTube检测</button>
-          <button class="btn-action" id="btn-update">🔄 更新评分</button>
-          <button class="btn-action" id="btn-new-words">🆕 新词</button>
-          <button class="btn-action" id="btn-refresh">🔃 刷新数据</button>
+          <button class="btn-action" id="btn-load-exploding">💥 爆发趋势</button>
+          <button class="btn-action" id="btn-load-early">🌱 早期趋势</button>
+          <button class="btn-action" id="btn-load-all">📚 全部趋势</button>
           <div style="display:flex;gap:0.5rem;align-items:center;flex:1;min-width:260px">
             <input id="api-base-input" placeholder="API_BASE，例如 https://your-backend/api" style="flex:1;background:#111827;border:1px solid #4b5563;border-radius:0.5rem;padding:0.5rem;color:white" />
             <button class="btn-action" id="btn-save-api-base">💾 保存地址</button>
@@ -307,21 +304,24 @@
       </div>
 
       <div class="panel">
-        <h2>游戏列表 (<span id="game-count">0</span>)</h2>
+        <h2>趋势列表 (<span id="trend-count">0</span>)</h2>
         <div class="table-container">
-          <table id="game-table">
+          <table id="trend-table">
             <thead>
               <tr>
-                <th>游戏名称</th>
-                <th>趋势分</th>
-                <th>YouTube</th>
-                <th>总分</th>
-                <th>状态</th>
+                <th>词</th>
+                <th>预测分</th>
+                <th>增长率</th>
+                <th>加速度</th>
+                <th>平台分</th>
+                <th>AI分</th>
+                <th>首次出现</th>
+                <th>平台</th>
               </tr>
             </thead>
-            <tbody id="game-tbody">
+            <tbody id="trend-tbody">
               <tr>
-                <td colspan="5" class="empty-state">暂无游戏数据，请点击"运行完整检测"开始抓取</td>
+                <td colspan="8" class="empty-state">暂无趋势数据，请选择上方分类加载</td>
               </tr>
             </tbody>
           </table>
@@ -360,7 +360,7 @@
   </div>
 
   <script>
-    var games = [];
+    var trends = [];
     var tasks = [];
     var stats = { total: 0, worthDoing: 0, ignore: 0, pending: 0 };
     function normalizeApiBase(u) {
@@ -415,114 +415,57 @@
     }
 
     function updateStats() {
-      document.getElementById('stat-total').textContent = stats.total;
-      document.getElementById('stat-worth').textContent = stats.worthDoing;
-      document.getElementById('stat-ignore').textContent = stats.ignore;
-      document.getElementById('stat-pending').textContent = stats.pending;
-      document.getElementById('game-count').textContent = games.length;
+      document.getElementById('stat-total').textContent = trends.length;
+      document.getElementById('stat-worth').textContent = 0;
+      document.getElementById('stat-ignore').textContent = 0;
+      document.getElementById('stat-pending').textContent = 0;
+      var c = document.getElementById('trend-count'); if (c) c.textContent = trends.length;
     }
 
-    function renderGames() {
-      var tbody = document.getElementById('game-tbody');
+    function renderTrends() {
+      var tbody = document.getElementById('trend-tbody');
 
-      if (games.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="empty-state">暂无游戏数据，请点击"运行完整检测"开始抓取</td></tr>';
+      if (!trends || trends.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" class="empty-state">暂无趋势数据，请选择上方分类加载</td></tr>';
         return;
       }
 
-      tbody.innerHTML = games.map(function (game) {
-        var statusClass = 'ignore';
-        var statusText = '忽略';
-
-        if (game.isCandidate || game.status === 'worth_doing') {
-          statusClass = 'worth';
-          statusText = '候选';
-        } else if (game.status === 'pending') {
-          statusClass = 'pending';
-          statusText = '待检测';
-        } else if (game.status === 'observe') {
-          statusClass = 'observe';
-          statusText = '观察';
-        }
-
-        var trendScoreValue = 0;
-        if (typeof game.trendScore === 'object' && game.trendScore !== null) {
-          trendScoreValue = game.trendScore.averageScore || game.trendScore.maxValue || 0;
-        } else if (typeof game.trendScore === 'number') {
-          trendScoreValue = game.trendScore;
-        }
-
-        if (trendScoreValue === 0 && game.newScore) {
-          trendScoreValue = game.newScore;
-        }
-
-        var youtubeValue = game.ytScore || game.youtubeCount || 0;
-
+      tbody.innerHTML = trends.map(function (t) {
+        var first = t.first_seen_at ? new Date(t.first_seen_at).toLocaleString('zh-CN') : '';
+        var plats = Array.isArray(t.platforms) ? t.platforms.join(', ') : '';
         return '<tr>' +
-          '<td>' + (game.gameName || game.name || '未知') + '</td>' +
-          '<td>' + trendScoreValue + '</td>' +
-          '<td>' + youtubeValue + '</td>' +
-          '<td>' + (game.totalScore || game.newScore || game.newWordScore || 0) + '</td>' +
-          '<td><span class="status-badge ' + statusClass + '">' + statusText + '</span></td>' +
+          '<td>' + (t.word || '') + '</td>' +
+          '<td>' + (t.prediction_score || 0) + '</td>' +
+          '<td>' + (t.growth_rate || 0) + '</td>' +
+          '<td>' + (t.acceleration || 0) + '</td>' +
+          '<td>' + (t.platform_score || 0) + '</td>' +
+          '<td>' + (t.ai_score || 0) + '</td>' +
+          '<td>' + first + '</td>' +
+          '<td>' + plats + '</td>' +
           '</tr>';
       }).join('');
     }
 
-    function fetchGames() {
-      showMessage('🔄 正在加载游戏数据...', 'info');
-      addTaskLog('开始加载游戏数据...');
-
-      var urlCandidate = API_BASE + '/games?candidate=true';
-      var urlAll = API_BASE + '/games';
-      addTaskLog('请求候选列表: ' + urlCandidate);
-      fetch(urlCandidate, { method: 'GET' })
+    function fetchTrends(endpoint, label) {
+      showMessage('🔄 正在加载' + label + '...', 'info');
+      addTaskLog('开始加载' + label + '...');
+      var url = API_BASE + endpoint;
+      addTaskLog('请求: ' + url);
+      fetch(url, { method: 'GET' })
         .then(function (response) {
-          if (!response.ok) {
-            throw new Error('HTTP错误: ' + response.status + ' ' + response.statusText);
-          }
+          if (!response.ok) throw new Error('HTTP错误: ' + response.status + ' ' + response.statusText);
           return response.json();
         })
         .then(function (data) {
-          games = data;
-          stats = {
-            total: data.length,
-            worthDoing: data.filter(function (g) { return g.isCandidate || g.status === 'worth_doing'; }).length,
-            ignore: data.filter(function (g) { return !g.isCandidate && g.status !== 'worth_doing' && g.status !== 'pending'; }).length,
-            pending: data.filter(function (g) { return g.status === 'pending'; }).length
-          };
+          trends = Array.isArray(data) ? data : [];
           updateStats();
-          renderGames();
-          showMessage('✅ 加载了 ' + data.length + ' 个游戏', 'success');
-          addTaskLog('成功加载游戏数据');
+          renderTrends();
+          showMessage('✅ 加载了 ' + trends.length + ' 条数据', 'success');
+          addTaskLog('成功加载' + label);
         })
         .catch(function (err) {
-          console.error('候选列表错误:', err);
-          addTaskLog('候选列表错误: ' + err.message + '，尝试全部列表: ' + urlAll);
-          fetch(urlAll, { method: 'GET' })
-            .then(function (response) {
-              if (!response.ok) {
-                throw new Error('HTTP错误: ' + response.status + ' ' + response.statusText);
-              }
-              return response.json();
-            })
-            .then(function (data) {
-              games = data;
-              stats = {
-                total: data.length,
-                worthDoing: data.filter(function (g) { return g.isCandidate || g.status === 'worth_doing'; }).length,
-                ignore: data.filter(function (g) { return !g.isCandidate && g.status !== 'worth_doing' && g.status !== 'pending'; }).length,
-                pending: data.filter(function (g) { return g.status === 'pending'; }).length
-              };
-              updateStats();
-              renderGames();
-              showMessage('✅ 加载了 ' + data.length + ' 个游戏', 'success');
-              addTaskLog('成功加载全部列表数据');
-            })
-            .catch(function (err2) {
-              console.error('获取游戏数据错误:', err2);
-              showMessage('❌ 获取游戏数据出错: ' + err2.message, 'error');
-              addTaskLog('获取游戏数据出错: ' + err2.message + '，API_BASE=' + API_BASE);
-            });
+          showMessage('❌ 加载出错: ' + err.message, 'error');
+          addTaskLog('加载出错: ' + err.message);
         });
     }
 
@@ -609,27 +552,14 @@
         callApi('/daily-job', '执行完整检测');
       });
 
-      document.getElementById('btn-grab').addEventListener('click', function () {
-        callApi('/grab-games', '抓取游戏');
+      document.getElementById('btn-load-exploding').addEventListener('click', function () {
+        fetchTrends('/trend/exploding', '爆发趋势');
       });
-
-      document.getElementById('btn-trend').addEventListener('click', function () {
-        callApi('/detect-trends', '趋势检测');
+      document.getElementById('btn-load-early').addEventListener('click', function () {
+        fetchTrends('/trend/early', '早期趋势');
       });
-
-      document.getElementById('btn-youtube').addEventListener('click', function () {
-        callApi('/detect-youtube', 'YouTube检测');
-      });
-
-      document.getElementById('btn-update').addEventListener('click', function () {
-        callApi('/update-scores', '更新评分');
-      });
-
-      document.getElementById('btn-refresh').addEventListener('click', function () {
-        fetchGames();
-      });
-      document.getElementById('btn-new-words').addEventListener('click', function () {
-        fetchNewWords();
+      document.getElementById('btn-load-all').addEventListener('click', function () {
+        fetchTrends('/trend/all', '全部趋势');
       });
       document.getElementById('btn-save-api-base').addEventListener('click', function () {
         var input = document.getElementById('api-base-input');
@@ -643,7 +573,7 @@
         localStorage.setItem('API_BASE', API_BASE);
         showMessage('✅ 已保存 API_BASE', 'success');
         addTaskLog('已设置 API_BASE 为 ' + API_BASE);
-        setTimeout(fetchGames, 500);
+        setTimeout(function(){ fetchTrends('/trend/exploding','爆发趋势') }, 500);
       });
       var input = document.getElementById('api-base-input');
       if (input) {
@@ -668,7 +598,7 @@
           });
       });
 
-      fetchGames();
+      fetchTrends('/trend/exploding','爆发趋势');
     });
   </script>
 </body>

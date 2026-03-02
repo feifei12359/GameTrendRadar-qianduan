@@ -374,9 +374,9 @@
       if (v) return normalizeApiBase(v);
       var h = location.hostname;
       var p = location.protocol;
-      if (h.endsWith('vercel.app')) return normalizeApiBase('https://game-trend-radar-backend.railway.app');
+      if (h.endsWith('vercel.app')) return normalizeApiBase('https://gametrendradar-backend-production.up.railway.app');
       if (h === 'localhost') return normalizeApiBase('http://localhost:4000');
-      return normalizeApiBase(p === 'https:' ? 'https://game-trend-radar-backend.railway.app' : 'http://localhost:4000');
+      return normalizeApiBase(p === 'https:' ? 'https://gametrendradar-backend-production.up.railway.app' : 'http://localhost:4000');
     })();
 
     function showMessage(text, type) {

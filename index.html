@@ -360,17 +360,23 @@
   </div>
 
   <script>
+    function normalizeApiBase(url) {
+      let u = String(url || '').trim();
+      if (!u) return '';
+      if (u.endsWith('/')) u = u.slice(0, -1);
+      if (!/\/api$/.test(u)) u = u + '/api';
+      return u;
+    }
+
+    // ✅ 升级版后端地址
+    let API_BASE = normalizeApiBase(
+      window.NEXT_PUBLIC_API_URL ||
+      (location.hostname === 'localhost' ? 'http://localhost:3000' : 'https://gametrenradar-backend-production.up.railway.app')
+    );
+
     var trends = [];
     var tasks = [];
     var stats = { total: 0, worthDoing: 0, ignore: 0, pending: 0 };
-    function normalizeApiBase(u) {
-      var s = String(u || '').trim();
-      if (!s) return '';
-      if (s.endsWith('/')) s = s.slice(0, -1);
-      if (!/\/api$/.test(s)) s = s + '/api';
-      return s;
-    }
-    var API_BASE = normalizeApiBase('https://gametrenradar-backend-production.up.railway.app');
 
     function showMessage(text, type) {
       var container = document.getElementById('message-container');
@@ -438,56 +444,53 @@
       }).join('');
     }
 
-    function fetchTrends(endpoint, label) {
-      showMessage('🔄 正在加载' + label + '...', 'info');
-      addTaskLog('开始加载' + label + '...');
-      var url = API_BASE + endpoint;
-      addTaskLog('请求: ' + url);
-      fetch(url, { method: 'GET' })
-        .then(function (response) {
-          if (!response.ok) throw new Error('HTTP错误: ' + response.status + ' ' + response.statusText);
-          return response.json();
-        })
-        .then(function (data) {
-          trends = Array.isArray(data) ? data : [];
-          updateStats();
-          renderTrends();
-          showMessage('✅ 加载了 ' + trends.length + ' 条数据', 'success');
-          addTaskLog('成功加载' + label);
-        })
-        .catch(function (err) {
-          showMessage('❌ 加载出错: ' + err.message, 'error');
-          addTaskLog('加载出错: ' + err.message);
-        });
+    // 获取趋势数据
+    async function fetchTrends(endpoint, label) {
+      try {
+        showMessage('🔄 正在加载' + label + '...', 'info');
+        addTaskLog('开始加载' + label + '...');
+        const url = API_BASE + endpoint;
+        addTaskLog('请求: ' + url);
+        const res = await fetch(url, { method: 'GET' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        trends = Array.isArray(data) ? data : [];
+        updateStats();
+        renderTrends();
+        showMessage('✅ 加载了 ' + trends.length + ' 条数据', 'success');
+        addTaskLog('成功加载' + label);
+      } catch (err) {
+        console.error(`获取 ${label} 失败:`, err);
+        showMessage('❌ 加载出错: ' + err.message, 'error');
+        addTaskLog('加载出错: ' + err.message);
+        trends = [];
+        updateStats();
+        renderTrends();
+      }
     }
 
-    function callApi(endpoint, actionName) {
-      showMessage('🔄 正在' + actionName + '...', 'info');
-      addTaskLog('开始' + actionName + '...');
-
-      fetch(API_BASE + endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        mode: 'cors',
-        credentials: 'omit'
-      })
-        .then(function (response) {
-          if (response.ok) {
-            showMessage('✅ ' + actionName + '成功！', 'success');
-            addTaskLog(actionName + '成功');
-            setTimeout(function () {
-              fetchGames();
-            }, 1000);
-          } else {
-            showMessage('❌ ' + actionName + '失败', 'error');
-            addTaskLog(actionName + '失败');
-          }
-        })
-        .catch(function (err) {
-          console.error(actionName + '错误:', err);
-          showMessage('❌ ' + actionName + '出错: ' + err.message, 'error');
-          addTaskLog(actionName + '出错: ' + err.message);
-        });
+    // 获取新词
+    async function fetchNewWords() {
+      try {
+        showMessage('🔄 正在加载新词...', 'info');
+        addTaskLog('开始加载新词...');
+        const url = API_BASE + '/new-words';
+        addTaskLog('请求新词: ' + url);
+        const res = await fetch(url, { method: 'GET' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        const items = Array.isArray(data.items) ? data.items : [];
+        items.sort(function (a, b) { return (b.noveltyScore || 0) - (a.noveltyScore || 0); });
+        renderNewWords(items);
+        document.getElementById('new-words-count').textContent = items.length;
+        showMessage('✅ 加载了 ' + items.length + ' 个新词', 'success');
+        addTaskLog('成功加载新词');
+      } catch (err) {
+        console.error('获取新词失败:', err);
+        showMessage('❌ 获取新词出错: ' + err.message, 'error');
+        addTaskLog('获取新词出错: ' + err.message);
+        renderNewWords([]);
+      }
     }
 
     function renderNewWords(items) {
@@ -512,36 +515,27 @@
       }).join('');
     }
 
-    function fetchNewWords() {
-      showMessage('🔄 正在加载新词...', 'info');
-      addTaskLog('开始加载新词...');
-      var url = API_BASE + '/new-words';
-      addTaskLog('请求新词: ' + url);
-      fetch(url, { method: 'GET' })
-        .then(function (response) {
-          if (!response.ok) {
-            throw new Error('HTTP错误: ' + response.status + ' ' + response.statusText);
-          }
-          return response.json();
-        })
-        .then(function (data) {
-          var items = Array.isArray(data.items) ? data.items.slice() : [];
-          items.sort(function (a, b) { return (b.noveltyScore || 0) - (a.noveltyScore || 0); });
-          renderNewWords(items);
-          document.getElementById('new-words-count').textContent = items.length;
-          showMessage('✅ 加载了 ' + items.length + ' 个新词', 'success');
-          addTaskLog('成功加载新词');
-        })
-        .catch(function (err) {
-          console.error('获取新词错误:', err);
-          showMessage('❌ 获取新词出错: ' + err.message, 'error');
-          addTaskLog('获取新词出错: ' + err.message);
-        });
+    // 执行完整检测
+    async function runFullDetection() {
+      try {
+        showMessage('🔄 正在执行完整检测...', 'info');
+        addTaskLog('开始执行完整检测...');
+        const url = API_BASE + '/daily-job';
+        addTaskLog('请求: ' + url);
+        const res = await fetch(url, { method: 'POST' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        showMessage('✅ 完整检测已运行', 'success');
+        addTaskLog('完整检测已运行');
+      } catch (err) {
+        console.error('执行完整检测失败:', err);
+        showMessage('❌ 执行完整检测出错: ' + err.message, 'error');
+        addTaskLog('执行完整检测出错: ' + err.message);
+      }
     }
 
     document.addEventListener('DOMContentLoaded', function () {
       document.getElementById('btn-full-detection').addEventListener('click', function () {
-        callApi('/daily-job', '执行完整检测');
+        runFullDetection();
       });
 
       document.getElementById('btn-load-exploding').addEventListener('click', function () {
@@ -577,20 +571,19 @@
         addTaskLog('测试后端连接: ' + url);
         fetch(url, { method: 'GET' })
           .then(function (response) {
-            if (!response.ok) throw new Error('HTTP错误: ' + response.status + ' ' + response.statusText);
-            return response.json();
-          })
-          .then(function (data) {
-            showMessage('✅ 后端健康: ' + (data.ok ? 'OK' : 'FAIL') + ' ' + (data.time || ''), 'success');
-            addTaskLog('后端健康检查成功');
+            if (response.ok) {
+              showMessage('✅ 后端连接正常', 'success');
+              addTaskLog('后端连接正常');
+            } else {
+              showMessage('❌ 后端连接失败', 'error');
+              addTaskLog('后端连接失败');
+            }
           })
           .catch(function (err) {
-            showMessage('❌ 连接失败: ' + err.message, 'error');
-            addTaskLog('连接失败: ' + err.message);
+            showMessage('❌ 后端连接出错: ' + err.message, 'error');
+            addTaskLog('后端连接出错: ' + err.message);
           });
       });
-
-      fetchTrends('/trend/exploding','爆发趋势');
     });
   </script>
 </body>

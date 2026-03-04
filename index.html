@@ -370,15 +370,7 @@
       if (!/\/api$/.test(s)) s = s + '/api';
       return s;
     }
-    var API_BASE = (function () {
-      var v = window.NEXT_PUBLIC_API_URL || window.API_BASE || localStorage.getItem('API_BASE');
-      if (v) return normalizeApiBase(v);
-      var h = location.hostname;
-      var p = location.protocol;
-      if (h.endsWith('vercel.app')) return normalizeApiBase('https://gametrendradar-backend-production.up.railway.app');
-      if (h === 'localhost') return normalizeApiBase('http://localhost:3000');
-      return normalizeApiBase(p === 'https:' ? 'https://gametrendradar-backend-production.up.railway.app' : 'http://localhost:3000');
-    })();
+    var API_BASE = normalizeApiBase('https://gametrenradar-backend-production.up.railway.app');
 
     function showMessage(text, type) {
       var container = document.getElementById('message-container');

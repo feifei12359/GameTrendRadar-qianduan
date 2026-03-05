@@ -1,364 +1,215 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GameTrend Radar</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0f1419;
-      color: white;
-    }
-
-    header {
-      border-bottom: 1px solid #2a3a4a;
-      padding: 1rem 1.5rem;
-    }
-
-    .header-content {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .title-section h1 {
-      font-size: 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin: 0;
-    }
-
-    .title-section p {
-      font-size: 0.875rem;
-      color: white;
-      margin: 0.25rem 0 0 0;
-    }
-
-    .btn-primary {
-      background: #007acc;
-      color: white;
-      padding: 0.5rem 1.5rem;
-      border-radius: 0.5rem;
-      border: none;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-
-    .btn-primary:hover {
-      background: #005a9e;
-    }
-
-    main {
-      padding: 1.5rem;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .stat-card {
-      background: #1f2937;
-      border: 1px solid #374151;
-      border-radius: 0.5rem;
-      padding: 1rem;
-      text-align: center;
-    }
-
-    .stat-card.worth {
-      border-color: #10b981;
-    }
-
-    .stat-card.ignore {
-      border-color: #ef4444;
-    }
-
-    .stat-card.pending {
-      border-color: #eab308;
-    }
-
-    .stat-value {
-      font-size: 1.875rem;
-      font-weight: bold;
-      margin-bottom: 0.5rem;
-    }
-
-    .stat-card.worth .stat-value {
-      color: #10b981;
-    }
-
-    .stat-card.ignore .stat-value {
-      color: #ef4444;
-    }
-
-    .stat-card.pending .stat-value {
-      color: #eab308;
-    }
-
-    .stat-label {
-      font-size: 0.875rem;
-      color: white;
-    }
-
-    .panel {
-      background: #1f2937;
-      border: 1px solid #374151;
-      border-radius: 0.5rem;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .panel h2 {
-      font-size: 1.125rem;
-      margin: 0 0 1rem 0;
-    }
-
-    .button-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-    }
-
-    .btn-action {
-      background: #1f2937;
-      border: 1px solid #4b5563;
-      border-radius: 0.5rem;
-      padding: 0.5rem 1rem;
-      color: white;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      cursor: pointer;
-    }
-
-    .btn-action:hover {
-      background: #374151;
-    }
-
-    .table-container {
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    th,
-    td {
-      padding: 0.75rem;
-      text-align: left;
-      border-bottom: 1px solid #374151;
-    }
-
-    th {
-      background: #111827;
-      font-weight: 600;
-    }
-
-    .status-badge {
-      padding: 0.25rem 0.75rem;
-      border-radius: 9999px;
-      font-size: 0.875rem;
-      font-weight: 500;
-    }
-
-    .status-badge.worth {
-      background: rgba(16, 185, 129, 0.2);
-      color: #10b981;
-      border: 1px solid #10b981;
-    }
-
-    .status-badge.ignore {
-      background: rgba(239, 68, 68, 0.2);
-      color: #ef4444;
-      border: 1px solid #ef4444;
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 2.5rem;
-      color: #9ca3af;
-    }
-
-    .task-log {
-      max-height: 15rem;
-      overflow-y: auto;
-    }
-
-    .task-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.5rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .task-indicator {
-      width: 0.5rem;
-      height: 0.5rem;
-      border-radius: 9999px;
-      margin-top: 0.5rem;
-      background: #3b82f6;
-    }
-
-    .task-indicator.error {
-      background: #ef4444;
-    }
-
-    .task-indicator.success {
-      background: #10b981;
-    }
-
-    .task-text {
-      font-size: 0.875rem;
-      flex: 1;
-    }
-
-    .message-box {
-      padding: 0.625rem;
-      border-radius: 0.3125rem;
-      margin: 0.625rem 1.25rem;
-      font-weight: bold;
-    }
-
-    .message-box.success {
-      background: #10b981;
-    }
-
-    .message-box.error {
-      background: #ef4444;
-    }
-
-    .message-box.info {
-      background: #3b82f6;
-    }
-
-    @media (max-width: 768px) {
-      .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#3b82f6',
+            secondary: '#10b981',
+            dark: '#1e293b',
+            light: '#f8fafc'
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif']
+          }
+        }
       }
     }
-
-    @media (max-width: 480px) {
-      .stats-grid {
-        grid-template-columns: 1fr;
-      }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto { content-visibility: auto; }
+      .text-shadow { text-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+      .card-hover { transition: all 0.3s ease; }
+      .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); }
     }
   </style>
 </head>
-
-<body>
-  <div id="app">
-    <header>
-      <div class="header-content">
-        <div class="title-section">
-          <h1>📊 GameTrend Radar</h1>
-          <p>跨平台新标签监控 + 爆发预测</p>
+<body class="bg-gray-50 min-h-screen">
+  <!-- 顶部导航 -->
+  <header class="bg-gradient-to-r from-primary to-blue-600 text-white shadow-lg">
+    <div class="container mx-auto px-4 py-6">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+          <i class="fa fa-line-chart text-2xl"></i>
+          <h1 class="text-2xl font-bold">GameTrend Radar</h1>
         </div>
-        <button class="btn-primary" id="btn-full-detection">
-          🔍 运行完整检测
-        </button>
-      </div>
-    </header>
-
-    <div id="message-container"></div>
-
-    <main>
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-value" id="stat-total">0</div>
-          <div class="stat-label">总游戏数</div>
-        </div>
-        <div class="stat-card worth">
-          <div class="stat-value" id="stat-worth">0</div>
-          <div class="stat-label">值得做</div>
-        </div>
-        <div class="stat-card ignore">
-          <div class="stat-value" id="stat-ignore">0</div>
-          <div class="stat-label">忽略</div>
-        </div>
-        <div class="stat-card pending">
-          <div class="stat-value" id="stat-pending">0</div>
-          <div class="stat-label">待检测</div>
+        <div class="hidden md:flex items-center space-x-6">
+          <a href="#" class="hover:text-yellow-200 transition-colors">
+            <i class="fa fa-refresh mr-1"></i> 刷新数据
+          </a>
+          <a href="#" class="hover:text-yellow-200 transition-colors">
+            <i class="fa fa-cog mr-1"></i> 配置
+          </a>
+          <a href="#" class="hover:text-yellow-200 transition-colors">
+            <i class="fa fa-question-circle mr-1"></i> 帮助
+          </a>
         </div>
       </div>
+      <div class="mt-4 text-center">
+        <p class="text-lg opacity-90">跨平台新标签监控 + 爆发预测</p>
+      </div>
+    </div>
+  </header>
 
-      <div class="panel">
-        <h2>趋势数据</h2>
-        <div class="button-group">
-          <button class="btn-action" id="btn-load-exploding">💥 爆发趋势</button>
-          <button class="btn-action" id="btn-load-early">🌱 早期趋势</button>
-          <button class="btn-action" id="btn-load-all">📚 全部趋势</button>
-          <div style="display:flex;gap:0.5rem;align-items:center;flex:1;min-width:260px">
-            <input id="api-base-input" placeholder="API_BASE，例如 https://your-backend/api" style="flex:1;background:#111827;border:1px solid #4b5563;border-radius:0.5rem;padding:0.5rem;color:white" />
-            <button class="btn-action" id="btn-save-api-base">💾 保存地址</button>
-            <button class="btn-action" id="btn-test-api">🧪 测试连接</button>
+  <!-- 主内容 -->
+  <main class="container mx-auto px-4 py-8">
+    <!-- 统计卡片 -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+      <div class="bg-white rounded-lg shadow p-6 card-hover">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-500 text-sm">总游戏数</p>
+            <p class="text-3xl font-bold text-dark" id="totalGames">0</p>
+          </div>
+          <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+            <i class="fa fa-gamepad text-primary text-xl"></i>
           </div>
         </div>
       </div>
-
-      <div class="panel">
-        <h2>趋势列表 (<span id="trend-count">0</span>)</h2>
-        <div class="table-container">
-          <table id="trend-table">
-            <thead>
-              <tr>
-                <th>词</th>
-                <th>预测分</th>
-                <th>增长率</th>
-                <th>加速度</th>
-                <th>平台分</th>
-                <th>AI分</th>
-                <th>首次出现</th>
-                <th>平台</th>
-              </tr>
-            </thead>
-            <tbody id="trend-tbody">
-              <tr>
-                <td colspan="8" class="empty-state">暂无趋势数据，请选择上方分类加载</td>
-              </tr>
-            </tbody>
-          </table>
+      <div class="bg-white rounded-lg shadow p-6 card-hover">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-500 text-sm">值得做</p>
+            <p class="text-3xl font-bold text-secondary" id="worthwhileGames">0</p>
+          </div>
+          <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+            <i class="fa fa-thumbs-up text-secondary text-xl"></i>
+          </div>
         </div>
       </div>
-
-      <div class="panel">
-        <h2>新词列表 (<span id="new-words-count">0</span>)</h2>
-        <div class="table-container">
-          <table id="new-words-table">
-            <thead>
-              <tr>
-                <th>词</th>
-                <th>新颖分</th>
-                <th>最近出现</th>
-                <th>总出现</th>
-                <th>首次出现</th>
-              </tr>
-            </thead>
-            <tbody id="new-words-tbody">
-              <tr>
-                <td colspan="5" class="empty-state">暂无新词数据，请点击“新词”加载</td>
-              </tr>
-            </tbody>
-          </table>
+      <div class="bg-white rounded-lg shadow p-6 card-hover">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-500 text-sm">忽略</p>
+            <p class="text-3xl font-bold text-gray-500" id="ignoredGames">0</p>
+          </div>
+          <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
+            <i class="fa fa-thumbs-down text-gray-500 text-xl"></i>
+          </div>
         </div>
       </div>
-
-      <div class="panel">
-        <h2>任务日志</h2>
-        <div class="task-log" id="task-log">
-          <div style="text-align: center; padding: 2rem; color: white;">暂无任务记录</div>
+      <div class="bg-white rounded-lg shadow p-6 card-hover">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-500 text-sm">待检测</p>
+            <p class="text-3xl font-bold text-orange-500" id="pendingGames">0</p>
+          </div>
+          <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+            <i class="fa fa-clock-o text-orange-500 text-xl"></i>
+          </div>
         </div>
       </div>
-    </main>
-  </div>
+    </div>
 
+    <!-- 趋势数据 -->
+    <div class="bg-white rounded-lg shadow p-6 mb-8">
+      <h2 class="text-xl font-bold text-dark mb-4">
+        <i class="fa fa-fire mr-2 text-red-500"></i> 趋势数据
+      </h2>
+      <div class="flex flex-wrap gap-2 mb-6">
+        <button class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-600 transition-colors" onclick="loadTrends('exploding', '爆发趋势')">
+          💥 爆发趋势
+        </button>
+        <button class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors" onclick="loadTrends('early', '早期趋势')">
+          🌱 早期趋势
+        </button>
+        <button class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors" onclick="loadTrends('all', '全部趋势')">
+          📚 全部趋势
+        </button>
+        <button class="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition-colors" onclick="loadNewWords()">
+          🔍 新词
+        </button>
+        <button class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors" onclick="runFullDetection()">
+          🚀 完整检测
+        </button>
+      </div>
+
+      <!-- 趋势列表 -->
+      <div class="overflow-x-auto">
+        <h3 class="text-lg font-semibold mb-3" id="trendTitle">趋势列表 (0)</h3>
+        <table class="min-w-full bg-white border border-gray-200">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="py-3 px-4 border-b text-left">词</th>
+              <th class="py-3 px-4 border-b text-left">预测分</th>
+              <th class="py-3 px-4 border-b text-left">增长率</th>
+              <th class="py-3 px-4 border-b text-left">加速度</th>
+              <th class="py-3 px-4 border-b text-left">平台分</th>
+              <th class="py-3 px-4 border-b text-left">AI分</th>
+              <th class="py-3 px-4 border-b text-left">首次出现</th>
+              <th class="py-3 px-4 border-b text-left">平台</th>
+              <th class="py-3 px-4 border-b text-left">操作</th>
+            </tr>
+          </thead>
+          <tbody id="trendTableBody">
+            <tr>
+              <td colspan="9" class="py-8 text-center text-gray-500">
+                暂无趋势数据，请选择上方分类加载
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 新词列表 -->
+    <div class="bg-white rounded-lg shadow p-6 mb-8">
+      <h2 class="text-xl font-bold text-dark mb-4">
+        <i class="fa fa-star mr-2 text-yellow-500"></i> 新词列表 (0)
+      </h2>
+      <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-200">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="py-3 px-4 border-b text-left">词</th>
+              <th class="py-3 px-4 border-b text-left">新颖分</th>
+              <th class="py-3 px-4 border-b text-left">最近出现</th>
+              <th class="py-3 px-4 border-b text-left">总出现</th>
+              <th class="py-3 px-4 border-b text-left">首次出现</th>
+              <th class="py-3 px-4 border-b text-left">操作</th>
+            </tr>
+          </thead>
+          <tbody id="newWordsTableBody">
+            <tr>
+              <td colspan="6" class="py-8 text-center text-gray-500">
+                暂无新词数据，请点击“新词”加载
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 任务日志 -->
+    <div class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-xl font-bold text-dark mb-4">
+        <i class="fa fa-history mr-2 text-gray-500"></i> 任务日志
+      </h2>
+      <div class="bg-gray-50 p-4 rounded-md min-h-[200px]" id="taskLog">
+        <p class="text-gray-500">暂无任务记录</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- 底部信息 -->
+  <footer class="bg-dark text-white py-6 mt-8">
+    <div class="container mx-auto px-4 text-center">
+      <p>© 2024 GameTrend Radar - 游戏趋势监控平台</p>
+      <p class="text-gray-400 text-sm mt-2">
+        <i class="fa fa-code mr-1"></i> 基于 NestJS + React + Prisma 构建
+      </p>
+    </div>
+  </footer>
+
+  <!-- API 配置和功能 -->
   <script>
     function normalizeApiBase(url) {
       let u = String(url || '').trim();
@@ -374,218 +225,186 @@
       (location.hostname === 'localhost' ? 'http://localhost:3000' : 'https://gametrenradar-backend-production.up.railway.app')
     );
 
-    var trends = [];
-    var tasks = [];
-    var stats = { total: 0, worthDoing: 0, ignore: 0, pending: 0 };
-
-    function showMessage(text, type) {
-      var container = document.getElementById('message-container');
-      var messageClass = 'message-box ' + (type || 'info');
-      container.innerHTML = '<div class="' + messageClass + '">' + text + '</div>';
-    }
-
-    function addTaskLog(text) {
-      var timestamp = new Date().toLocaleString('zh-CN');
-      var logText = timestamp + ' - ' + text;
-      tasks.push(logText);
-      renderTaskLog();
-    }
-
-    function renderTaskLog() {
-      var container = document.getElementById('task-log');
-      if (tasks.length === 0) {
-        container.innerHTML = '<div style="text-align: center; padding: 2rem; color: white;">暂无任务记录</div>';
-        return;
-      }
-
-      container.innerHTML = tasks.map(function (task) {
-        var isError = task.indexOf('失败') !== -1 || task.indexOf('错误') !== -1;
-        var isSuccess = task.indexOf('成功') !== -1;
-        var indicatorClass = 'task-indicator';
-        if (isError) indicatorClass += ' error';
-        if (isSuccess) indicatorClass += ' success';
-
-        return '<div class="task-item">' +
-          '<div class="' + indicatorClass + '"></div>' +
-          '<div class="task-text">' + task + '</div>' +
-          '</div>';
-      }).join('');
-    }
-
-    function updateStats() {
-      document.getElementById('stat-total').textContent = trends.length;
-      document.getElementById('stat-worth').textContent = 0;
-      document.getElementById('stat-ignore').textContent = 0;
-      document.getElementById('stat-pending').textContent = 0;
-      var c = document.getElementById('trend-count'); if (c) c.textContent = trends.length;
-    }
-
-    function renderTrends() {
-      var tbody = document.getElementById('trend-tbody');
-
-      if (!trends || trends.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" class="empty-state">暂无趋势数据，请选择上方分类加载</td></tr>';
-        return;
-      }
-
-      tbody.innerHTML = trends.map(function (t) {
-        var first = t.first_seen_at ? new Date(t.first_seen_at).toLocaleString('zh-CN') : '';
-        var plats = Array.isArray(t.platforms) ? t.platforms.join(', ') : '';
-        return '<tr>' +
-          '<td>' + (t.word || '') + '</td>' +
-          '<td>' + (t.prediction_score || 0) + '</td>' +
-          '<td>' + (t.growth_rate || 0) + '</td>' +
-          '<td>' + (t.acceleration || 0) + '</td>' +
-          '<td>' + (t.platform_score || 0) + '</td>' +
-          '<td>' + (t.ai_score || 0) + '</td>' +
-          '<td>' + first + '</td>' +
-          '<td>' + plats + '</td>' +
-          '</tr>';
-      }).join('');
-    }
-
     // 获取趋势数据
     async function fetchTrends(endpoint, label) {
       try {
-        showMessage('🔄 正在加载' + label + '...', 'info');
-        addTaskLog('开始加载' + label + '...');
         const url = API_BASE + endpoint;
-        addTaskLog('请求: ' + url);
+        console.log('请求 URL:', url);
         const res = await fetch(url, { method: 'GET' });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
-        trends = Array.isArray(data) ? data : [];
-        updateStats();
-        renderTrends();
-        showMessage('✅ 加载了 ' + trends.length + ' 条数据', 'success');
-        addTaskLog('成功加载' + label);
+        return Array.isArray(data) ? data : [];
       } catch (err) {
         console.error(`获取 ${label} 失败:`, err);
-        showMessage('❌ 加载出错: ' + err.message, 'error');
-        addTaskLog('加载出错: ' + err.message);
-        trends = [];
-        updateStats();
-        renderTrends();
+        return [];
       }
     }
 
     // 获取新词
     async function fetchNewWords() {
       try {
-        showMessage('🔄 正在加载新词...', 'info');
-        addTaskLog('开始加载新词...');
         const url = API_BASE + '/new-words';
-        addTaskLog('请求新词: ' + url);
         const res = await fetch(url, { method: 'GET' });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
-        const items = Array.isArray(data.items) ? data.items : [];
-        items.sort(function (a, b) { return (b.noveltyScore || 0) - (a.noveltyScore || 0); });
-        renderNewWords(items);
-        document.getElementById('new-words-count').textContent = items.length;
-        showMessage('✅ 加载了 ' + items.length + ' 个新词', 'success');
-        addTaskLog('成功加载新词');
+        return Array.isArray(data.items) ? data.items : [];
       } catch (err) {
         console.error('获取新词失败:', err);
-        showMessage('❌ 获取新词出错: ' + err.message, 'error');
-        addTaskLog('获取新词出错: ' + err.message);
-        renderNewWords([]);
+        return [];
       }
-    }
-
-    function renderNewWords(items) {
-      var tbody = document.getElementById('new-words-tbody');
-      if (!items || items.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="empty-state">暂无新词数据，请点击“新词”加载</td></tr>';
-        return;
-      }
-      tbody.innerHTML = items.map(function (it) {
-        var token = it.token || '';
-        var novelty = it.noveltyScore || 0;
-        var recent = it.recentCount || 0;
-        var total = it.totalCount || 0;
-        var first = it.firstSeenAt ? new Date(it.firstSeenAt).toLocaleString('zh-CN') : '';
-        return '<tr>' +
-          '<td>' + token + '</td>' +
-          '<td>' + novelty + '</td>' +
-          '<td>' + recent + '</td>' +
-          '<td>' + total + '</td>' +
-          '<td>' + first + '</td>' +
-          '</tr>';
-      }).join('');
     }
 
     // 执行完整检测
     async function runFullDetection() {
       try {
-        showMessage('🔄 正在执行完整检测...', 'info');
-        addTaskLog('开始执行完整检测...');
         const url = API_BASE + '/daily-job';
-        addTaskLog('请求: ' + url);
         const res = await fetch(url, { method: 'POST' });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        showMessage('✅ 完整检测已运行', 'success');
-        addTaskLog('完整检测已运行');
+        console.log('完整检测已触发');
+        addTaskLog('完整检测已触发');
       } catch (err) {
         console.error('执行完整检测失败:', err);
-        showMessage('❌ 执行完整检测出错: ' + err.message, 'error');
-        addTaskLog('执行完整检测出错: ' + err.message);
+        addTaskLog('执行完整检测失败: ' + err.message);
       }
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
-      document.getElementById('btn-full-detection').addEventListener('click', function () {
-        runFullDetection();
-      });
-
-      document.getElementById('btn-load-exploding').addEventListener('click', function () {
-        fetchTrends('/trend/exploding', '爆发趋势');
-      });
-      document.getElementById('btn-load-early').addEventListener('click', function () {
-        fetchTrends('/trend/early', '早期趋势');
-      });
-      document.getElementById('btn-load-all').addEventListener('click', function () {
-        fetchTrends('/trend/all', '全部趋势');
-      });
-      document.getElementById('btn-save-api-base').addEventListener('click', function () {
-        var input = document.getElementById('api-base-input');
-        var url = (input && input.value || '').trim();
-        if (!url) {
-          showMessage('❌ API_BASE 为空', 'error');
-          addTaskLog('API_BASE 为空');
-          return;
-        }
-        API_BASE = normalizeApiBase(url);
-        localStorage.setItem('API_BASE', API_BASE);
-        showMessage('✅ 已保存 API_BASE', 'success');
-        addTaskLog('已设置 API_BASE 为 ' + API_BASE);
-        setTimeout(function(){ fetchTrends('/trend/exploding','爆发趋势') }, 500);
-      });
-      var input = document.getElementById('api-base-input');
-      if (input) {
-        input.value = API_BASE;
+    // 加载趋势数据
+    async function loadTrends(type, title) {
+      addTaskLog(`加载${title}...`);
+      
+      let endpoint = '';
+      if (type === 'exploding') {
+        endpoint = '/trend/exploding';
+      } else if (type === 'early') {
+        endpoint = '/trend/early';
+      } else {
+        endpoint = '/trend/all';
       }
 
-      document.getElementById('btn-test-api').addEventListener('click', function () {
-        var url = API_BASE + '/health';
-        addTaskLog('测试后端连接: ' + url);
-        fetch(url, { method: 'GET' })
-          .then(function (response) {
-            if (response.ok) {
-              showMessage('✅ 后端连接正常', 'success');
-              addTaskLog('后端连接正常');
-            } else {
-              showMessage('❌ 后端连接失败', 'error');
-              addTaskLog('后端连接失败');
-            }
-          })
-          .catch(function (err) {
-            showMessage('❌ 后端连接出错: ' + err.message, 'error');
-            addTaskLog('后端连接出错: ' + err.message);
-          });
-      });
-    });
+      const trends = await fetchTrends(endpoint, title);
+      updateTrendTable(trends, title);
+      addTaskLog(`${title}加载完成，共${trends.length}条`);
+    }
+
+    // 加载新词数据
+    async function loadNewWords() {
+      addTaskLog('加载新词数据...');
+      const words = await fetchNewWords();
+      updateNewWordsTable(words);
+      addTaskLog(`新词数据加载完成，共${words.length}条`);
+    }
+
+    // 更新趋势表格
+    function updateTrendTable(trends, title) {
+      const tableBody = document.getElementById('trendTableBody');
+      const trendTitle = document.getElementById('trendTitle');
+      
+      trendTitle.textContent = `${title} (${trends.length})`;
+      
+      if (trends.length === 0) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="9" class="py-8 text-center text-gray-500">
+              暂无${title}数据
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tableBody.innerHTML = trends.map(trend => `
+        <tr class="hover:bg-gray-50">
+          <td class="py-3 px-4 border-b">${trend.word || '未知'}</td>
+          <td class="py-3 px-4 border-b">${trend.prediction || trend.prediction_score || 0}</td>
+          <td class="py-3 px-4 border-b">${(trend.growthRate || trend.growth_rate || 0).toFixed(2)}</td>
+          <td class="py-3 px-4 border-b">${(trend.acceleration || 0).toFixed(2)}</td>
+          <td class="py-3 px-4 border-b">${trend.platformScore || trend.platform_score || 0}</td>
+          <td class="py-3 px-4 border-b">${trend.aiScore || trend.ai_score || 0}</td>
+          <td class="py-3 px-4 border-b">${formatDate(trend.firstSeenAt || trend.first_seen_at)}</td>
+          <td class="py-3 px-4 border-b">${(trend.platforms || []).join(', ')}</td>
+          <td class="py-3 px-4 border-b">
+            <button class="text-blue-500 hover:text-blue-700 mr-2">
+              <i class="fa fa-eye"></i>
+            </button>
+            <button class="text-green-500 hover:text-green-700 mr-2">
+              <i class="fa fa-thumbs-up"></i>
+            </button>
+            <button class="text-red-500 hover:text-red-700">
+              <i class="fa fa-thumbs-down"></i>
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // 更新新词表格
+    function updateNewWordsTable(words) {
+      const tableBody = document.getElementById('newWordsTableBody');
+      const tableTitle = document.querySelector('h2:has(+ table)');
+      
+      if (tableTitle) {
+        tableTitle.textContent = `新词列表 (${words.length})`;
+      }
+      
+      if (words.length === 0) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="6" class="py-8 text-center text-gray-500">
+              暂无新词数据
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tableBody.innerHTML = words.map(word => `
+        <tr class="hover:bg-gray-50">
+          <td class="py-3 px-4 border-b">${word.token || '未知'}</td>
+          <td class="py-3 px-4 border-b">${word.noveltyScore || 0}</td>
+          <td class="py-3 px-4 border-b">${word.recentCount || 0}</td>
+          <td class="py-3 px-4 border-b">${word.totalCount || 0}</td>
+          <td class="py-3 px-4 border-b">${formatDate(word.firstSeenAt)}</td>
+          <td class="py-3 px-4 border-b">
+            <button class="text-blue-500 hover:text-blue-700 mr-2">
+              <i class="fa fa-eye"></i>
+            </button>
+            <button class="text-green-500 hover:text-green-700">
+              <i class="fa fa-plus"></i>
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // 添加任务日志
+    function addTaskLog(message) {
+      const taskLog = document.getElementById('taskLog');
+      const timestamp = new Date().toLocaleString('zh-CN');
+      const logEntry = document.createElement('div');
+      logEntry.className = 'mb-2';
+      logEntry.innerHTML = `<span class="text-gray-500">[${timestamp}]</span> ${message}`;
+      taskLog.appendChild(logEntry);
+      taskLog.scrollTop = taskLog.scrollHeight;
+    }
+
+    // 格式化日期
+    function formatDate(dateStr) {
+      if (!dateStr) return '-';
+      const date = new Date(dateStr);
+      return date.toLocaleString('zh-CN');
+    }
+
+    // 初始化
+    async function init() {
+      addTaskLog('系统初始化...');
+      addTaskLog(`后端 API: ${API_BASE}`);
+      
+      // 加载默认数据
+      await loadTrends('exploding', '爆发趋势');
+    }
+
+    // 页面加载完成后初始化
+    window.onload = init;
   </script>
 </body>
-
 </html>

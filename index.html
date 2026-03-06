@@ -1,16 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Generate code</title>
-  <script type="module" crossorigin src="/assets/index-kQApVUhF.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-BLbnT8GC.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game Trend Radar</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 
-<body>
-  <div id="root"></div>
+<body class="bg-gray-100 font-sans">
+
+  <div class="container mx-auto p-6">
+    <h1 class="text-2xl font-bold mb-4">Game Trend Radar 测试页面</h1>
+    <button id="testApiBtn" class="bg-blue-600 text-white px-4 py-2 rounded mb-4">
+      测试后端 /api/health
+    </button>
+    <div id="apiResult" class="p-4 bg-white rounded shadow"></div>
+  </div>
+
+  <script>
+    // ✅ 正确的后端地址
+    const API_BASE = 'https://gametrendradar-backend-production.up.railway.app';
+
+    async function testBackendHealth() {
+      const resultEl = document.getElementById('apiResult');
+      resultEl.textContent = '请求中...';
+      try {
+        const res = await fetch(API_BASE + '/api/health');
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        resultEl.textContent = '✅ 后端访问成功: ' + JSON.stringify(data);
+      } catch (err) {
+        resultEl.textContent = '❌ 请求后端失败: ' + err;
+      }
+    }
+
+    document.getElementById('testApiBtn').addEventListener('click', testBackendHealth);
+  </script>
 </body>
 
 </html>

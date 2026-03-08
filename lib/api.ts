@@ -1,4 +1,4 @@
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+const API_BASE = "https://gametrendradar-backend-production.up.railway.app/api";
 
 if (!API_BASE) {
   throw new Error("VITE_API_URL is not defined");

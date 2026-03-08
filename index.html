@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -42,6 +43,7 @@
     }
   </style>
 </head>
+
 <body class="bg-light font-inter text-dark">
   <div class="min-h-screen flex flex-col">
     <!-- Header -->
@@ -53,7 +55,8 @@
             <h1 class="text-2xl font-bold text-primary">Game Trend Radar</h1>
           </div>
           <div class="flex items-center space-x-4">
-            <button id="runJobBtn" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg transition-all flex items-center space-x-2">
+            <button id="runJobBtn"
+              class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg transition-all flex items-center space-x-2">
               <i class="fa fa-refresh"></i>
               <span>运行完整检测</span>
             </button>
@@ -68,22 +71,29 @@
       <div class="mb-8 border-b border-gray-200">
         <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="trend-tabs" role="tablist">
           <li class="mr-2" role="presentation">
-            <button class="inline-block p-4 border-b-2 border-primary text-primary rounded-t-lg active" id="exploding-tab" data-tab="exploding" type="button" role="tab">
+            <button class="inline-block p-4 border-b-2 border-primary text-primary rounded-t-lg active"
+              id="exploding-tab" data-tab="exploding" type="button" role="tab">
               <i class="fa fa-rocket mr-2"></i>爆发趋势
             </button>
           </li>
           <li class="mr-2" role="presentation">
-            <button class="inline-block p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 rounded-t-lg" id="early-tab" data-tab="early" type="button" role="tab">
+            <button
+              class="inline-block p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 rounded-t-lg"
+              id="early-tab" data-tab="early" type="button" role="tab">
               <i class="fa fa-seedling mr-2"></i>早期趋势
             </button>
           </li>
           <li class="mr-2" role="presentation">
-            <button class="inline-block p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 rounded-t-lg" id="all-tab" data-tab="all" type="button" role="tab">
+            <button
+              class="inline-block p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 rounded-t-lg"
+              id="all-tab" data-tab="all" type="button" role="tab">
               <i class="fa fa-list mr-2"></i>全部趋势
             </button>
           </li>
           <li role="presentation">
-            <button class="inline-block p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 rounded-t-lg" id="new-words-tab" data-tab="new-words" type="button" role="tab">
+            <button
+              class="inline-block p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 rounded-t-lg"
+              id="new-words-tab" data-tab="new-words" type="button" role="tab">
               <i class="fa fa-book mr-2"></i>新词
             </button>
           </li>
@@ -103,14 +113,22 @@
               <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                   <tr>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">关键词</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">预测分数</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">增长率</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">加速度</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">平台分数</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">AI 分数</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">首次发现</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">平台</th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">关键词</th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">预测分数</th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">增长率</th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">加速度</th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">平台分数</th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">AI 分数</th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">首次发现</th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">平台</th>
                   </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200" id="exploding-table">
@@ -134,14 +152,22 @@
               <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                   <tr>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">关键词</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">预测分数</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">增长率</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">加速度</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">平台分数</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">AI 分数</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">首次发现</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">平台</th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">关键词</th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">预测分数</th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">增长率</th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">加速度</th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">平台分数</th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">AI 分数</th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">首次发现</th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">平台</th>
                   </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200" id="early-table">
@@ -165,14 +191,22 @@
               <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                   <tr>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">关键词</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">预测分数</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">增长率</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">加速度</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">平台分数</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">AI 分数</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">首次发现</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">平台</th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">关键词</th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">预测分数</th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">增长率</th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">加速度</th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">平台分数</th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">AI 分数</th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">首次发现</th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">平台</th>
                   </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200" id="all-table">
@@ -196,11 +230,16 @@
               <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                   <tr>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">词汇</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">新颖度</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">近期出现</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">总出现</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">首次发现</th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">词汇</th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">新颖度</th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">近期出现</th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">总出现</th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">首次发现</th>
                   </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200" id="new-words-table">
@@ -247,19 +286,7 @@
   </div>
 
   <script>
-    function normalizeApiBase(url) {
-      let u = String(url || '').trim();
-      if (!u) return '';
-      if (u.endsWith('/')) u = u.slice(0, -1);
-      if (!/\/api$/.test(u)) u = u + '/api';
-      return u;
-    }
-
-    // ✅ 升级版后端地址
-    let API_BASE = normalizeApiBase(
-      window.NEXT_PUBLIC_API_URL ||
-      (location.hostname === 'localhost' ? 'http://localhost:3000' : 'https://gametrenradar-backend-production.up.railway.app')
-    );
+    const API_BASE = "https://gametrendradar-backend-production.up.railway.app/api";
 
     // 获取趋势数据
     async function fetchTrends(endpoint, label) {
@@ -319,14 +346,14 @@
     function renderTrendTable(data, tableId, countId) {
       const table = document.getElementById(tableId);
       const count = document.getElementById(countId);
-      
+
       count.textContent = `共 ${data.length} 条数据`;
-      
+
       if (data.length === 0) {
         table.innerHTML = '<tr><td colspan="8" class="px-6 py-4 text-center text-gray-500">暂无数据</td></tr>';
         return;
       }
-      
+
       table.innerHTML = data.map(trend => {
         // 处理平台数据，支持字符串和数组格式
         const platforms = Array.isArray(trend.platforms) ? trend.platforms : trend.platforms?.split(',') || [];
@@ -365,14 +392,14 @@
     function renderNewWordsTable(data, tableId, countId) {
       const table = document.getElementById(tableId);
       const count = document.getElementById(countId);
-      
+
       count.textContent = `共 ${data.length} 条数据`;
-      
+
       if (data.length === 0) {
         table.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-gray-500">暂无数据</td></tr>';
         return;
       }
-      
+
       table.innerHTML = data.map(item => `
         <tr class="card-hover">
           <td class="px-6 py-4 whitespace-nowrap">
@@ -404,23 +431,23 @@
             t.classList.remove('border-primary', 'text-primary');
             t.classList.add('border-transparent', 'hover:text-gray-600', 'hover:border-gray-300');
           });
-          
+
           // 添加当前标签的活动状态
           tab.classList.remove('border-transparent', 'hover:text-gray-600', 'hover:border-gray-300');
           tab.classList.add('border-primary', 'text-primary');
-          
+
           // 隐藏所有内容
           document.querySelectorAll('.tab-pane').forEach(pane => {
             pane.classList.add('hidden');
             pane.classList.remove('active');
           });
-          
+
           // 显示当前内容
           const tabId = tab.getAttribute('data-tab');
           const content = document.getElementById(`${tabId}-content`);
           content.classList.remove('hidden');
           content.classList.add('active');
-          
+
           // 加载数据
           if (tabId === 'exploding') {
             const data = await fetchTrends('/trend/exploding', '爆发趋势');
@@ -443,11 +470,11 @@
     async function init() {
       // 初始化标签
       setupTabs();
-      
+
       // 加载初始数据（爆发趋势）
       const data = await fetchTrends('/trend/exploding', '爆发趋势');
       renderTrendTable(data, 'exploding-table', 'exploding-count');
-      
+
       // 绑定运行任务按钮
       document.getElementById('runJobBtn').addEventListener('click', runFullDetection);
     }
@@ -456,4 +483,5 @@
     window.addEventListener('DOMContentLoaded', init);
   </script>
 </body>
+
 </html>

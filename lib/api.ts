@@ -1,44 +1,31 @@
-// api.ts - 可直接替换你的前端文件
-
 const API = "https://gametrendradar-backend-production.up.railway.app";
 
-async function fetchJSON(url: string, options?: RequestInit) {
-  try {
-    const res = await fetch(url, options);
-    if (!res.ok) {
-      throw new Error(`Failed to fetch ${url}, status: ${res.status}`);
-    }
-    return res.json();
-  } catch (err: any) {
-    console.error(err.message);
-    throw err;
-  }
-}
-
-export async function getHealth() {
-  return fetchJSON(`${API}/api/health`);
-}
-
-export async function getGames() {
-  return fetchJSON(`${API}/api/games`);
-}
-
 export async function getExplodingTrends() {
-  return fetchJSON(`${API}/api/trend/exploding`);
+  const res = await fetch(`${API}/api/trend/exploding`);
+  if (!res.ok) throw new Error("Failed to fetch exploding trends");
+  return res.json();
 }
 
 export async function getEarlyTrends() {
-  return fetchJSON(`${API}/api/trend/early`);
+  const res = await fetch(`${API}/api/trend/early`);
+  if (!res.ok) throw new Error("Failed to fetch early trends");
+  return res.json();
 }
 
 export async function getAllTrends() {
-  return fetchJSON(`${API}/api/trend/all`);
+  const res = await fetch(`${API}/api/trend/all`);
+  if (!res.ok) throw new Error("Failed to fetch all trends");
+  return res.json();
 }
 
 export async function getNewWords() {
-  return fetchJSON(`${API}/api/new-words`);
+  const res = await fetch(`${API}/api/new-words`);
+  if (!res.ok) throw new Error("Failed to fetch new words");
+  return res.json();
 }
 
 export async function runDailyJob() {
-  return fetchJSON(`${API}/api/daily-job`, { method: "POST" });
+  const res = await fetch(`${API}/api/daily-job`, { method: "POST" });
+  if (!res.ok) throw new Error("Failed to run daily job");
+  return res.json();
 }

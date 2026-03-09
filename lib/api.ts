@@ -1,6 +1,6 @@
 // api.ts - 可直接替换你的前端文件
 
-const API = " `https://gametrenradar-backend-production.up.railway.app` ";
+const API = "https://gametrendradar-backend-production.up.railway.app";
 
 async function fetchJSON(url: string, options?: RequestInit) {
   try {

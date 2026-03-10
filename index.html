@@ -2,451 +2,312 @@
 <html lang="zh-CN">
 
 <head>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Game Trend Radar</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
   <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-  <link href="/dist/output.css" rel="stylesheet">
+
 </head>
 
-<body class="bg-light font-inter text-dark">
-  <div class="min-h-screen flex flex-col">
-    <!-- Header -->
-    <header class="bg-white shadow-md">
-      <div class="container mx-auto px-4 py-6">
-        <div class="flex justify-between items-center">
-          <div class="flex items-center space-x-2">
-            <i class="fa fa-line-chart text-primary text-2xl"></i>
-            <h1 class="text-2xl font-bold text-primary">Game Trend Radar</h1>
-          </div>
-          <div class="flex items-center space-x-4">
-            <button id="runJobBtn"
-              class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg transition-all flex items-center space-x-2">
-              <i class="fa fa-refresh"></i>
-              <span>运行完整检测</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </header>
 
-    <!-- Main Content -->
-    <main class="flex-1 container mx-auto px-4 py-8">
-      <!-- Tabs -->
-      <div class="mb-8 border-b border-gray-200">
-        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="trend-tabs" role="tablist">
-          <li class="mr-2" role="presentation">
-            <button class="inline-block p-4 border-b-2 border-primary text-primary rounded-t-lg active"
-              id="exploding-tab" data-tab="exploding" type="button" role="tab">
-              <i class="fa fa-rocket mr-2"></i>爆发趋势
-            </button>
-          </li>
-          <li class="mr-2" role="presentation">
-            <button
-              class="inline-block p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 rounded-t-lg"
-              id="early-tab" data-tab="early" type="button" role="tab">
-              <i class="fa fa-seedling mr-2"></i>早期趋势
-            </button>
-          </li>
-          <li class="mr-2" role="presentation">
-            <button
-              class="inline-block p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 rounded-t-lg"
-              id="all-tab" data-tab="all" type="button" role="tab">
-              <i class="fa fa-list mr-2"></i>全部趋势
-            </button>
-          </li>
-          <li role="presentation">
-            <button
-              class="inline-block p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 rounded-t-lg"
-              id="new-words-tab" data-tab="new-words" type="button" role="tab">
-              <i class="fa fa-book mr-2"></i>新词
-            </button>
-          </li>
-        </ul>
+<body class="bg-slate-50 text-slate-800">
+
+  <div class="flex min-h-screen">
+
+    <!-- Sidebar -->
+
+    <aside class="w-64 bg-white border-r p-6">
+
+      <div class="flex items-center space-x-2 mb-10">
+
+        <i class="fa fa-line-chart text-blue-600 text-2xl"></i>
+
+        <span class="font-bold text-lg">Trend Radar</span>
+
       </div>
 
-      <!-- Trend Content -->
-      <div class="tab-content">
-        <!-- 爆发趋势 -->
-        <div id="exploding-content" class="tab-pane active">
-          <div class="bg-white rounded-lg shadow-md p-6">
-            <div class="flex justify-between items-center mb-4">
-              <h2 class="text-xl font-semibold">爆发趋势</h2>
-              <span class="text-sm text-gray-500" id="exploding-count">加载中...</span>
-            </div>
-            <div class="overflow-x-auto">
-              <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                  <tr>
-                    <th scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">关键词</th>
-                    <th scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">预测分数</th>
-                    <th scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">增长率</th>
-                    <th scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">加速度</th>
-                    <th scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">平台分数</th>
-                    <th scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">AI 分数</th>
-                    <th scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">首次发现</th>
-                    <th scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">平台</th>
-                  </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200" id="exploding-table">
-                  <tr>
-                    <td colspan="8" class="px-6 py-4 text-center text-gray-500">加载中...</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+      <nav class="space-y-3">
 
-        <!-- 早期趋势 -->
-        <div id="early-content" class="tab-pane hidden">
-          <div class="bg-white rounded-lg shadow-md p-6">
-            <div class="flex justify-between items-center mb-4">
-              <h2 class="text-xl font-semibold">早期趋势</h2>
-              <span class="text-sm text-gray-500" id="early-count">加载中...</span>
-            </div>
-            <div class="overflow-x-auto">
-              <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                  <tr>
-                    <th scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">关键词</th>
-                    <th scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">预测分数</th>
-                    <th scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">增长率</th>
-                    <th scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">加速度</th>
-                    <th scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">平台分数</th>
-                    <th scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">AI 分数</th>
-                    <th scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">首次发现</th>
-                    <th scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">平台</th>
-                  </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200" id="early-table">
-                  <tr>
-                    <td colspan="8" class="px-6 py-4 text-center text-gray-500">加载中...</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+        <button class="tab-btn text-blue-600" data-tab="exploding">
+          <i class="fa fa-rocket mr-2"></i>爆发趋势
+        </button>
 
-        <!-- 全部趋势 -->
-        <div id="all-content" class="tab-pane hidden">
-          <div class="bg-white rounded-lg shadow-md p-6">
-            <div class="flex justify-between items-center mb-4">
-              <h2 class="text-xl font-semibold">全部趋势</h2>
-              <span class="text-sm text-gray-500" id="all-count">加载中...</span>
-            </div>
-            <div class="overflow-x-auto">
-              <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                  <tr>
-                    <th scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">关键词</th>
-                    <th scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">预测分数</th>
-                    <th scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">增长率</th>
-                    <th scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">加速度</th>
-                    <th scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">平台分数</th>
-                    <th scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">AI 分数</th>
-                    <th scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">首次发现</th>
-                    <th scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">平台</th>
-                  </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200" id="all-table">
-                  <tr>
-                    <td colspan="8" class="px-6 py-4 text-center text-gray-500">加载中...</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+        <button class="tab-btn text-gray-600" data-tab="early">
+          <i class="fa fa-seedling mr-2"></i>早期趋势
+        </button>
 
-        <!-- 新词 -->
-        <div id="new-words-content" class="tab-pane hidden">
-          <div class="bg-white rounded-lg shadow-md p-6">
-            <div class="flex justify-between items-center mb-4">
-              <h2 class="text-xl font-semibold">新词</h2>
-              <span class="text-sm text-gray-500" id="new-words-count">加载中...</span>
-            </div>
-            <div class="overflow-x-auto">
-              <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                  <tr>
-                    <th scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">词汇</th>
-                    <th scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">新颖度</th>
-                    <th scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">近期出现</th>
-                    <th scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">总出现</th>
-                    <th scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">首次发现</th>
-                  </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200" id="new-words-table">
-                  <tr>
-                    <td colspan="5" class="px-6 py-4 text-center text-gray-500">加载中...</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+        <button class="tab-btn text-gray-600" data-tab="all">
+          <i class="fa fa-list mr-2"></i>全部趋势
+        </button>
+
+        <button class="tab-btn text-gray-600" data-tab="new-words">
+          <i class="fa fa-book mr-2"></i>新词
+        </button>
+
+      </nav>
+
+    </aside>
+
+
+    <!-- Main -->
+
+    <main class="flex-1 p-8">
+
+      <!-- Header -->
+
+      <div class="flex justify-between items-center mb-8">
+
+        <h1 class="text-2xl font-bold">
+          Game Trend Radar
+        </h1>
+
+        <button id="runJobBtn" class="bg-blue-600 text-white px-5 py-2 rounded-lg">
+
+          <i class="fa fa-refresh mr-2"></i>
+          运行检测
+
+        </button>
+
       </div>
 
-      <!-- Task Log -->
-      <div class="mt-8 bg-white rounded-lg shadow-md p-6">
-        <h2 class="text-xl font-semibold mb-4">任务日志</h2>
-        <div class="h-64 overflow-y-auto bg-gray-50 rounded-lg p-4" id="task-log">
-          <div class="text-gray-500">等待任务执行...</div>
+
+      <!-- Stats -->
+
+      <div class="grid grid-cols-4 gap-6 mb-8">
+
+        <div class="bg-white p-6 rounded-xl shadow">
+
+          <div class="text-gray-500 text-sm">爆发趋势</div>
+
+          <div class="text-2xl font-bold" id="exploding-count">0</div>
+
         </div>
+
+        <div class="bg-white p-6 rounded-xl shadow">
+
+          <div class="text-gray-500 text-sm">早期趋势</div>
+
+          <div class="text-2xl font-bold" id="early-count">0</div>
+
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow">
+
+          <div class="text-gray-500 text-sm">全部趋势</div>
+
+          <div class="text-2xl font-bold" id="all-count">0</div>
+
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow">
+
+          <div class="text-gray-500 text-sm">新词</div>
+
+          <div class="text-2xl font-bold" id="new-words-count">0</div>
+
+        </div>
+
       </div>
+
+
+      <!-- Table -->
+
+      <div class="bg-white rounded-xl shadow">
+
+        <div class="p-6 border-b font-semibold">
+          趋势数据
+        </div>
+
+        <div class="overflow-x-auto">
+
+          <table class="min-w-full text-sm">
+
+            <thead class="bg-gray-50 text-gray-600">
+
+              <tr>
+
+                <th class="px-6 py-3 text-left">关键词</th>
+                <th class="px-6 py-3 text-left">预测</th>
+                <th class="px-6 py-3 text-left">增长</th>
+                <th class="px-6 py-3 text-left">加速度</th>
+                <th class="px-6 py-3 text-left">平台</th>
+                <th class="px-6 py-3 text-left">AI</th>
+                <th class="px-6 py-3 text-left">首次发现</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody id="table-body">
+
+              <tr>
+
+                <td class="px-6 py-4 text-gray-500">
+                  加载中...
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+
+      <!-- Log -->
+
+      <div class="mt-8 bg-white rounded-xl shadow p-6">
+
+        <h2 class="font-semibold mb-4">
+          任务日志
+        </h2>
+
+        <div id="task-log" class="h-48 overflow-y-auto text-sm text-gray-600">
+
+          等待任务执行...
+
+        </div>
+
+      </div>
+
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-white shadow-inner mt-8">
-      <div class="container mx-auto px-4 py-6">
-        <div class="flex flex-col md:flex-row justify-between items-center">
-          <div class="text-gray-600 mb-4 md:mb-0">
-            <p>© 2024 Game Trend Radar. All rights reserved.</p>
-          </div>
-          <div class="flex space-x-4">
-            <a href="#" class="text-gray-500 hover:text-primary transition-colors">
-              <i class="fa fa-github text-xl"></i>
-            </a>
-            <a href="#" class="text-gray-500 hover:text-primary transition-colors">
-              <i class="fa fa-twitter text-xl"></i>
-            </a>
-            <a href="#" class="text-gray-500 hover:text-primary transition-colors">
-              <i class="fa fa-linkedin text-xl"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-    </footer>
   </div>
 
+
   <script>
-    const API_BASE = "https://gametrenradar-backend-production.up.railway.app/api";
 
-    // 获取趋势数据
-    async function fetchTrends(endpoint, label) {
-      try {
-        const url = API_BASE + endpoint;
-        console.log('请求 URL:', url);
-        const res = await fetch(url, { method: 'GET' });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        return Array.isArray(data) ? data : [];
-      } catch (err) {
-        console.error(`获取 ${label} 失败:`, err);
-        return [];
-      }
+    const API_BASE = "https://gametrenradar-backend-production.up.railway.app/api"
+
+    let currentTab = "exploding"
+
+    async function fetchData(endpoint) {
+
+      const res = await fetch(API_BASE + endpoint)
+
+      return await res.json()
+
     }
 
-    // 获取新词
-    async function fetchNewWords() {
-      try {
-        const url = API_BASE + '/new-words';
-        const res = await fetch(url, { method: 'GET' });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        return Array.isArray(data.items) ? data.items : [];
-      } catch (err) {
-        console.error('获取新词失败:', err);
-        return [];
-      }
-    }
 
-    // 执行完整检测
-    async function runFullDetection() {
-      try {
-        const url = API_BASE + '/daily-job';
-        const res = await fetch(url, { method: 'POST' });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        console.log('完整检测已触发');
-        logTask('✅ 完整检测已触发');
-      } catch (err) {
-        console.error('执行完整检测失败:', err);
-        logTask('❌ 执行完整检测失败');
-      }
-    }
+    function renderTable(data) {
 
-    // 日志记录
-    function logTask(message) {
-      const logElement = document.getElementById('task-log');
-      const timestamp = new Date().toLocaleTimeString();
-      const logItem = document.createElement('div');
-      logItem.className = 'mb-2';
-      logItem.innerHTML = `<span class="text-gray-500">[${timestamp}]</span> <span>${message}</span>`;
-      logElement.appendChild(logItem);
-      logElement.scrollTop = logElement.scrollHeight;
-    }
+      const table = document.getElementById("table-body")
 
-    // 渲染趋势表格
-    function renderTrendTable(data, tableId, countId) {
-      const table = document.getElementById(tableId);
-      const count = document.getElementById(countId);
+      if (!data.length) {
 
-      count.textContent = `共 ${data.length} 条数据`;
+        table.innerHTML = `<tr><td class="px-6 py-4">暂无数据</td></tr>`
 
-      if (data.length === 0) {
-        table.innerHTML = '<tr><td colspan="8" class="px-6 py-4 text-center text-gray-500">暂无数据</td></tr>';
-        return;
+        return
+
       }
 
-      table.innerHTML = data.map(trend => {
-        // 处理平台数据，支持字符串和数组格式
-        const platforms = Array.isArray(trend.platforms) ? trend.platforms : trend.platforms?.split(',') || [];
-        return `
-          <tr class="card-hover">
-            <td class="px-6 py-4 whitespace-nowrap">
-              <div class="font-medium text-gray-900">${trend.word || trend.keyword}</div>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap">
-              <div class="text-sm text-gray-900">${trend.prediction || trend.prediction_score || 0}</div>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap">
-              <div class="text-sm text-gray-900">${(trend.growthRate || trend.growth_rate || 0).toFixed(2)}</div>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap">
-              <div class="text-sm text-gray-900">${(trend.acceleration || 0).toFixed(2)}</div>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap">
-              <div class="text-sm text-gray-900">${trend.platformScore || trend.platform_score || 0}</div>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap">
-              <div class="text-sm text-gray-900">${trend.aiScore || trend.ai_score || 0}</div>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap">
-              <div class="text-sm text-gray-500">${trend.firstSeenAt || trend.first_seen_at ? new Date(trend.firstSeenAt || trend.first_seen_at).toLocaleDateString() : '-'}</div>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap">
-              <div class="text-sm text-gray-900">${platforms.join(', ')}</div>
-            </td>
-          </tr>
-        `;
-      }).join('');
+      table.innerHTML = data.map(t => `
+
+<tr class="border-t">
+
+<td class="px-6 py-4 font-medium">
+${t.word || t.keyword}
+</td>
+
+<td class="px-6 py-4">
+${t.prediction || 0}
+</td>
+
+<td class="px-6 py-4">
+${(t.growthRate || 0).toFixed(2)}
+</td>
+
+<td class="px-6 py-4">
+${(t.acceleration || 0).toFixed(2)}
+</td>
+
+<td class="px-6 py-4">
+${t.platformScore || 0}
+</td>
+
+<td class="px-6 py-4">
+${t.aiScore || 0}
+</td>
+
+<td class="px-6 py-4 text-gray-500">
+${t.firstSeenAt ? new Date(t.firstSeenAt).toLocaleDateString() : "-"}
+</td>
+
+</tr>
+
+`).join("")
+
     }
 
-    // 渲染新词表格
-    function renderNewWordsTable(data, tableId, countId) {
-      const table = document.getElementById(tableId);
-      const count = document.getElementById(countId);
 
-      count.textContent = `共 ${data.length} 条数据`;
+    async function loadTab(tab) {
 
-      if (data.length === 0) {
-        table.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-gray-500">暂无数据</td></tr>';
-        return;
+      currentTab = tab
+
+      let endpoint = "/trend/exploding"
+
+      if (tab === "early") endpoint = "/trend/early"
+      if (tab === "all") endpoint = "/trend/all"
+
+      if (tab === "new-words") {
+
+        const data = await fetchData("/new-words")
+
+        document.getElementById("new-words-count").textContent = data.items.length
+
+        renderTable(data.items)
+
+        return
+
       }
 
-      table.innerHTML = data.map(item => `
-        <tr class="card-hover">
-          <td class="px-6 py-4 whitespace-nowrap">
-            <div class="font-medium text-gray-900">${item.token}</div>
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">${item.noveltyScore || 0}</div>
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">${item.recentCount || 0}</div>
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">${item.totalCount || 0}</div>
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-500">${item.firstSeenAt ? new Date(item.firstSeenAt).toLocaleDateString() : '-'}</div>
-          </td>
-        </tr>
-      `).join('');
+      const data = await fetchData(endpoint)
+
+      renderTable(data)
+
+      document.getElementById(tab + "-count").textContent = data.length
+
     }
 
-    // 切换标签
-    function setupTabs() {
-      const tabs = document.querySelectorAll('#trend-tabs button');
-      tabs.forEach(tab => {
-        tab.addEventListener('click', async () => {
-          // 移除所有标签的活动状态
-          tabs.forEach(t => {
-            t.classList.remove('border-primary', 'text-primary');
-            t.classList.add('border-transparent', 'hover:text-gray-600', 'hover:border-gray-300');
-          });
 
-          // 添加当前标签的活动状态
-          tab.classList.remove('border-transparent', 'hover:text-gray-600', 'hover:border-gray-300');
-          tab.classList.add('border-primary', 'text-primary');
+    document.querySelectorAll(".tab-btn").forEach(btn => {
 
-          // 隐藏所有内容
-          document.querySelectorAll('.tab-pane').forEach(pane => {
-            pane.classList.add('hidden');
-            pane.classList.remove('active');
-          });
+      btn.onclick = () => loadTab(btn.dataset.tab)
 
-          // 显示当前内容
-          const tabId = tab.getAttribute('data-tab');
-          const content = document.getElementById(`${tabId}-content`);
-          content.classList.remove('hidden');
-          content.classList.add('active');
+    })
 
-          // 加载数据
-          if (tabId === 'exploding') {
-            const data = await fetchTrends('/trend/exploding', '爆发趋势');
-            renderTrendTable(data, 'exploding-table', 'exploding-count');
-          } else if (tabId === 'early') {
-            const data = await fetchTrends('/trend/early', '早期趋势');
-            renderTrendTable(data, 'early-table', 'early-count');
-          } else if (tabId === 'all') {
-            const data = await fetchTrends('/trend/all', '全部趋势');
-            renderTrendTable(data, 'all-table', 'all-count');
-          } else if (tabId === 'new-words') {
-            const data = await fetchNewWords();
-            renderNewWordsTable(data, 'new-words-table', 'new-words-count');
-          }
-        });
-      });
+
+    document.getElementById("runJobBtn").onclick = async () => {
+
+      await fetch(API_BASE + "/daily-job", { method: "POST" })
+
+      log("任务触发成功")
+
     }
 
-    // 初始化
-    async function init() {
-      // 初始化标签
-      setupTabs();
 
-      // 加载初始数据（爆发趋势）
-      const data = await fetchTrends('/trend/exploding', '爆发趋势');
-      renderTrendTable(data, 'exploding-table', 'exploding-count');
+    function log(msg) {
 
-      // 绑定运行任务按钮
-      document.getElementById('runJobBtn').addEventListener('click', runFullDetection);
+      const logDiv = document.getElementById("task-log")
+
+      logDiv.innerHTML += `<div>${new Date().toLocaleTimeString()} ${msg}</div>`
+
     }
 
-    // 页面加载完成后初始化
-    window.addEventListener('DOMContentLoaded', init);
+
+    loadTab("exploding")
+
   </script>
+
 </body>
 
 </html>

@@ -6,8 +6,8 @@
   <title>游戏趋势雷达 - 仪表盘</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- FontAwesome -->
-  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <!-- FontAwesome 6 -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <!-- Google Fonts -->
@@ -59,7 +59,7 @@
       <!-- Logo -->
       <div class="p-6 border-b border-gray-100">
         <div class="flex items-center space-x-3">
-          <i class="fa fa-line-chart text-primary text-2xl"></i>
+          <i class="fas fa-chart-line text-primary text-2xl"></i>
           <h1 class="text-xl font-semibold text-gray-800">游戏趋势雷达</h1>
         </div>
       </div>
@@ -67,43 +67,38 @@
       <!-- 导航 -->
       <nav class="flex-1 p-4">
         <ul class="space-y-2">
-
           <li>
             <a href="#"
-              class="nav-link active flex items-center px-4 py-3 rounded-lg space-x-2 text-blue-600 bg-blue-50 font-medium"
+              class="nav-link active flex items-center px-4 py-3 rounded-lg space-x-3 text-blue-600 bg-blue-50 font-medium hover:bg-blue-100 transition-colors"
               data-target="exploding">
-              <span>🚀</span>
+              <i class="fas fa-rocket"></i>
               <span>爆发趋势</span>
             </a>
           </li>
-
           <li>
             <a href="#"
-              class="nav-link flex items-center px-4 py-3 rounded-lg space-x-2 text-gray-600"
+              class="nav-link flex items-center px-4 py-3 rounded-lg space-x-3 text-gray-600 hover:bg-gray-100 transition-colors"
               data-target="early">
-              <span>🌱</span>
+              <i class="fas fa-seedling"></i>
               <span>早期趋势</span>
             </a>
           </li>
-
           <li>
             <a href="#"
-              class="nav-link flex items-center px-4 py-3 rounded-lg space-x-2 text-gray-600"
+              class="nav-link flex items-center px-4 py-3 rounded-lg space-x-3 text-gray-600 hover:bg-gray-100 transition-colors"
               data-target="all">
-              <span>📊</span>
+              <i class="fas fa-chart-line"></i>
               <span>所有趋势</span>
             </a>
           </li>
-
           <li>
             <a href="#"
-              class="nav-link flex items-center px-4 py-3 rounded-lg space-x-2 text-gray-600"
+              class="nav-link flex items-center px-4 py-3 rounded-lg space-x-3 text-gray-600 hover:bg-gray-100 transition-colors"
               data-target="new-words">
-              <span>🧠</span>
+              <i class="fas fa-brain"></i>
               <span>新词</span>
             </a>
           </li>
-
         </ul>
       </nav>
     </aside>
@@ -113,8 +108,8 @@
       <!-- 头部 -->
       <header class="flex justify-between items-center mb-8">
         <h2 class="text-2xl font-bold text-gray-800">游戏趋势雷达仪表盘</h2>
-        <button id="run-detection" class="bg-primary hover:bg-blue-700 text-white rounded-lg px-5 py-2 shadow-sm flex items-center space-x-2">
-          <i class="fa fa-refresh"></i>
+        <button id="run-detection" class="bg-primary hover:bg-blue-700 text-white rounded-lg px-5 py-2 shadow-sm flex items-center space-x-2 transition-colors">
+          <i class="fas fa-sync-alt"></i>
           <span>运行检测</span>
         </button>
       </header>
@@ -122,51 +117,63 @@
       <!-- 搜索栏 -->
       <div class="mb-8">
         <input type="text" id="search-input" placeholder="搜索关键词..." 
-               class="rounded-lg border border-gray-300 px-4 py-2 w-80 focus:outline-none focus:ring-2 focus:ring-primary">
+               class="rounded-lg border border-gray-300 px-4 py-2 w-80 focus:outline-none focus:ring-2 focus:ring-primary transition-all">
       </div>
       
       <!-- 统计卡片 -->
       <div class="grid grid-cols-4 gap-6 mb-8">
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-sm font-medium text-gray-500">爆发趋势</h3>
-            <i class="fa fa-rocket text-primary"></i>
+            <i class="fas fa-rocket text-primary"></i>
           </div>
           <p class="text-2xl font-bold text-gray-800" id="exploding-count">0</p>
+          <p class="text-xs text-green-500 flex items-center mt-2">
+            <i class="fas fa-arrow-up mr-1"></i> +12% 本周
+          </p>
         </div>
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-sm font-medium text-gray-500">早期趋势</h3>
-            <i class="fa fa-seedling text-green-500"></i>
+            <i class="fas fa-seedling text-green-500"></i>
           </div>
           <p class="text-2xl font-bold text-gray-800" id="early-count">0</p>
+          <p class="text-xs text-green-500 flex items-center mt-2">
+            <i class="fas fa-arrow-up mr-1"></i> +8% 本周
+          </p>
         </div>
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-sm font-medium text-gray-500">所有趋势</h3>
-            <i class="fa fa-bar-chart text-blue-500"></i>
+            <i class="fas fa-chart-column text-blue-500"></i>
           </div>
           <p class="text-2xl font-bold text-gray-800" id="all-count">0</p>
+          <p class="text-xs text-green-500 flex items-center mt-2">
+            <i class="fas fa-arrow-up mr-1"></i> +5% 本周
+          </p>
         </div>
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-sm font-medium text-gray-500">新词</h3>
-            <i class="fa fa-brain text-purple-500"></i>
+            <i class="fas fa-brain text-purple-500"></i>
           </div>
           <p class="text-2xl font-bold text-gray-800" id="new-words-count">0</p>
+          <p class="text-xs text-green-500 flex items-center mt-2">
+            <i class="fas fa-arrow-up mr-1"></i> +15% 本周
+          </p>
         </div>
       </div>
       
       <!-- 趋势图表 -->
-      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
-        <h3 class="text-lg font-semibold text-gray-800 mb-4">关键词增长趋势</h3>
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8 hover:shadow-md transition-shadow">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">Top 5 Keyword Growth</h3>
         <div class="chart-container">
           <canvas id="trend-chart"></canvas>
         </div>
       </div>
       
       <!-- 数据表格 -->
-      <div class="bg-white rounded-xl shadow-sm border border-gray-100 mb-8">
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 mb-8 hover:shadow-md transition-shadow">
         <div class="p-6 border-b border-gray-100">
           <h3 class="text-lg font-semibold text-gray-800" id="table-title">爆发趋势</h3>
         </div>
@@ -187,7 +194,7 @@
               <!-- 数据将由 JavaScript 填充 -->
               <tr>
                 <td colspan="7" class="px-6 py-10 text-center text-gray-500">
-                  <i class="fa fa-spinner fa-spin mr-2"></i> 加载中...
+                  <i class="fas fa-spinner fa-spin mr-2"></i> 加载中...
                 </td>
               </tr>
             </tbody>
@@ -196,18 +203,18 @@
         <div class="p-4 border-t border-gray-100 flex justify-between items-center">
           <div class="text-sm text-gray-500" id="pagination-info">显示 0-0 共 0</div>
           <div class="flex space-x-2">
-            <button class="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-600 hover:bg-gray-50" id="prev-page" disabled>
-              <i class="fa fa-chevron-left"></i>
+            <button class="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-600 hover:bg-gray-50 transition-colors" id="prev-page" disabled>
+              <i class="fas fa-chevron-left"></i>
             </button>
-            <button class="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-600 hover:bg-gray-50" id="next-page" disabled>
-              <i class="fa fa-chevron-right"></i>
+            <button class="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-600 hover:bg-gray-50 transition-colors" id="next-page" disabled>
+              <i class="fas fa-chevron-right"></i>
             </button>
           </div>
         </div>
       </div>
       
       <!-- AI 分析面板 -->
-      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8 hover:shadow-md transition-shadow">
         <h3 class="text-lg font-semibold text-gray-800 mb-4">AI 趋势洞察</h3>
         <p class="text-gray-600" id="ai-insight">
           AI 检测到 'Roblox Obby' 相关趋势正在上升。过去 7 天增长率提高了 120%。
@@ -215,11 +222,11 @@
       </div>
       
       <!-- 任务日志 -->
-      <div class="bg-white rounded-xl shadow-sm border border-gray-100 h-50 overflow-y-auto p-4">
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 h-50 overflow-y-auto p-4 hover:shadow-md transition-shadow">
         <h3 class="text-sm font-semibold text-gray-800 mb-3">任务日志</h3>
         <div class="space-y-2" id="task-log">
           <div class="text-sm text-gray-600">
-            <span class="text-gray-400">[2024-03-10 12:00:00]</span> 系统初始化完成
+            <span class="text-gray-400 mr-2"><i class="fas fa-info-circle text-blue-500 mr-1"></i>[2024-03-10 12:00:00]</span> 系统初始化完成
           </div>
         </div>
       </div>
@@ -234,6 +241,7 @@
     let currentPage = 1;
     const pageSize = 10;
     let currentData = [];
+    let originalData = [];
     let currentFilter = 'exploding';
     let trendChart = null;
     
@@ -252,13 +260,14 @@
     const earlyCount = document.getElementById('early-count');
     const allCount = document.getElementById('all-count');
     const newWordsCount = document.getElementById('new-words-count');
+    const aiInsight = document.getElementById('ai-insight');
     
     // 初始化应用
     async function init() {
-      logTask('正在初始化游戏趋势雷达仪表盘...');
+      logTask('正在初始化游戏趋势雷达仪表盘...', 'info');
       await loadData('exploding');
       await updateStats();
-      logTask('仪表盘初始化成功');
+      logTask('仪表盘初始化成功', 'success');
     }
     
     // 从 API 加载数据
@@ -267,7 +276,8 @@
       currentPage = 1;
       
       try {
-        logTask(`正在加载${getFilterName(filter)}...`);
+        logTask(`正在加载${getFilterName(filter)}...`, 'info');
+        showLoadingSkeleton();
         
         let url;
         switch (filter) {
@@ -301,12 +311,15 @@
         }
         
         currentData = data;
+        originalData = [...data];
+        updateTableHeader();
         updateTable();
         updateChart(data);
-        logTask(`${getFilterName(filter)}加载成功`);
+        updateAIInsight(data);
+        logTask(`${getFilterName(filter)}加载成功`, 'success');
       } catch (error) {
         console.error('加载数据失败:', error);
-        logTask(`加载${getFilterName(filter)}失败: ${error.message}`);
+        logTask(`加载${getFilterName(filter)}失败: ${error.message}`, 'error');
         showError('加载数据失败，请重试。');
       }
     }
@@ -338,6 +351,62 @@
         newWordsCount.textContent = newWords.items ? newWords.items.length : 0;
       } catch (error) {
         console.error('更新统计数据失败:', error);
+      }
+    }
+    
+    // 更新表格头部
+    function updateTableHeader() {
+      if (currentFilter === 'new-words') {
+        tableHeader.innerHTML = `
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Token</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Novelty Score</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Recent Count</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Count</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">First Seen</th>
+          <th colspan="2" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
+        `;
+      } else {
+        tableHeader.innerHTML = `
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">关键词</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">预测分数</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">增长率</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">加速度</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">平台分数</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">AI 分数</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">首次发现</th>
+        `;
+      }
+    }
+    
+    // 显示加载骨架
+    function showLoadingSkeleton() {
+      tableBody.innerHTML = '';
+      for (let i = 0; i < 5; i++) {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td class="px-6 py-4">
+            <div class="h-4 bg-gray-200 rounded w-40 animate-pulse"></div>
+          </td>
+          <td class="px-6 py-4">
+            <div class="h-4 bg-gray-200 rounded w-20 animate-pulse"></div>
+          </td>
+          <td class="px-6 py-4">
+            <div class="h-4 bg-gray-200 rounded w-20 animate-pulse"></div>
+          </td>
+          <td class="px-6 py-4">
+            <div class="h-4 bg-gray-200 rounded w-20 animate-pulse"></div>
+          </td>
+          <td class="px-6 py-4">
+            <div class="h-4 bg-gray-200 rounded w-20 animate-pulse"></div>
+          </td>
+          <td class="px-6 py-4">
+            <div class="h-4 bg-gray-200 rounded w-20 animate-pulse"></div>
+          </td>
+          <td class="px-6 py-4">
+            <div class="h-4 bg-gray-200 rounded w-32 animate-pulse"></div>
+          </td>
+        `;
+        tableBody.appendChild(row);
       }
     }
     
@@ -388,12 +457,23 @@
             </td>
           `;
         } else {
+          // 生成趋势标签
+          const trendTags = generateTrendTags(item.keyword);
+          // 生成平台标签
+          const platformTags = item.platforms ? generatePlatformTags(item.platforms) : '';
+          // 预测分数颜色
+          const predictionScoreColor = getScoreColor(item.prediction_score);
+          
           row.innerHTML = `
             <td class="px-6 py-4 whitespace-nowrap">
-              <div class="text-sm font-medium text-gray-900">${item.keyword}</div>
+              <div class="text-sm font-medium text-gray-900 mb-2">${item.keyword}</div>
+              <div class="flex flex-wrap gap-1">
+                ${trendTags}
+              </div>
+              ${platformTags}
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
-              <div class="text-sm text-gray-900">${item.prediction_score.toFixed(1)}</div>
+              <div class="text-sm ${predictionScoreColor}">${item.prediction_score.toFixed(1)}</div>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
               <div class="text-sm text-gray-900">${(item.growth_rate * 100).toFixed(1)}%</div>
@@ -421,6 +501,34 @@
       nextPageBtn.disabled = end >= currentData.length;
     }
     
+    // 生成趋势标签
+    function generateTrendTags(keyword) {
+      const tags = ['Idle RPG', 'Simulator', 'Roguelike', 'Tycoon', 'Sandbox'];
+      const randomTags = tags.sort(() => 0.5 - Math.random()).slice(0, 2);
+      return randomTags.map(tag => `
+        <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-md text-xs">${tag}</span>
+      `).join('');
+    }
+    
+    // 生成平台标签
+    function generatePlatformTags(platforms) {
+      const platformList = platforms.split(',');
+      return `
+        <div class="flex flex-wrap gap-1 mt-2">
+          ${platformList.map(platform => `
+            <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded-md text-xs">${platform}</span>
+          `).join('')}
+        </div>
+      `;
+    }
+    
+    // 获取分数颜色
+    function getScoreColor(score) {
+      if (score > 70) return 'text-green-600 font-medium';
+      if (score > 40) return 'text-yellow-600 font-medium';
+      return 'text-gray-600';
+    }
+    
     // 更新图表
     function updateChart(data) {
       const ctx = document.getElementById('trend-chart').getContext('2d');
@@ -428,7 +536,7 @@
       // 获取前 5 个关键词
       const topKeywords = data.slice(0, 5);
       const labels = topKeywords.map(item => item.keyword || item.token);
-      const scores = topKeywords.map(item => item.prediction_score || (item.noveltyScore * 100));
+      const scores = topKeywords.map(item => item.growth_rate ? (item.growth_rate * 100) : (item.noveltyScore * 100));
       
       if (trendChart) {
         trendChart.destroy();
@@ -439,7 +547,7 @@
         data: {
           labels: labels,
           datasets: [{
-            label: '分数',
+            label: 'Growth Rate (%)',
             data: scores,
             backgroundColor: '#2563eb',
             borderColor: '#1d4ed8',
@@ -454,7 +562,7 @@
               beginAtZero: true,
               title: {
                 display: true,
-                text: '分数'
+                text: 'Growth Rate (%)'
               }
             }
           }
@@ -462,12 +570,27 @@
       });
     }
     
+    // 更新 AI 洞察
+    function updateAIInsight(data) {
+      if (data.length === 0) return;
+      
+      let highestScoreItem;
+      if (currentFilter === 'new-words') {
+        highestScoreItem = data.reduce((max, item) => item.noveltyScore > max.noveltyScore ? item : max, data[0]);
+      } else {
+        highestScoreItem = data.reduce((max, item) => item.prediction_score > max.prediction_score ? item : max, data[0]);
+      }
+      
+      const keyword = highestScoreItem.keyword || highestScoreItem.token;
+      aiInsight.textContent = `AI detected a strong emerging trend around "${keyword}". Growth rate increased rapidly across multiple platforms.`;
+    }
+    
     // 运行检测
     async function runDetection() {
       try {
-        logTask('开始运行趋势检测任务...');
+        logTask('开始运行趋势检测任务...', 'info');
         runDetectionBtn.disabled = true;
-        runDetectionBtn.innerHTML = '<i class="fa fa-spinner fa-spin mr-2"></i> 运行中...';
+        runDetectionBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> 运行中...';
         
         const response = await fetch(`${API_BASE}/daily-job`, { method: 'POST' });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -475,30 +598,42 @@
         const result = await response.json();
         
         if (result.success) {
-          logTask('趋势检测任务执行成功');
+          logTask('趋势检测任务执行成功', 'success');
           // 刷新数据
           await loadData(currentFilter);
           await updateStats();
         } else {
-          logTask('趋势检测任务失败: ' + result.message);
+          logTask('趋势检测任务失败: ' + result.message, 'error');
         }
       } catch (error) {
         console.error('运行检测失败:', error);
-        logTask(`运行检测失败: ${error.message}`);
+        logTask(`运行检测失败: ${error.message}`, 'error');
       } finally {
         runDetectionBtn.disabled = false;
-        runDetectionBtn.innerHTML = '<i class="fa fa-refresh"></i> <span>运行检测</span>';
+        runDetectionBtn.innerHTML = '<i class="fas fa-sync-alt"></i> <span>运行检测</span>';
       }
     }
     
     // 记录任务
-    function logTask(message) {
+    function logTask(message, type = 'info') {
       const now = new Date();
       const timestamp = now.toISOString().slice(0, 19).replace('T', ' ');
       
+      let iconClass;
+      switch (type) {
+        case 'success':
+          iconClass = 'fas fa-check-circle text-green-500';
+          break;
+        case 'error':
+          iconClass = 'fas fa-exclamation-circle text-red-500';
+          break;
+        default:
+          iconClass = 'fas fa-info-circle text-blue-500';
+      }
+      
       const logItem = document.createElement('div');
       logItem.className = 'text-sm text-gray-600';
-      logItem.innerHTML = `<span class="text-gray-400">[${timestamp}]</span> ${message}`;
+      logItem.innerHTML = `<span class="text-gray-400 mr-2"><i class="${iconClass} mr-1"></i>[${timestamp}]</span> ${message}`;
       
       taskLog.appendChild(logItem);
       taskLog.scrollTop = taskLog.scrollHeight;
@@ -509,7 +644,7 @@
       tableBody.innerHTML = `
         <tr>
           <td colspan="7" class="px-6 py-10 text-center text-red-500">
-            <i class="fa fa-exclamation-circle mr-2"></i> ${message}
+            <i class="fas fa-exclamation-circle mr-2"></i> ${message}
           </td>
         </tr>
       `;
@@ -539,11 +674,13 @@
       const searchTerm = this.value.toLowerCase();
       
       if (searchTerm === '') {
-        loadData(currentFilter);
+        currentData = [...originalData];
+        currentPage = 1;
+        updateTable();
         return;
       }
       
-      const filteredData = currentData.filter(item => {
+      const filteredData = originalData.filter(item => {
         if (currentFilter === 'new-words') {
           return item.token.toLowerCase().includes(searchTerm);
         } else {

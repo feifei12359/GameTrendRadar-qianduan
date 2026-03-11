@@ -899,7 +899,7 @@
         resetAndRerunBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> 重置中...';
 
         // 调用重置接口
-        const response = await fetch(`${API_BASE}/system/reset`, { method: 'POST' });
+        const response = await fetch(`${API_BASE}/new-words/reset`, { method: 'POST' });
 
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}`);

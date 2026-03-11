@@ -57,11 +57,18 @@
             <i class="fas fa-chart-line text-primary text-3xl"></i>
             <h1 class="text-3xl font-bold text-gray-800">游戏趋势雷达</h1>
           </div>
-          <button id="run-detection"
-            class="bg-primary hover:bg-blue-700 text-white rounded-lg px-6 py-3 shadow-sm flex items-center space-x-2 transition-colors">
-            <i class="fas fa-sync-alt"></i>
-            <span>运行检测</span>
-          </button>
+          <div class="flex items-center space-x-3">
+            <button id="reset-and-rerun"
+              class="bg-red-600 hover:bg-red-700 text-white rounded-lg px-6 py-3 shadow-sm flex items-center space-x-2 transition-colors">
+              <i class="fas fa-rotate-left"></i>
+              <span>重置并重跑</span>
+            </button>
+            <button id="run-detection"
+              class="bg-primary hover:bg-blue-700 text-white rounded-lg px-6 py-3 shadow-sm flex items-center space-x-2 transition-colors">
+              <i class="fas fa-sync-alt"></i>
+              <span>运行检测</span>
+            </button>
+          </div>
         </div>
 
         <div class="flex items-center gap-2 max-w-2xl">
@@ -259,6 +266,7 @@
     let timelineChart = null;
 
     const runDetectionBtn = document.getElementById('run-detection');
+    const resetAndRerunBtn = document.getElementById('reset-and-rerun');
     const searchInput = document.getElementById('search-input');
     const searchButton = document.getElementById('search-button');
     const taskLog = document.getElementById('task-log');
@@ -866,7 +874,52 @@
       }
     }
 
+    async function resetAndRerun() {
+      try {
+        logTask('开始重置数据库并重新生成趋势...', 'info');
+
+        // 禁用按钮并显示 loading 状态
+        resetAndRerunBtn.disabled = true;
+        resetAndRerunBtn.classList.add('opacity-80', 'cursor-not-allowed');
+        resetAndRerunBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> 重置中...';
+
+        // 调用重置接口
+        const response = await fetch(`${API_BASE}/system/reset`, { method: 'POST' });
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (result.success) {
+          logTask('系统已重置并开始重跑', 'success');
+
+          // 重新加载数据
+          await loadAllData();
+
+          // 如果有搜索条件，重新执行搜索
+          if (searchInput.value.trim()) {
+            runSearch();
+          }
+
+          logTask('重置并重跑完成', 'success');
+        } else {
+          throw new Error(result.message || '重置失败');
+        }
+      } catch (error) {
+        console.error('重置重跑失败:', error);
+        logTask(`重置重跑失败: ${error.message}`, 'error');
+      } finally {
+        // 恢复按钮状态
+        resetAndRerunBtn.disabled = false;
+        resetAndRerunBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+        resetAndRerunBtn.innerHTML = '<i class="fas fa-rotate-left"></i> <span>重置并重跑</span>';
+      }
+    }
+
     runDetectionBtn.addEventListener('click', runDetection);
+    resetAndRerunBtn.addEventListener('click', resetAndRerun);
     searchButton.addEventListener('click', runSearch);
 
     searchInput.addEventListener('keypress', function (e) {

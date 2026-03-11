@@ -4,15 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>游戏趋势雷达 - 仪表盘</title>
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- FontAwesome 6 -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
+
   <script>
     tailwind.config = {
       theme: {
@@ -30,7 +26,7 @@
       }
     }
   </script>
-  
+
   <style type="text/tailwindcss">
     @layer utilities {
       .content-auto {
@@ -38,7 +34,7 @@
       }
     }
   </style>
-  
+
   <style>
     body {
       font-family: 'Inter', system-ui, sans-serif;
@@ -51,9 +47,7 @@
 </head>
 <body class="bg-background min-h-screen">
   <div class="min-h-screen">
-    <!-- 主内容 -->
     <main class="p-8 max-w-7xl mx-auto">
-      <!-- Header -->
       <header class="mb-8">
         <div class="flex items-center justify-between mb-6">
           <div class="flex items-center space-x-3">
@@ -65,17 +59,16 @@
             <span>运行检测</span>
           </button>
         </div>
-        
-        <!-- AI 搜索框 -->
+
         <div class="flex items-center gap-2 max-w-2xl">
-          <input 
-            id="search-input" 
-            type="text" 
-            placeholder='搜索趋势、平台、标签...' 
+          <input
+            id="search-input"
+            type="text"
+            placeholder="搜索趋势、平台、标签..."
             class="flex-1 border border-gray-300 rounded-lg px-4 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all shadow-sm"
           />
-          <button 
-            id="search-button" 
+          <button
+            id="search-button"
             class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 flex items-center gap-2 transition-colors"
           >
             <i class="fa-solid fa-magnifying-glass"></i>
@@ -83,8 +76,7 @@
           </button>
         </div>
       </header>
-      
-      <!-- Stats Cards -->
+
       <div class="grid grid-cols-4 gap-6 mb-8">
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
           <div class="flex items-center justify-between mb-4">
@@ -127,18 +119,15 @@
           </p>
         </div>
       </div>
-      
-      <!-- 图表和 AI 洞察布局 -->
+
       <div class="grid grid-cols-3 gap-6 mb-8">
-        <!-- 趋势图表 -->
         <div class="col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
           <h3 class="text-lg font-semibold text-gray-800 mb-4">🔥 爆发趋势排行榜</h3>
           <div class="chart-container">
             <canvas id="trend-chart"></canvas>
           </div>
         </div>
-        
-        <!-- AI 趋势洞察 -->
+
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
           <h3 class="text-lg font-semibold text-gray-800 mb-4">🧠 AI 趋势洞察</h3>
           <p class="text-gray-600 text-sm leading-relaxed" id="ai-insight">
@@ -155,16 +144,14 @@
           </div>
         </div>
       </div>
-      
-      <!-- 趋势时间线 -->
+
       <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8 hover:shadow-md transition-shadow">
         <h3 class="text-lg font-semibold text-gray-800 mb-4">📈 趋势时间线</h3>
         <div class="chart-container">
           <canvas id="timeline-chart"></canvas>
         </div>
       </div>
-      
-      <!-- Exploding Trends Table -->
+
       <div class="bg-white rounded-xl shadow-sm border border-gray-100 mb-8 hover:shadow-md transition-shadow">
         <div class="p-6 border-b border-gray-100">
           <h3 class="text-lg font-semibold text-gray-800">🔥 爆发趋势</h3>
@@ -190,8 +177,7 @@
           </table>
         </div>
       </div>
-      
-      <!-- Early Trends Table -->
+
       <div class="bg-white rounded-xl shadow-sm border border-gray-100 mb-8 hover:shadow-md transition-shadow">
         <div class="p-6 border-b border-gray-100">
           <h3 class="text-lg font-semibold text-gray-800">📈 早期趋势</h3>
@@ -217,8 +203,7 @@
           </table>
         </div>
       </div>
-      
-      <!-- New Words Table -->
+
       <div class="bg-white rounded-xl shadow-sm border border-gray-100 mb-8 hover:shadow-md transition-shadow">
         <div class="p-6 border-b border-gray-100">
           <h3 class="text-lg font-semibold text-gray-800">🧠 新词</h3>
@@ -244,8 +229,7 @@
           </table>
         </div>
       </div>
-      
-      <!-- Task Log -->
+
       <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-y-auto max-h-64 p-4 hover:shadow-md transition-shadow">
         <h3 class="text-sm font-semibold text-gray-800 mb-3">任务日志</h3>
         <div class="space-y-2" id="task-log">
@@ -256,20 +240,17 @@
       </div>
     </main>
   </div>
-  
+
   <script>
-    // API 配置
     const API_BASE = "https://gametrenradar-backend-production.up.railway.app/api";
-    
-    // 全局变量
+
     let explodingData = [];
     let earlyData = [];
     let allData = [];
     let newWordsData = [];
     let trendChart = null;
     let timelineChart = null;
-    
-    // DOM 元素
+
     const runDetectionBtn = document.getElementById('run-detection');
     const searchInput = document.getElementById('search-input');
     const searchButton = document.getElementById('search-button');
@@ -280,182 +261,237 @@
     const newWordsCount = document.getElementById('new-words-count');
     const aiInsight = document.getElementById('ai-insight');
     const aiSuggestion = document.getElementById('ai-suggestion');
-    
-    // 初始化应用
+
+    async function fetchJSON(url, options = {}) {
+      const res = await fetch(url, options);
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+      }
+      return res.json();
+    }
+
+    function showTableError(id, colspan = 5, message = '加载失败') {
+      const tbody = document.getElementById(id);
+      if (!tbody) return;
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="${colspan}" class="px-6 py-10 text-center text-red-500">
+            <i class="fas fa-exclamation-circle mr-2"></i>${message}
+          </td>
+        </tr>
+      `;
+    }
+
+    function escapeHTML(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function formatDate(value) {
+      if (!value) return '-';
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return String(value);
+      return date.toLocaleDateString();
+    }
+
+    function formatPercentFromDecimal(value) {
+      const num = Number(value);
+      if (Number.isNaN(num)) return '0.0%';
+      return `${(num * 100).toFixed(1)}%`;
+    }
+
+    function formatPercentDirect(value) {
+      const num = Number(value);
+      if (Number.isNaN(num)) return '0.0%';
+      return `${num.toFixed(1)}%`;
+    }
+
+    function getPlatformTags(platformsValue) {
+      if (!platformsValue) return '-';
+
+      const parts = String(platformsValue)
+        .split(',')
+        .map(p => p.trim())
+        .filter(Boolean);
+
+      if (parts.length === 0) return '-';
+
+      return parts.map(p =>
+        `<span class="bg-gray-100 text-gray-700 px-2 py-1 rounded-md text-xs mr-1">${escapeHTML(p)}</span>`
+      ).join('');
+    }
+
     async function init() {
       logTask('初始化游戏趋势雷达仪表盘...', 'info');
       await loadAllData();
       logTask('仪表盘初始化成功', 'success');
     }
-    
-    // 加载所有数据
+
     async function loadAllData() {
       try {
         logTask('加载所有趋势数据...', 'info');
-        
+
         const [exploding, early, all, newWords] = await Promise.all([
-          fetch(`${API_BASE}/trend/exploding`).then(res => res.json()),
-          fetch(`${API_BASE}/trend/early`).then(res => res.json()),
-          fetch(`${API_BASE}/trend/all`).then(res => res.json()),
-          fetch(`${API_BASE}/new-words`).then(res => res.json())
+          fetchJSON(`${API_BASE}/trend/exploding`),
+          fetchJSON(`${API_BASE}/trend/early`),
+          fetchJSON(`${API_BASE}/trend/all`),
+          fetchJSON(`${API_BASE}/new-words`)
         ]);
-        
-        explodingData = exploding;
-        earlyData = early;
-        allData = all;
-        newWordsData = newWords.items || [];
-        
-        // 更新统计数据
+
+        explodingData = Array.isArray(exploding) ? exploding : [];
+        earlyData = Array.isArray(early) ? early : [];
+        allData = Array.isArray(all) ? all : [];
+        newWordsData = Array.isArray(newWords) ? newWords : (newWords?.items || []);
+
         explodingCount.textContent = explodingData.length;
         earlyCount.textContent = earlyData.length;
         allCount.textContent = allData.length;
         newWordsCount.textContent = newWordsData.length;
-        
-        // 更新表格
+
         updateExplodingTable(explodingData);
         updateEarlyTable(earlyData);
         updateNewWordsTable(newWordsData);
-        
-        // 更新图表
+
         updateChart(explodingData);
         updateTimelineChart(explodingData);
-        
-        // 更新 AI 洞察
         updateAIInsight(explodingData);
-        
+
         logTask('所有趋势数据加载成功', 'success');
       } catch (error) {
         console.error('加载数据失败:', error);
+        showTableError('exploding-table-body');
+        showTableError('early-table-body');
+        showTableError('new-words-table-body');
+        explodingCount.textContent = '0';
+        earlyCount.textContent = '0';
+        allCount.textContent = '0';
+        newWordsCount.textContent = '0';
+        aiInsight.textContent = '数据加载失败，请检查后端接口是否正常。';
+        aiSuggestion.textContent = '请稍后重试，或查看任务日志定位问题。';
         logTask(`加载数据失败: ${error.message}`, 'error');
       }
     }
-    
-    // 更新 Exploding Trends 表格
+
     function updateExplodingTable(data) {
       const tbody = document.getElementById('exploding-table-body');
       tbody.innerHTML = '';
-      
-      if (data.length === 0) {
+
+      if (!data.length) {
         tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-10 text-center text-gray-500">无数据</td></tr>';
         return;
       }
-      
+
       data.slice(0, 10).forEach(item => {
         const row = document.createElement('tr');
-        const platforms = item.platforms ? item.platforms.split(',').map(p => 
-          `<span class="bg-gray-100 text-gray-700 px-2 py-1 rounded-md text-xs mr-1">${p}</span>`
-        ).join('') : '-';
-        
         row.innerHTML = `
           <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm font-medium text-gray-900">${item.keyword}</div>
+            <div class="text-sm font-medium text-gray-900">${escapeHTML(item.keyword)}</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm ${getScoreColor(item.prediction_score)}">${item.prediction_score.toFixed(1)}</div>
+            <div class="text-sm ${getScoreColor(item.prediction_score)}">${Number(item.prediction_score || 0).toFixed(1)}</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">${(item.growth_rate * 100).toFixed(1)}%</div>
+            <div class="text-sm text-gray-900">${formatPercentFromDecimal(item.growth_rate)}</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
-            <div class="flex flex-wrap gap-1">${platforms}</div>
+            <div class="flex flex-wrap gap-1">${getPlatformTags(item.platforms)}</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">${new Date(item.first_seen_at).toLocaleDateString()}</div>
+            <div class="text-sm text-gray-900">${formatDate(item.first_seen_at)}</div>
           </td>
         `;
         tbody.appendChild(row);
       });
     }
-    
-    // 更新 Early Trends 表格
+
     function updateEarlyTable(data) {
       const tbody = document.getElementById('early-table-body');
       tbody.innerHTML = '';
-      
-      if (data.length === 0) {
+
+      if (!data.length) {
         tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-10 text-center text-gray-500">无数据</td></tr>';
         return;
       }
-      
+
       data.slice(0, 10).forEach(item => {
         const row = document.createElement('tr');
-        const platforms = item.platforms ? item.platforms.split(',').map(p => 
-          `<span class="bg-gray-100 text-gray-700 px-2 py-1 rounded-md text-xs mr-1">${p}</span>`
-        ).join('') : '-';
-        
         row.innerHTML = `
           <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm font-medium text-gray-900">${item.keyword}</div>
+            <div class="text-sm font-medium text-gray-900">${escapeHTML(item.keyword)}</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm ${getScoreColor(item.prediction_score)}">${item.prediction_score.toFixed(1)}</div>
+            <div class="text-sm ${getScoreColor(item.prediction_score)}">${Number(item.prediction_score || 0).toFixed(1)}</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">${(item.growth_rate * 100).toFixed(1)}%</div>
+            <div class="text-sm text-gray-900">${formatPercentFromDecimal(item.growth_rate)}</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
-            <div class="flex flex-wrap gap-1">${platforms}</div>
+            <div class="flex flex-wrap gap-1">${getPlatformTags(item.platforms)}</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">${new Date(item.first_seen_at).toLocaleDateString()}</div>
+            <div class="text-sm text-gray-900">${formatDate(item.first_seen_at)}</div>
           </td>
         `;
         tbody.appendChild(row);
       });
     }
-    
-    // 更新 New Words 表格
+
     function updateNewWordsTable(data) {
       const tbody = document.getElementById('new-words-table-body');
       tbody.innerHTML = '';
-      
-      if (data.length === 0) {
+
+      if (!data.length) {
         tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-10 text-center text-gray-500">无数据</td></tr>';
         return;
       }
-      
+
       data.slice(0, 10).forEach(item => {
+        const noveltyScore = item.novelty_score ?? item.noveltyScore ?? 0;
+        const recentCount = item.recent_count ?? item.recentCount ?? 0;
+        const totalCount = item.total_count ?? item.totalCount ?? 0;
+        const firstSeenAt = item.first_seen_at ?? item.firstSeenAt ?? '-';
+
         const row = document.createElement('tr');
         row.innerHTML = `
           <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm font-medium text-gray-900">${item.token}</div>
+            <div class="text-sm font-medium text-gray-900">${escapeHTML(item.token)}</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">${(item.noveltyScore * 100).toFixed(1)}%</div>
+            <div class="text-sm text-gray-900">${formatPercentDirect(Number(noveltyScore) * 100)}</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">${item.recentCount}</div>
+            <div class="text-sm text-gray-900">${escapeHTML(recentCount)}</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">${item.totalCount}</div>
+            <div class="text-sm text-gray-900">${escapeHTML(totalCount)}</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">${item.firstSeenAt}</div>
+            <div class="text-sm text-gray-900">${formatDate(firstSeenAt)}</div>
           </td>
         `;
         tbody.appendChild(row);
       });
     }
-    
-    // 更新图表
+
     function updateChart(data) {
       const ctx = document.getElementById('trend-chart').getContext('2d');
-      
       const topKeywords = data.slice(0, 5);
-      const labels = topKeywords.map(item => item.keyword);
-      const scores = topKeywords.map(item => item.growth_rate * 100);
-      
+
       if (trendChart) {
         trendChart.destroy();
       }
-      
+
       trendChart = new Chart(ctx, {
         type: 'bar',
         data: {
-          labels: labels,
+          labels: topKeywords.map(item => item.keyword),
           datasets: [{
             label: '增长率 (%)',
-            data: scores,
+            data: topKeywords.map(item => Number(item.growth_rate || 0) * 100),
             backgroundColor: '#2563eb',
             borderColor: '#1d4ed8',
             borderWidth: 1
@@ -476,17 +512,22 @@
         }
       });
     }
-    
-    // 更新时间线图表
+
     function updateTimelineChart(data) {
       const ctx = document.getElementById('timeline-chart').getContext('2d');
-      
-      if (data.length === 0) return;
-      
+
+      if (!data.length) {
+        if (timelineChart) {
+          timelineChart.destroy();
+          timelineChart = null;
+        }
+        return;
+      }
+
       const topKeyword = data[0];
       const keyword = topKeyword.keyword;
-      const growthRate = topKeyword.growth_rate;
-      
+      const growthRate = Number(topKeyword.growth_rate || 0);
+
       const timeline = [
         growthRate * 0.2,
         growthRate * 0.4,
@@ -494,11 +535,11 @@
         growthRate * 0.8,
         growthRate * 1.0
       ];
-      
+
       if (timelineChart) {
         timelineChart.destroy();
       }
-      
+
       timelineChart = new Chart(ctx, {
         type: 'line',
         data: {
@@ -527,74 +568,76 @@
         }
       });
     }
-    
-    // 更新 AI 洞察
+
     function updateAIInsight(data) {
-      if (data.length === 0) return;
-      
-      const highestScoreItem = data.reduce((max, item) => item.prediction_score > max.prediction_score ? item : max, data[0]);
+      if (!data.length) {
+        aiInsight.textContent = '当前暂无足够趋势数据，等待下一轮检测。';
+        aiSuggestion.textContent = '建议先运行检测，获取最新趋势结果。';
+        return;
+      }
+
+      const highestScoreItem = data.reduce((max, item) =>
+        Number(item.prediction_score || 0) > Number(max.prediction_score || 0) ? item : max
+      , data[0]);
+
       const keyword = highestScoreItem.keyword;
-      const score = highestScoreItem.prediction_score;
-      
+      const score = Number(highestScoreItem.prediction_score || 0);
+      const growthRate = Number(highestScoreItem.growth_rate || 0) * 100;
+
       aiInsight.textContent = `AI 检测到 "${keyword}" 相关的强劲新兴趋势。该关键词在多个平台上显示出快速增长。预测分数达到 ${score.toFixed(1)}，表明具有强劲的爆发潜力。`;
-      
-      const growthRate = (highestScoreItem.growth_rate * 100).toFixed(1);
-      aiSuggestion.textContent = `建议关注此关键词，当前增长率 ${growthRate}%，预计未来 7 天将继续增长。`;
+      aiSuggestion.textContent = `建议关注此关键词，当前增长率 ${growthRate.toFixed(1)}%，预计未来 7 天将继续增长。`;
     }
-    
-    // 统一搜索逻辑
+
     function runSearch() {
       const query = searchInput.value.toLowerCase().trim();
-      
+
       if (!query) {
-        // 恢复原始数据
         updateExplodingTable(explodingData);
         updateEarlyTable(earlyData);
         updateNewWordsTable(newWordsData);
         updateChart(explodingData);
         updateTimelineChart(explodingData);
         updateAIInsight(explodingData);
+        logTask('已恢复全部数据视图', 'info');
         return;
       }
-      
-      // 搜索 Exploding Trends
+
       const filteredExploding = explodingData.filter(item => {
-        const text = (item.keyword + ' ' + (item.platforms || '') + ' ' + generateTags(item.keyword)).toLowerCase();
+        const text = `${item.keyword || ''} ${item.platforms || ''} ${generateTags(item.keyword || '')}`.toLowerCase();
         return text.includes(query);
       });
-      
-      // 搜索 Early Trends
+
       const filteredEarly = earlyData.filter(item => {
-        const text = (item.keyword + ' ' + (item.platforms || '') + ' ' + generateTags(item.keyword)).toLowerCase();
+        const text = `${item.keyword || ''} ${item.platforms || ''} ${generateTags(item.keyword || '')}`.toLowerCase();
         return text.includes(query);
       });
-      
-      // 搜索 New Words
+
       const filteredNewWords = newWordsData.filter(item => {
-        const text = item.token.toLowerCase();
+        const text = `${item.token || ''}`.toLowerCase();
         return text.includes(query);
       });
-      
-      // 更新表格
+
       updateExplodingTable(filteredExploding);
       updateEarlyTable(filteredEarly);
       updateNewWordsTable(filteredNewWords);
-      
-      // 更新图表（使用过滤后的 exploding 数据）
+
       if (filteredExploding.length > 0) {
         updateChart(filteredExploding);
         updateTimelineChart(filteredExploding);
         updateAIInsight(filteredExploding);
+      } else {
+        updateChart([]);
+        updateTimelineChart([]);
+        updateAIInsight([]);
       }
-      
+
       logTask(`搜索完成: "${query}"`, 'success');
     }
-    
-    // 生成标签
+
     function generateTags(keyword) {
       const tags = [];
-      const keywordLower = keyword.toLowerCase();
-      
+      const keywordLower = String(keyword || '').toLowerCase();
+
       if (keywordLower.includes('rpg')) tags.push('rpg');
       if (keywordLower.includes('simulator')) tags.push('simulator');
       if (keywordLower.includes('tycoon')) tags.push('tycoon');
@@ -603,35 +646,29 @@
       if (keywordLower.includes('defense')) tags.push('defense');
       if (keywordLower.includes('racing')) tags.push('racing');
       if (keywordLower.includes('puzzle')) tags.push('puzzle');
-      
+
       return tags.join(' ');
     }
-    
-    // 获取分数颜色
+
     function getScoreColor(score) {
-      if (score > 70) return 'text-green-600 font-medium';
-      if (score > 40) return 'text-yellow-600 font-medium';
+      const num = Number(score || 0);
+      if (num > 70) return 'text-green-600 font-medium';
+      if (num > 40) return 'text-yellow-600 font-medium';
       return 'text-gray-600';
     }
-    
-    // 运行检测
+
     async function runDetection() {
       try {
         logTask('开始趋势检测...', 'info');
         runDetectionBtn.disabled = true;
         runDetectionBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> 运行中...';
-        
-        const response = await fetch(`${API_BASE}/daily-job`, { method: 'POST' });
+
+        const response = await fetch(`${API_BASE}/daily-job`, { method: 'GET' });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        
-        const result = await response.json();
-        
-        if (result.success) {
-          logTask('趋势检测完成', 'success');
-          await loadAllData();
-        } else {
-          logTask('趋势检测失败: ' + result.message, 'error');
-        }
+
+        await response.json();
+        logTask('趋势检测完成', 'success');
+        await loadAllData();
       } catch (error) {
         console.error('检测失败:', error);
         logTask(`检测失败: ${error.message}`, 'error');
@@ -640,12 +677,11 @@
         runDetectionBtn.innerHTML = '<i class="fas fa-sync-alt"></i> <span>运行检测</span>';
       }
     }
-    
-    // 记录任务
+
     function logTask(message, type = 'info') {
       const now = new Date();
       const timestamp = now.toISOString().slice(0, 19).replace('T', ' ');
-      
+
       let iconClass;
       switch (type) {
         case 'success':
@@ -657,29 +693,24 @@
         default:
           iconClass = 'fas fa-info-circle text-blue-500';
       }
-      
+
       const logItem = document.createElement('div');
       logItem.className = 'text-sm text-gray-600';
-      logItem.innerHTML = `<span class="text-gray-400 mr-2"><i class="${iconClass} mr-1"></i>[${timestamp}]</span> ${message}`;
-      
+      logItem.innerHTML = `<span class="text-gray-400 mr-2"><i class="${iconClass} mr-1"></i>[${timestamp}]</span> ${escapeHTML(message)}`;
+
       taskLog.appendChild(logItem);
       taskLog.scrollTop = taskLog.scrollHeight;
     }
-    
-    // 事件监听器
+
     runDetectionBtn.addEventListener('click', runDetection);
-    
-    searchButton.addEventListener('click', () => {
-      runSearch();
-    });
-    
-    searchInput.addEventListener('keypress', function(e) {
+    searchButton.addEventListener('click', runSearch);
+
+    searchInput.addEventListener('keypress', function (e) {
       if (e.key === 'Enter') {
         runSearch();
       }
     });
-    
-    // 初始化
+
     init();
   </script>
 </body>

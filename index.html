@@ -845,9 +845,24 @@
       }
     }
 
-    function logTask(message, type = 'info') {
+    function getBeijingTime() {
       const now = new Date();
-      const timestamp = now.toISOString().slice(0, 19).replace('T', ' ');
+      return new Intl.DateTimeFormat('zh-CN', {
+        timeZone: 'Asia/Shanghai',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      })
+        .format(now)
+        .replace(/\//g, '-');
+    }
+
+    function logTask(message, type = 'info') {
+      const timestamp = getBeijingTime();
 
       let iconClass;
       switch (type) {

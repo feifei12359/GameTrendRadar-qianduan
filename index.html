@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,12 +40,14 @@
     body {
       font-family: 'Inter', system-ui, sans-serif;
     }
+
     .chart-container {
       position: relative;
       height: 300px;
     }
   </style>
 </head>
+
 <body class="bg-background min-h-screen">
   <div class="min-h-screen">
     <main class="p-8 max-w-7xl mx-auto">
@@ -54,23 +57,18 @@
             <i class="fas fa-chart-line text-primary text-3xl"></i>
             <h1 class="text-3xl font-bold text-gray-800">游戏趋势雷达</h1>
           </div>
-          <button id="run-detection" class="bg-primary hover:bg-blue-700 text-white rounded-lg px-6 py-3 shadow-sm flex items-center space-x-2 transition-colors">
+          <button id="run-detection"
+            class="bg-primary hover:bg-blue-700 text-white rounded-lg px-6 py-3 shadow-sm flex items-center space-x-2 transition-colors">
             <i class="fas fa-sync-alt"></i>
             <span>运行检测</span>
           </button>
         </div>
 
         <div class="flex items-center gap-2 max-w-2xl">
-          <input
-            id="search-input"
-            type="text"
-            placeholder="搜索趋势、平台、标签..."
-            class="flex-1 border border-gray-300 rounded-lg px-4 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all shadow-sm"
-          />
-          <button
-            id="search-button"
-            class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 flex items-center gap-2 transition-colors"
-          >
+          <input id="search-input" type="text" placeholder="搜索趋势、平台、标签..."
+            class="flex-1 border border-gray-300 rounded-lg px-4 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all shadow-sm" />
+          <button id="search-button"
+            class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 flex items-center gap-2 transition-colors">
             <i class="fa-solid fa-magnifying-glass"></i>
             <span>搜索</span>
           </button>
@@ -84,7 +82,7 @@
             <i class="fas fa-rocket text-primary"></i>
           </div>
           <p class="text-3xl font-bold text-gray-800" id="exploding-count">0</p>
-          <p class="text-xs text-green-500 flex items-center mt-2">
+          <p class="text-xs text-green-500 flex items-center mt-2" id="exploding-subtext">
             <i class="fas fa-arrow-up mr-1"></i> 本周 +12%
           </p>
         </div>
@@ -94,7 +92,7 @@
             <i class="fas fa-seedling text-green-500"></i>
           </div>
           <p class="text-3xl font-bold text-gray-800" id="early-count">0</p>
-          <p class="text-xs text-green-500 flex items-center mt-2">
+          <p class="text-xs text-green-500 flex items-center mt-2" id="early-subtext">
             <i class="fas fa-arrow-up mr-1"></i> 本周 +8%
           </p>
         </div>
@@ -104,7 +102,7 @@
             <i class="fas fa-chart-column text-blue-500"></i>
           </div>
           <p class="text-3xl font-bold text-gray-800" id="all-count">0</p>
-          <p class="text-xs text-green-500 flex items-center mt-2">
+          <p class="text-xs text-green-500 flex items-center mt-2" id="all-subtext">
             <i class="fas fa-arrow-up mr-1"></i> 本周 +5%
           </p>
         </div>
@@ -114,14 +112,15 @@
             <i class="fas fa-brain text-purple-500"></i>
           </div>
           <p class="text-3xl font-bold text-gray-800" id="new-words-count">0</p>
-          <p class="text-xs text-green-500 flex items-center mt-2">
+          <p class="text-xs text-green-500 flex items-center mt-2" id="new-words-subtext">
             <i class="fas fa-arrow-up mr-1"></i> 本周 +15%
           </p>
         </div>
       </div>
 
       <div class="grid grid-cols-3 gap-6 mb-8">
-        <div class="col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
+        <div
+          class="col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
           <h3 class="text-lg font-semibold text-gray-800 mb-4">🔥 爆发趋势排行榜</h3>
           <div class="chart-container">
             <canvas id="trend-chart"></canvas>
@@ -230,11 +229,13 @@
         </div>
       </div>
 
-      <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-y-auto max-h-64 p-4 hover:shadow-md transition-shadow">
+      <div
+        class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-y-auto max-h-64 p-4 hover:shadow-md transition-shadow">
         <h3 class="text-sm font-semibold text-gray-800 mb-3">任务日志</h3>
         <div class="space-y-2" id="task-log">
           <div class="text-sm text-gray-600">
-            <span class="text-gray-400 mr-2"><i class="fas fa-info-circle text-blue-500 mr-1"></i>[2026-03-10 12:00:00]</span> 系统初始化
+            <span class="text-gray-400 mr-2"><i class="fas fa-info-circle text-blue-500 mr-1"></i>[2026-03-10
+              12:00:00]</span> 系统初始化
           </div>
         </div>
       </div>
@@ -248,6 +249,12 @@
     let earlyData = [];
     let allData = [];
     let newWordsData = [];
+
+    let filteredExplodingData = [];
+    let filteredEarlyData = [];
+    let filteredAllData = [];
+    let filteredNewWordsData = [];
+
     let trendChart = null;
     let timelineChart = null;
 
@@ -255,10 +262,17 @@
     const searchInput = document.getElementById('search-input');
     const searchButton = document.getElementById('search-button');
     const taskLog = document.getElementById('task-log');
+
     const explodingCount = document.getElementById('exploding-count');
     const earlyCount = document.getElementById('early-count');
     const allCount = document.getElementById('all-count');
     const newWordsCount = document.getElementById('new-words-count');
+
+    const explodingSubtext = document.getElementById('exploding-subtext');
+    const earlySubtext = document.getElementById('early-subtext');
+    const allSubtext = document.getElementById('all-subtext');
+    const newWordsSubtext = document.getElementById('new-words-subtext');
+
     const aiInsight = document.getElementById('ai-insight');
     const aiSuggestion = document.getElementById('ai-suggestion');
 
@@ -268,18 +282,6 @@
         throw new Error(`HTTP ${res.status}`);
       }
       return res.json();
-    }
-
-    function showTableError(id, colspan = 5, message = '加载失败') {
-      const tbody = document.getElementById(id);
-      if (!tbody) return;
-      tbody.innerHTML = `
-        <tr>
-          <td colspan="${colspan}" class="px-6 py-10 text-center text-red-500">
-            <i class="fas fa-exclamation-circle mr-2"></i>${message}
-          </td>
-        </tr>
-      `;
     }
 
     function escapeHTML(value) {
@@ -298,16 +300,11 @@
       return date.toLocaleDateString();
     }
 
-    function formatPercentFromDecimal(value) {
-      const num = Number(value);
-      if (Number.isNaN(num)) return '0.0%';
-      return `${(num * 100).toFixed(1)}%`;
-    }
-
-    function formatPercentDirect(value) {
-      const num = Number(value);
-      if (Number.isNaN(num)) return '0.0%';
-      return `${num.toFixed(1)}%`;
+    function getScoreColor(score) {
+      const num = Number(score || 0);
+      if (num > 70) return 'text-green-600 font-medium';
+      if (num > 40) return 'text-yellow-600 font-medium';
+      return 'text-gray-600';
     }
 
     function getPlatformTags(platformsValue) {
@@ -318,62 +315,172 @@
         .map(p => p.trim())
         .filter(Boolean);
 
-      if (parts.length === 0) return '-';
+      if (!parts.length) return '-';
 
       return parts.map(p =>
         `<span class="bg-gray-100 text-gray-700 px-2 py-1 rounded-md text-xs mr-1">${escapeHTML(p)}</span>`
       ).join('');
     }
 
-    async function init() {
-      logTask('初始化游戏趋势雷达仪表盘...', 'info');
-      await loadAllData();
-      logTask('仪表盘初始化成功', 'success');
+    function normalizeNewWord(item) {
+      return {
+        token: item.token ?? '',
+        novelty_score: Number(item.novelty_score ?? item.noveltyScore ?? 0),
+        recent_count: Number(item.recent_count ?? item.recentCount ?? 0),
+        total_count: Number(item.total_count ?? item.totalCount ?? 0),
+        first_seen_at: item.first_seen_at ?? item.firstSeenAt ?? null,
+      };
     }
 
-    async function loadAllData() {
-      try {
-        logTask('加载所有趋势数据...', 'info');
+    function normalizeTrend(item) {
+      return {
+        keyword: item.keyword ?? '',
+        prediction_score: Number(item.prediction_score ?? item.predictionScore ?? 0),
+        growth_rate: Number(item.growth_rate ?? item.growthRate ?? 0),
+        acceleration: Number(item.acceleration ?? 0),
+        platform_score: Number(item.platform_score ?? item.platformScore ?? 0),
+        ai_score: Number(item.ai_score ?? item.aiScore ?? 0),
+        platforms: item.platforms ?? '',
+        first_seen_at: item.first_seen_at ?? item.firstSeenAt ?? null,
+      };
+    }
 
-        const [exploding, early, all, newWords] = await Promise.all([
-          fetchJSON(`${API_BASE}/trend/exploding`),
-          fetchJSON(`${API_BASE}/trend/early`),
-          fetchJSON(`${API_BASE}/trend/all`),
-          fetchJSON(`${API_BASE}/new-words`)
-        ]);
+    function showTableError(id, colspan = 5, message = '加载失败') {
+      const tbody = document.getElementById(id);
+      if (!tbody) return;
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="${colspan}" class="px-6 py-10 text-center text-red-500">
+            <i class="fas fa-exclamation-circle mr-2"></i>${message}
+          </td>
+        </tr>
+      `;
+    }
 
-        explodingData = Array.isArray(exploding) ? exploding : [];
-        earlyData = Array.isArray(early) ? early : [];
-        allData = Array.isArray(all) ? all : [];
-        newWordsData = Array.isArray(newWords) ? newWords : (newWords?.items || []);
-
-        explodingCount.textContent = explodingData.length;
-        earlyCount.textContent = earlyData.length;
-        allCount.textContent = allData.length;
-        newWordsCount.textContent = newWordsData.length;
-
-        updateExplodingTable(explodingData);
-        updateEarlyTable(earlyData);
-        updateNewWordsTable(newWordsData);
-
-        updateChart(explodingData);
-        updateTimelineChart(explodingData);
-        updateAIInsight(explodingData);
-
-        logTask('所有趋势数据加载成功', 'success');
-      } catch (error) {
-        console.error('加载数据失败:', error);
-        showTableError('exploding-table-body');
-        showTableError('early-table-body');
-        showTableError('new-words-table-body');
-        explodingCount.textContent = '0';
-        earlyCount.textContent = '0';
-        allCount.textContent = '0';
-        newWordsCount.textContent = '0';
-        aiInsight.textContent = '数据加载失败，请检查后端接口是否正常。';
-        aiSuggestion.textContent = '请稍后重试，或查看任务日志定位问题。';
-        logTask(`加载数据失败: ${error.message}`, 'error');
+    function showEmptyCharts() {
+      if (trendChart) {
+        trendChart.destroy();
+        trendChart = null;
       }
+      if (timelineChart) {
+        timelineChart.destroy();
+        timelineChart = null;
+      }
+    }
+
+    function setDefaultSummaryText() {
+      explodingSubtext.innerHTML = '<i class="fas fa-arrow-up mr-1"></i> 本周 +12%';
+      earlySubtext.innerHTML = '<i class="fas fa-arrow-up mr-1"></i> 本周 +8%';
+      allSubtext.innerHTML = '<i class="fas fa-arrow-up mr-1"></i> 本周 +5%';
+      newWordsSubtext.innerHTML = '<i class="fas fa-arrow-up mr-1"></i> 本周 +15%';
+    }
+
+    function updateCounts(explodingList, earlyList, allList, newWordsList, isFiltered = false) {
+      explodingCount.textContent = explodingList.length;
+      earlyCount.textContent = earlyList.length;
+      allCount.textContent = allList.length;
+      newWordsCount.textContent = newWordsList.length;
+
+      if (!isFiltered) {
+        setDefaultSummaryText();
+        return;
+      }
+
+      explodingSubtext.innerHTML = `<i class="fas fa-filter mr-1"></i> 当前匹配 ${explodingList.length} 条`;
+      earlySubtext.innerHTML = `<i class="fas fa-filter mr-1"></i> 当前匹配 ${earlyList.length} 条`;
+      allSubtext.innerHTML = `<i class="fas fa-filter mr-1"></i> 当前匹配 ${allList.length} 条`;
+      newWordsSubtext.innerHTML = `<i class="fas fa-filter mr-1"></i> 当前匹配 ${newWordsList.length} 条`;
+    }
+
+    function buildSearchTokens(query) {
+      return query
+        .toLowerCase()
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean);
+    }
+
+    function generateTags(keyword) {
+      const tags = [];
+      const keywordLower = String(keyword || '').toLowerCase();
+
+      if (keywordLower.includes('rpg')) tags.push('rpg');
+      if (keywordLower.includes('simulator')) tags.push('simulator');
+      if (keywordLower.includes('tycoon')) tags.push('tycoon');
+      if (keywordLower.includes('idle')) tags.push('idle');
+      if (keywordLower.includes('shooter')) tags.push('shooter');
+      if (keywordLower.includes('defense')) tags.push('defense');
+      if (keywordLower.includes('racing')) tags.push('racing');
+      if (keywordLower.includes('puzzle')) tags.push('puzzle');
+
+      return tags.join(' ');
+    }
+
+    function getTrendSearchText(item) {
+      return [
+        item.keyword,
+        item.platforms,
+        generateTags(item.keyword),
+      ].join(' ').toLowerCase();
+    }
+
+    function getNewWordSearchText(item) {
+      return [item.token].join(' ').toLowerCase();
+    }
+
+    function calculateMatchScore(text, tokens) {
+      let score = 0;
+
+      for (const token of tokens) {
+        if (!text.includes(token)) return -1;
+
+        if (text.startsWith(token)) score += 6;
+        if (text.includes(` ${token}`)) score += 4;
+        if (text.includes(token)) score += 2;
+      }
+
+      return score;
+    }
+
+    function filterAndSortTrends(list, tokens) {
+      return list
+        .map(item => {
+          const text = getTrendSearchText(item);
+          const matchScore = calculateMatchScore(text, tokens);
+          return { item, matchScore };
+        })
+        .filter(entry => entry.matchScore >= 0)
+        .sort((a, b) => {
+          if (b.matchScore !== a.matchScore) return b.matchScore - a.matchScore;
+          if (b.item.prediction_score !== a.item.prediction_score) return b.item.prediction_score - a.item.prediction_score;
+          return b.item.growth_rate - a.item.growth_rate;
+        })
+        .map(entry => entry.item);
+    }
+
+    function filterAndSortNewWords(list, tokens) {
+      return list
+        .map(item => {
+          const text = getNewWordSearchText(item);
+          const matchScore = calculateMatchScore(text, tokens);
+          return { item, matchScore };
+        })
+        .filter(entry => entry.matchScore >= 0)
+        .sort((a, b) => {
+          if (b.matchScore !== a.matchScore) return b.matchScore - a.matchScore;
+          if (b.item.novelty_score !== a.item.novelty_score) return b.item.novelty_score - a.item.novelty_score;
+          return b.item.recent_count - a.item.recent_count;
+        })
+        .map(entry => entry.item);
+    }
+
+    function pickBestInsightItem(list) {
+      if (!list.length) return null;
+
+      return [...list].sort((a, b) => {
+        if (b.prediction_score !== a.prediction_score) return b.prediction_score - a.prediction_score;
+        return b.growth_rate - a.growth_rate;
+      })[0];
     }
 
     function updateExplodingTable(data) {
@@ -392,10 +499,10 @@
             <div class="text-sm font-medium text-gray-900">${escapeHTML(item.keyword)}</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm ${getScoreColor(item.prediction_score)}">${Number(item.prediction_score || 0).toFixed(1)}</div>
+            <div class="text-sm ${getScoreColor(item.prediction_score)}">${item.prediction_score.toFixed(1)}</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">${formatPercentFromDecimal(item.growth_rate)}</div>
+            <div class="text-sm text-gray-900">${(item.growth_rate * 100).toFixed(1)}%</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
             <div class="flex flex-wrap gap-1">${getPlatformTags(item.platforms)}</div>
@@ -424,10 +531,10 @@
             <div class="text-sm font-medium text-gray-900">${escapeHTML(item.keyword)}</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm ${getScoreColor(item.prediction_score)}">${Number(item.prediction_score || 0).toFixed(1)}</div>
+            <div class="text-sm ${getScoreColor(item.prediction_score)}">${item.prediction_score.toFixed(1)}</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">${formatPercentFromDecimal(item.growth_rate)}</div>
+            <div class="text-sm text-gray-900">${(item.growth_rate * 100).toFixed(1)}%</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
             <div class="flex flex-wrap gap-1">${getPlatformTags(item.platforms)}</div>
@@ -450,27 +557,22 @@
       }
 
       data.slice(0, 10).forEach(item => {
-        const noveltyScore = item.novelty_score ?? item.noveltyScore ?? 0;
-        const recentCount = item.recent_count ?? item.recentCount ?? 0;
-        const totalCount = item.total_count ?? item.totalCount ?? 0;
-        const firstSeenAt = item.first_seen_at ?? item.firstSeenAt ?? '-';
-
         const row = document.createElement('tr');
         row.innerHTML = `
           <td class="px-6 py-4 whitespace-nowrap">
             <div class="text-sm font-medium text-gray-900">${escapeHTML(item.token)}</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">${formatPercentDirect(Number(noveltyScore) * 100)}</div>
+            <div class="text-sm text-gray-900">${(item.novelty_score * 100).toFixed(1)}%</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">${escapeHTML(recentCount)}</div>
+            <div class="text-sm text-gray-900">${item.recent_count}</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">${escapeHTML(totalCount)}</div>
+            <div class="text-sm text-gray-900">${item.total_count}</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">${formatDate(firstSeenAt)}</div>
+            <div class="text-sm text-gray-900">${formatDate(item.first_seen_at)}</div>
           </td>
         `;
         tbody.appendChild(row);
@@ -485,13 +587,18 @@
         trendChart.destroy();
       }
 
+      if (!topKeywords.length) {
+        trendChart = null;
+        return;
+      }
+
       trendChart = new Chart(ctx, {
         type: 'bar',
         data: {
           labels: topKeywords.map(item => item.keyword),
           datasets: [{
             label: '增长率 (%)',
-            data: topKeywords.map(item => Number(item.growth_rate || 0) * 100),
+            data: topKeywords.map(item => item.growth_rate * 100),
             backgroundColor: '#2563eb',
             borderColor: '#1d4ed8',
             borderWidth: 1
@@ -516,17 +623,18 @@
     function updateTimelineChart(data) {
       const ctx = document.getElementById('timeline-chart').getContext('2d');
 
+      if (timelineChart) {
+        timelineChart.destroy();
+      }
+
       if (!data.length) {
-        if (timelineChart) {
-          timelineChart.destroy();
-          timelineChart = null;
-        }
+        timelineChart = null;
         return;
       }
 
-      const topKeyword = data[0];
+      const topKeyword = pickBestInsightItem(data);
       const keyword = topKeyword.keyword;
-      const growthRate = Number(topKeyword.growth_rate || 0);
+      const growthRate = topKeyword.growth_rate;
 
       const timeline = [
         growthRate * 0.2,
@@ -535,10 +643,6 @@
         growthRate * 0.8,
         growthRate * 1.0
       ];
-
-      if (timelineChart) {
-        timelineChart.destroy();
-      }
 
       timelineChart = new Chart(ctx, {
         type: 'line',
@@ -569,111 +673,166 @@
       });
     }
 
-    function updateAIInsight(data) {
-      if (!data.length) {
-        aiInsight.textContent = '当前暂无足够趋势数据，等待下一轮检测。';
-        aiSuggestion.textContent = '建议先运行检测，获取最新趋势结果。';
+    function updateAIInsight(data, searchQuery = '') {
+      const bestItem = pickBestInsightItem(data);
+
+      if (!bestItem) {
+        if (searchQuery) {
+          aiInsight.textContent = `当前没有找到与“${searchQuery}”相关的趋势结果。`;
+          aiSuggestion.textContent = '建议换一个更短的关键词，或使用平台名、玩法标签继续搜索。';
+        } else {
+          aiInsight.textContent = '当前暂无足够趋势数据，等待下一轮检测。';
+          aiSuggestion.textContent = '建议先运行检测，获取最新趋势结果。';
+        }
         return;
       }
 
-      const highestScoreItem = data.reduce((max, item) =>
-        Number(item.prediction_score || 0) > Number(max.prediction_score || 0) ? item : max
-      , data[0]);
+      const keyword = bestItem.keyword;
+      const score = bestItem.prediction_score;
+      const growthRate = (bestItem.growth_rate * 100).toFixed(1);
+      const platformsText = bestItem.platforms ? `覆盖平台：${bestItem.platforms}。` : '';
 
-      const keyword = highestScoreItem.keyword;
-      const score = Number(highestScoreItem.prediction_score || 0);
-      const growthRate = Number(highestScoreItem.growth_rate || 0) * 100;
+      aiInsight.textContent = `AI 检测到 "${keyword}" 相关的强劲新兴趋势。预测分数达到 ${score.toFixed(1)}，增长率 ${growthRate}%。${platformsText}`;
+      aiSuggestion.textContent = `建议优先关注 "${keyword}"，并结合当前平台分布持续跟踪未来 7 天变化。`;
+    }
 
-      aiInsight.textContent = `AI 检测到 "${keyword}" 相关的强劲新兴趋势。该关键词在多个平台上显示出快速增长。预测分数达到 ${score.toFixed(1)}，表明具有强劲的爆发潜力。`;
-      aiSuggestion.textContent = `建议关注此关键词，当前增长率 ${growthRate.toFixed(1)}%，预计未来 7 天将继续增长。`;
+    function renderDashboard({ exploding, early, all, newWords, searchQuery = '', isFiltered = false }) {
+      updateCounts(exploding, early, all, newWords, isFiltered);
+      updateExplodingTable(exploding);
+      updateEarlyTable(early);
+      updateNewWordsTable(newWords);
+      updateChart(exploding);
+      updateTimelineChart(exploding);
+      updateAIInsight(exploding, searchQuery);
+    }
+
+    async function init() {
+      logTask('初始化游戏趋势雷达仪表盘...', 'info');
+      await loadAllData();
+      logTask('仪表盘初始化成功', 'success');
+    }
+
+    async function loadAllData() {
+      try {
+        logTask('加载所有趋势数据...', 'info');
+
+        const [exploding, early, all, newWords] = await Promise.all([
+          fetchJSON(`${API_BASE}/trend/exploding`),
+          fetchJSON(`${API_BASE}/trend/early`),
+          fetchJSON(`${API_BASE}/trend/all`),
+          fetchJSON(`${API_BASE}/new-words`)
+        ]);
+
+        explodingData = Array.isArray(exploding) ? exploding.map(normalizeTrend) : [];
+        earlyData = Array.isArray(early) ? early.map(normalizeTrend) : [];
+        allData = Array.isArray(all) ? all.map(normalizeTrend) : [];
+
+        const rawNewWords = Array.isArray(newWords) ? newWords : (newWords?.items || []);
+        newWordsData = rawNewWords.map(normalizeNewWord);
+
+        filteredExplodingData = [...explodingData];
+        filteredEarlyData = [...earlyData];
+        filteredAllData = [...allData];
+        filteredNewWordsData = [...newWordsData];
+
+        renderDashboard({
+          exploding: explodingData,
+          early: earlyData,
+          all: allData,
+          newWords: newWordsData,
+          isFiltered: false
+        });
+
+        logTask(`爆发趋势加载成功：${explodingData.length} 条`, 'success');
+        logTask(`早期趋势加载成功：${earlyData.length} 条`, 'success');
+        logTask(`全部趋势加载成功：${allData.length} 条`, 'success');
+        logTask(`新词数据加载成功：${newWordsData.length} 条`, 'success');
+      } catch (error) {
+        console.error('加载数据失败:', error);
+        showTableError('exploding-table-body', 5, '爆发趋势加载失败');
+        showTableError('early-table-body', 5, '早期趋势加载失败');
+        showTableError('new-words-table-body', 5, '新词数据加载失败');
+        explodingCount.textContent = '0';
+        earlyCount.textContent = '0';
+        allCount.textContent = '0';
+        newWordsCount.textContent = '0';
+        setDefaultSummaryText();
+        showEmptyCharts();
+        aiInsight.textContent = '数据加载失败，请检查后端接口是否正常。';
+        aiSuggestion.textContent = '请稍后重试，或查看任务日志定位问题。';
+        logTask(`加载数据失败: ${error.message}`, 'error');
+      }
+    }
+
+    function restoreAllData() {
+      filteredExplodingData = [...explodingData];
+      filteredEarlyData = [...earlyData];
+      filteredAllData = [...allData];
+      filteredNewWordsData = [...newWordsData];
+
+      renderDashboard({
+        exploding: filteredExplodingData,
+        early: filteredEarlyData,
+        all: filteredAllData,
+        newWords: filteredNewWordsData,
+        isFiltered: false
+      });
+
+      logTask('已恢复全部数据视图', 'info');
     }
 
     function runSearch() {
-      const query = searchInput.value.toLowerCase().trim();
+      const query = searchInput.value.trim();
+      const tokens = buildSearchTokens(query);
 
-      if (!query) {
-        updateExplodingTable(explodingData);
-        updateEarlyTable(earlyData);
-        updateNewWordsTable(newWordsData);
-        updateChart(explodingData);
-        updateTimelineChart(explodingData);
-        updateAIInsight(explodingData);
-        logTask('已恢复全部数据视图', 'info');
+      if (!tokens.length) {
+        restoreAllData();
         return;
       }
 
-      const filteredExploding = explodingData.filter(item => {
-        const text = `${item.keyword || ''} ${item.platforms || ''} ${generateTags(item.keyword || '')}`.toLowerCase();
-        return text.includes(query);
+      filteredExplodingData = filterAndSortTrends(explodingData, tokens);
+      filteredEarlyData = filterAndSortTrends(earlyData, tokens);
+      filteredAllData = filterAndSortTrends(allData, tokens);
+      filteredNewWordsData = filterAndSortNewWords(newWordsData, tokens);
+
+      renderDashboard({
+        exploding: filteredExplodingData,
+        early: filteredEarlyData,
+        all: filteredAllData,
+        newWords: filteredNewWordsData,
+        searchQuery: query,
+        isFiltered: true
       });
 
-      const filteredEarly = earlyData.filter(item => {
-        const text = `${item.keyword || ''} ${item.platforms || ''} ${generateTags(item.keyword || '')}`.toLowerCase();
-        return text.includes(query);
-      });
-
-      const filteredNewWords = newWordsData.filter(item => {
-        const text = `${item.token || ''}`.toLowerCase();
-        return text.includes(query);
-      });
-
-      updateExplodingTable(filteredExploding);
-      updateEarlyTable(filteredEarly);
-      updateNewWordsTable(filteredNewWords);
-
-      if (filteredExploding.length > 0) {
-        updateChart(filteredExploding);
-        updateTimelineChart(filteredExploding);
-        updateAIInsight(filteredExploding);
-      } else {
-        updateChart([]);
-        updateTimelineChart([]);
-        updateAIInsight([]);
-      }
-
-      logTask(`搜索完成: "${query}"`, 'success');
-    }
-
-    function generateTags(keyword) {
-      const tags = [];
-      const keywordLower = String(keyword || '').toLowerCase();
-
-      if (keywordLower.includes('rpg')) tags.push('rpg');
-      if (keywordLower.includes('simulator')) tags.push('simulator');
-      if (keywordLower.includes('tycoon')) tags.push('tycoon');
-      if (keywordLower.includes('idle')) tags.push('idle');
-      if (keywordLower.includes('shooter')) tags.push('shooter');
-      if (keywordLower.includes('defense')) tags.push('defense');
-      if (keywordLower.includes('racing')) tags.push('racing');
-      if (keywordLower.includes('puzzle')) tags.push('puzzle');
-
-      return tags.join(' ');
-    }
-
-    function getScoreColor(score) {
-      const num = Number(score || 0);
-      if (num > 70) return 'text-green-600 font-medium';
-      if (num > 40) return 'text-yellow-600 font-medium';
-      return 'text-gray-600';
+      logTask(
+        `搜索完成：爆发 ${filteredExplodingData.length} 条，早期 ${filteredEarlyData.length} 条，全部 ${filteredAllData.length} 条，新词 ${filteredNewWordsData.length} 条`,
+        'success'
+      );
     }
 
     async function runDetection() {
       try {
         logTask('开始趋势检测...', 'info');
         runDetectionBtn.disabled = true;
+        runDetectionBtn.classList.add('opacity-80', 'cursor-not-allowed');
         runDetectionBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> 运行中...';
 
         const response = await fetch(`${API_BASE}/daily-job`, { method: 'GET' });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
         await response.json();
-        logTask('趋势检测完成', 'success');
+        logTask('趋势检测完成，正在刷新数据...', 'success');
         await loadAllData();
+
+        if (searchInput.value.trim()) {
+          runSearch();
+        }
       } catch (error) {
         console.error('检测失败:', error);
         logTask(`检测失败: ${error.message}`, 'error');
       } finally {
         runDetectionBtn.disabled = false;
+        runDetectionBtn.classList.remove('opacity-80', 'cursor-not-allowed');
         runDetectionBtn.innerHTML = '<i class="fas fa-sync-alt"></i> <span>运行检测</span>';
       }
     }
@@ -700,6 +859,11 @@
 
       taskLog.appendChild(logItem);
       taskLog.scrollTop = taskLog.scrollHeight;
+
+      const maxLogItems = 50;
+      while (taskLog.children.length > maxLogItems) {
+        taskLog.removeChild(taskLog.firstElementChild);
+      }
     }
 
     runDetectionBtn.addEventListener('click', runDetection);
@@ -711,7 +875,14 @@
       }
     });
 
+    searchInput.addEventListener('input', function () {
+      if (!searchInput.value.trim()) {
+        restoreAllData();
+      }
+    });
+
     init();
   </script>
 </body>
+
 </html>

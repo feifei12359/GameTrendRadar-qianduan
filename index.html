@@ -8,7 +8,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <script>
     tailwind.config = {
@@ -21,7 +21,7 @@
             border: '#e5e7eb',
           },
           fontFamily: {
-            inter: ['Inter', 'system-ui', 'sans-serif'],
+            inter: ['Inter', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', 'system-ui', 'sans-serif'],
           },
         },
       }
@@ -38,7 +38,7 @@
 
   <style>
     body {
-      font-family: 'Inter', system-ui, sans-serif;
+      font-family: 'Inter', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
     }
 
     .chart-container {
@@ -55,29 +55,29 @@
         <div class="flex items-center justify-between mb-6">
           <div class="flex items-center space-x-3">
             <i class="fas fa-chart-line text-primary text-3xl"></i>
-            <h1 class="text-3xl font-bold text-gray-800">娓告垙瓒嬪娍闆疯揪</h1>
+            <h1 class="text-3xl font-bold text-gray-800">游戏趋势雷达</h1>
           </div>
           <div class="flex items-center space-x-3">
             <button id="reset-and-rerun"
               class="bg-red-600 hover:bg-red-700 text-white rounded-lg px-6 py-3 shadow-sm flex items-center space-x-2 transition-colors">
               <i class="fas fa-rotate-left"></i>
-              <span>閲嶇疆骞堕噸璺?/span>
+              <span>重置并重跑</span>
             </button>
             <button id="run-detection"
               class="bg-primary hover:bg-blue-700 text-white rounded-lg px-6 py-3 shadow-sm flex items-center space-x-2 transition-colors">
               <i class="fas fa-sync-alt"></i>
-              <span>杩愯妫€娴?/span>
+              <span>运行检测</span>
             </button>
           </div>
         </div>
 
         <div class="flex items-center gap-2 max-w-2xl">
-          <input id="search-input" type="text" placeholder="鎼滅储瓒嬪娍銆佸钩鍙般€佹爣绛?.."
+          <input id="search-input" type="text" placeholder="搜索趋势、平台、标签..."
             class="flex-1 border border-gray-300 rounded-lg px-4 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all shadow-sm" />
           <button id="search-button"
             class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 flex items-center gap-2 transition-colors">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <span>鎼滅储</span>
+            <span>搜索</span>
           </button>
         </div>
       </header>
@@ -85,7 +85,7 @@
       <div class="grid grid-cols-4 gap-6 mb-8">
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
           <div class="flex items-center justify-between mb-4">
-            <h3 class="text-sm font-medium text-gray-500">鐖嗗彂瓒嬪娍</h3>
+            <h3 class="text-sm font-medium text-gray-500">爆发趋势</h3>
             <i class="fas fa-rocket text-primary"></i>
           </div>
           <p class="text-3xl font-bold text-gray-800" id="exploding-count">0</p>
@@ -95,7 +95,7 @@
         </div>
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
           <div class="flex items-center justify-between mb-4">
-            <h3 class="text-sm font-medium text-gray-500">鏃╂湡瓒嬪娍</h3>
+            <h3 class="text-sm font-medium text-gray-500">早期趋势</h3>
             <i class="fas fa-seedling text-green-500"></i>
           </div>
           <p class="text-3xl font-bold text-gray-800" id="early-count">0</p>
@@ -115,7 +115,7 @@
         </div>
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
           <div class="flex items-center justify-between mb-4">
-            <h3 class="text-sm font-medium text-gray-500">鏂拌瘝</h3>
+            <h3 class="text-sm font-medium text-gray-500">新词</h3>
             <i class="fas fa-brain text-purple-500"></i>
           </div>
           <p class="text-3xl font-bold text-gray-800" id="new-words-count">0</p>
@@ -135,16 +135,18 @@
         </div>
 
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
-          <h3 class="text-lg font-semibold text-gray-800 mb-4">馃 AI 瓒嬪娍娲炲療</h3>
+          <h3 class="text-lg font-semibold text-gray-800 mb-4">AI 趋势洞察</h3>
           <p class="text-gray-600 text-sm leading-relaxed" id="ai-insight">
-            AI 妫€娴嬪埌 "Tower Defense" 鐩稿叧鐨勫己鍔叉柊鍏磋秼鍔裤€?          </p>
+            AI 检测到 "Tower Defense" 相关的强劲新兴趋势。
+          </p>
           <div class="mt-4 p-4 bg-blue-50 rounded-lg">
             <div class="flex items-center mb-2">
               <i class="fas fa-lightbulb text-primary mr-2"></i>
-              <span class="text-sm font-medium text-gray-800">AI 寤鸿</span>
+              <span class="text-sm font-medium text-gray-800">AI 建议</span>
             </div>
             <p class="text-xs text-gray-600" id="ai-suggestion">
-              鏈潵 7 澶╁叧娉ㄦ鍏抽敭璇嶃€?            </p>
+              未来 7 天重点关注这个关键词。
+            </p>
           </div>
         </div>
       </div>
@@ -158,23 +160,23 @@
 
       <div class="bg-white rounded-xl shadow-sm border border-gray-100 mb-8 hover:shadow-md transition-shadow">
         <div class="p-6 border-b border-gray-100">
-          <h3 class="text-lg font-semibold text-gray-800">馃敟 鐖嗗彂瓒嬪娍</h3>
+          <h3 class="text-lg font-semibold text-gray-800">爆发趋势</h3>
         </div>
         <div class="overflow-x-auto">
           <table class="w-full">
             <thead class="bg-gray-50">
               <tr>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">关键词</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">棰勬祴鍒嗘暟</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">预测分数</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">增长率</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">骞冲彴</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">棣栨鍑虹幇</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">平台</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">首次出现</th>
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200" id="exploding-table-body">
               <tr>
                 <td colspan="5" class="px-6 py-10 text-center text-gray-500">
-                  <i class="fas fa-spinner fa-spin mr-2"></i> 鍔犺浇涓?..
+                  <i class="fas fa-spinner fa-spin mr-2"></i> 加载中...
                 </td>
               </tr>
             </tbody>
@@ -184,23 +186,23 @@
 
       <div class="bg-white rounded-xl shadow-sm border border-gray-100 mb-8 hover:shadow-md transition-shadow">
         <div class="p-6 border-b border-gray-100">
-          <h3 class="text-lg font-semibold text-gray-800">馃搱 鏃╂湡瓒嬪娍</h3>
+          <h3 class="text-lg font-semibold text-gray-800">早期趋势</h3>
         </div>
         <div class="overflow-x-auto">
           <table class="w-full">
             <thead class="bg-gray-50">
               <tr>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">关键词</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">棰勬祴鍒嗘暟</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">预测分数</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">增长率</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">骞冲彴</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">棣栨鍑虹幇</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">平台</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">首次出现</th>
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200" id="early-table-body">
               <tr>
                 <td colspan="5" class="px-6 py-10 text-center text-gray-500">
-                  <i class="fas fa-spinner fa-spin mr-2"></i> 鍔犺浇涓?..
+                  <i class="fas fa-spinner fa-spin mr-2"></i> 加载中...
                 </td>
               </tr>
             </tbody>
@@ -210,24 +212,24 @@
 
       <div class="bg-white rounded-xl shadow-sm border border-gray-100 mb-8 hover:shadow-md transition-shadow">
         <div class="p-6 border-b border-gray-100">
-          <h3 class="text-lg font-semibold text-gray-800">馃 鏂拌瘝</h3>
+          <h3 class="text-lg font-semibold text-gray-800">新词</h3>
         </div>
         <div class="overflow-x-auto">
           <table class="w-full">
             <thead class="bg-gray-50">
               <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">璇嶆眹</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">词汇</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">新颖度</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">杩戞湡鍑虹幇</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">近期出现</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">总出现</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">骞冲彴</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">棣栨鍑虹幇</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">平台</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">首次出现</th>
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200" id="new-words-table-body">
               <tr>
                 <td colspan="6" class="px-6 py-10 text-center text-gray-500">
-                  <i class="fas fa-spinner fa-spin mr-2"></i> 鍔犺浇涓?..
+                  <i class="fas fa-spinner fa-spin mr-2"></i> 加载中...
                 </td>
               </tr>
             </tbody>
@@ -237,11 +239,12 @@
 
       <div
         class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-y-auto max-h-64 p-4 hover:shadow-md transition-shadow">
-        <h3 class="text-sm font-semibold text-gray-800 mb-3">浠诲姟鏃ュ織</h3>
+        <h3 class="text-sm font-semibold text-gray-800 mb-3">任务日志</h3>
         <div class="space-y-2" id="task-log">
           <div class="text-sm text-gray-600">
             <span class="text-gray-400 mr-2"><i class="fas fa-info-circle text-blue-500 mr-1"></i>[2026-03-10
-              12:00:00]</span> 绯荤粺鍒濆鍖?          </div>
+              12:00:00]</span> 系统初始化
+          </div>
         </div>
       </div>
     </main>
@@ -376,7 +379,7 @@
       };
     }
 
-    function showTableError(id, colspan = 5, message = '鍔犺浇澶辫触') {
+    function showTableError(id, colspan = 5, message = '加载失败') {
       const tbody = document.getElementById(id);
       if (!tbody) return;
       tbody.innerHTML = `
@@ -417,10 +420,10 @@
         return;
       }
 
-      explodingSubtext.innerHTML = `<i class="fas fa-filter mr-1"></i> ???? ${explodingList.length} ?`;
-      earlySubtext.innerHTML = `<i class="fas fa-filter mr-1"></i> ???? ${earlyList.length} ?`;
-      allSubtext.innerHTML = `<i class="fas fa-filter mr-1"></i> ???? ${allList.length} ?`;
-      newWordsSubtext.innerHTML = `<i class="fas fa-filter mr-1"></i> ???? ${newWordsList.length} ?`;
+      explodingSubtext.innerHTML = `<i class="fas fa-filter mr-1"></i> 当前匹配 ${explodingList.length} 条`;
+      earlySubtext.innerHTML = `<i class="fas fa-filter mr-1"></i> 当前匹配 ${earlyList.length} 条`;
+      allSubtext.innerHTML = `<i class="fas fa-filter mr-1"></i> 当前匹配 ${allList.length} 条`;
+      newWordsSubtext.innerHTML = `<i class="fas fa-filter mr-1"></i> 当前匹配 ${newWordsList.length} 条`;
     }
 
     function buildSearchTokens(query) {
@@ -519,7 +522,7 @@
       tbody.innerHTML = '';
 
       if (!data.length) {
-        tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-10 text-center text-gray-500">鏃犳暟鎹?/td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-10 text-center text-gray-500">暂无数据</td></tr>';
         return;
       }
 
@@ -551,7 +554,7 @@
       tbody.innerHTML = '';
 
       if (!data.length) {
-        tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-10 text-center text-gray-500">鏃犳暟鎹?/td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-10 text-center text-gray-500">暂无数据</td></tr>';
         return;
       }
 
@@ -583,7 +586,7 @@
       tbody.innerHTML = '';
 
       if (!data.length) {
-        tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-10 text-center text-gray-500">????</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-10 text-center text-gray-500">暂无数据</td></tr>';
         return;
       }
 
@@ -631,7 +634,7 @@
         data: {
           labels: topKeywords.map(item => item.keyword),
           datasets: [{
-            label: '澧為暱鐜?(%)',
+            label: '增长率 (%)',
             data: topKeywords.map(item => item.growth_rate * 100),
             backgroundColor: '#2563eb',
             borderColor: '#1d4ed8',
@@ -646,7 +649,7 @@
               beginAtZero: true,
               title: {
                 display: true,
-                text: '澧為暱鐜?(%)'
+                text: '增长率 (%)'
               }
             }
           }
@@ -681,9 +684,9 @@
       timelineChart = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: ['? 1 ?', '? 2 ?', '? 3 ?', '? 4 ?', '? 5 ?'],
+          labels: ['第 1 天', '第 2 天', '第 3 天', '第 4 天', '第 5 天'],
           datasets: [{
-            label: `${keyword} 澧為暱瓒嬪娍`,
+            label: `${keyword} 增长趋势`,
             data: timeline.map(t => t * 100),
             borderColor: '#2563eb',
             backgroundColor: 'rgba(37, 99, 235, 0.1)',
@@ -699,7 +702,7 @@
               beginAtZero: true,
               title: {
                 display: true,
-                text: '澧為暱鐜?(%)'
+                text: '增长率 (%)'
               }
             }
           }
@@ -712,11 +715,11 @@
 
       if (!bestItem) {
         if (searchQuery) {
-          aiInsight.textContent = `??????? "${searchQuery}" ????????`;
-          aiSuggestion.textContent = '????????????????????????????';
+          aiInsight.textContent = `当前没有找到与 "${searchQuery}" 相关的趋势结果。`;
+          aiSuggestion.textContent = '建议换一个更短的关键词，或使用平台名、玩法标签继续搜索。';
         } else {
-          aiInsight.textContent = '???????????????????';
-          aiSuggestion.textContent = '?????????????????';
+          aiInsight.textContent = '当前暂无足够趋势数据，等待下一轮检测。';
+          aiSuggestion.textContent = '建议先运行检测，获取最新趋势结果。';
         }
         return;
       }
@@ -724,10 +727,10 @@
       const keyword = bestItem.keyword;
       const score = bestItem.prediction_score;
       const growthRate = (bestItem.growth_rate * 100).toFixed(1);
-      const platformsText = bestItem.platforms ? `?????${bestItem.platforms}?` : '';
+      const platformsText = bestItem.platforms ? `覆盖平台：${bestItem.platforms}。` : '';
 
-      aiInsight.textContent = `AI ??? "${keyword}" ???????????????? ${score.toFixed(1)}???? ${growthRate}%?${platformsText}`;
-      aiSuggestion.textContent = `?????? "${keyword}"???????????????? 7 ????`;
+      aiInsight.textContent = `AI 检测到 "${keyword}" 相关的强劲新兴趋势。预测分数达到 ${score.toFixed(1)}，增长率 ${growthRate}%。${platformsText}`;
+      aiSuggestion.textContent = `建议优先关注 "${keyword}"，并结合当前平台分布持续跟踪未来 7 天变化。`;
     }
 
     function renderDashboard({ exploding, early, all, newWords, searchQuery = '', isFiltered = false }) {
@@ -741,14 +744,14 @@
     }
 
     async function init() {
-      logTask('鍒濆鍖栨父鎴忚秼鍔块浄杈句华琛ㄧ洏...', 'info');
+      logTask('初始化游戏趋势雷达仪表盘...', 'info');
       await loadAllData();
-      logTask('浠〃鐩樺垵濮嬪寲鎴愬姛', 'success');
+      logTask('仪表盘初始化成功', 'success');
     }
 
     async function loadAllData() {
       try {
-        logTask('鍔犺浇鎵€鏈夎秼鍔挎暟鎹?..', 'info');
+        logTask('加载所有趋势数据...', 'info');
 
         const [exploding, early, all, newWords] = await Promise.all([
           fetchJSON(`${API_BASE}/trend/exploding`),
@@ -777,24 +780,24 @@
           isFiltered: false
         });
 
-        logTask(`?????????${explodingData.length} ?`, 'success');
-        logTask(`?????????${earlyData.length} ?`, 'success');
-        logTask(`?????????${allData.length} ?`, 'success');
-        logTask(`?????????${newWordsData.length} ?`, 'success');
+        logTask(`爆发趋势加载成功：${explodingData.length} 条`, 'success');
+        logTask(`早期趋势加载成功：${earlyData.length} 条`, 'success');
+        logTask(`全部趋势加载成功：${allData.length} 条`, 'success');
+        logTask(`新词数据加载成功：${newWordsData.length} 条`, 'success');
       } catch (error) {
-        console.error('鍔犺浇鏁版嵁澶辫触:', error);
-        showTableError('exploding-table-body', 5, '鐖嗗彂瓒嬪娍鍔犺浇澶辫触');
-        showTableError('early-table-body', 5, '鏃╂湡瓒嬪娍鍔犺浇澶辫触');
-        showTableError('new-words-table-body', 5, '鏂拌瘝鏁版嵁鍔犺浇澶辫触');
+        console.error('加载数据失败:', error);
+        showTableError('exploding-table-body', 5, '爆发趋势加载失败');
+        showTableError('early-table-body', 5, '早期趋势加载失败');
+        showTableError('new-words-table-body', 5, '新词数据加载失败');
         explodingCount.textContent = '0';
         earlyCount.textContent = '0';
         allCount.textContent = '0';
         newWordsCount.textContent = '0';
         setDefaultSummaryText();
         showEmptyCharts();
-        aiInsight.textContent = '???????????????????';
-        aiSuggestion.textContent = '??????????????????';
-        logTask(`鍔犺浇鏁版嵁澶辫触: ${error.message}`, 'error');
+        aiInsight.textContent = '数据加载失败，请检查后端接口是否正常。';
+        aiSuggestion.textContent = '请稍后重试，或查看任务日志定位问题。';
+        logTask(`加载数据失败: ${error.message}`, 'error');
       }
     }
 
@@ -812,7 +815,7 @@
         isFiltered: false
       });
 
-      logTask('?????????', 'info');
+      logTask('已恢复全部数据视图', 'info');
     }
 
     function runSearch() {
@@ -839,35 +842,35 @@
       });
 
       logTask(
-        `??????? ${filteredExplodingData.length} ???? ${filteredEarlyData.length} ???? ${filteredAllData.length} ???? ${filteredNewWordsData.length} ?`,
+        `搜索完成：爆发 ${filteredExplodingData.length} 条，早期 ${filteredEarlyData.length} 条，全部 ${filteredAllData.length} 条，新词 ${filteredNewWordsData.length} 条`,
         'success'
       );
     }
 
     async function runDetection() {
       try {
-        logTask('寮€濮嬭秼鍔挎娴?..', 'info');
+        logTask('开始趋势检测...', 'info');
         runDetectionBtn.disabled = true;
         runDetectionBtn.classList.add('opacity-80', 'cursor-not-allowed');
-        runDetectionBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> 杩愯涓?..';
+        runDetectionBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> 运行中...';
 
         const response = await fetch(`${API_BASE}/daily-job`, { method: 'GET' });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
         await response.json();
-        logTask('瓒嬪娍妫€娴嬪畬鎴愶紝姝ｅ湪鍒锋柊鏁版嵁...', 'success');
+        logTask('趋势检测完成，正在刷新数据...', 'success');
         await loadAllData();
 
         if (searchInput.value.trim()) {
           runSearch();
         }
       } catch (error) {
-        console.error('妫€娴嬪け璐?', error);
-        logTask(`妫€娴嬪け璐? ${error.message}`, 'error');
+        console.error('检测失败:', error);
+        logTask(`检测失败: ${error.message}`, 'error');
       } finally {
         runDetectionBtn.disabled = false;
         runDetectionBtn.classList.remove('opacity-80', 'cursor-not-allowed');
-        runDetectionBtn.innerHTML = '<i class="fas fa-sync-alt"></i> <span>杩愯妫€娴?/span>';
+        runDetectionBtn.innerHTML = '<i class="fas fa-sync-alt"></i> <span>运行检测</span>';
       }
     }
 
@@ -917,11 +920,11 @@
 
     async function resetAndRerun() {
       try {
-        logTask('寮€濮嬮噸缃暟鎹簱骞堕噸鏂扮敓鎴愯秼鍔?..', 'info');
+        logTask('开始重置数据库并重新生成趋势...', 'info');
 
         // 绂佺敤鎸夐挳骞舵樉绀?loading 鐘舵€?        resetAndRerunBtn.disabled = true;
         resetAndRerunBtn.classList.add('opacity-80', 'cursor-not-allowed');
-        resetAndRerunBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> 閲嶇疆涓?..';
+        resetAndRerunBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> 重置中...';
 
         // 璋冪敤閲嶇疆鎺ュ彛
         const response = await fetch(`${API_BASE}/new-words/reset`, { method: 'POST' });
@@ -933,7 +936,7 @@
         const result = await response.json();
 
         if (result.success) {
-          logTask('??????????', 'success');
+          logTask('系统已重置并开始重跑', 'success');
 
           // 閲嶆柊鍔犺浇鏁版嵁
           await loadAllData();
@@ -943,17 +946,17 @@
             runSearch();
           }
 
-          logTask('???????', 'success');
+          logTask('重置并重跑完成', 'success');
         } else {
-          throw new Error(result.message || '閲嶇疆澶辫触');
+          throw new Error(result.message || '重置失败');
         }
       } catch (error) {
-        console.error('閲嶇疆閲嶈窇澶辫触:', error);
-        logTask(`閲嶇疆閲嶈窇澶辫触: ${error.message}`, 'error');
+        console.error('重置重跑失败:', error);
+        logTask(`重置重跑失败: ${error.message}`, 'error');
       } finally {
         // 鎭㈠鎸夐挳鐘舵€?        resetAndRerunBtn.disabled = false;
         resetAndRerunBtn.classList.remove('opacity-80', 'cursor-not-allowed');
-        resetAndRerunBtn.innerHTML = '<i class="fas fa-rotate-left"></i> <span>閲嶇疆骞堕噸璺?/span>';
+        resetAndRerunBtn.innerHTML = '<i class="fas fa-rotate-left"></i> <span>重置并重跑</span>';
       }
     }
 

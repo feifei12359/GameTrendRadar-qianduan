@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>娓告垙瓒嬪娍闆疯揪 - 浠〃鐩?/title>
+  <title>Game Trend Radar - Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -105,7 +105,7 @@
         </div>
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
           <div class="flex items-center justify-between mb-4">
-            <h3 class="text-sm font-medium text-gray-500">鎵€鏈夎秼鍔?/h3>
+            <h3 class="text-sm font-medium text-gray-500">全部趋势</h3>
             <i class="fas fa-chart-column text-blue-500"></i>
           </div>
           <p class="text-3xl font-bold text-gray-800" id="all-count">0</p>
@@ -128,7 +128,7 @@
       <div class="grid grid-cols-3 gap-6 mb-8">
         <div
           class="col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
-          <h3 class="text-lg font-semibold text-gray-800 mb-4">馃敟 鐖嗗彂瓒嬪娍鎺掕姒?/h3>
+          <h3 class="text-lg font-semibold text-gray-800 mb-4">爆发趋势排行</h3>
           <div class="chart-container">
             <canvas id="trend-chart"></canvas>
           </div>
@@ -150,7 +150,7 @@
       </div>
 
       <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8 hover:shadow-md transition-shadow">
-        <h3 class="text-lg font-semibold text-gray-800 mb-4">馃搱 瓒嬪娍鏃堕棿绾?/h3>
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">趋势时间线</h3>
         <div class="chart-container">
           <canvas id="timeline-chart"></canvas>
         </div>
@@ -164,9 +164,9 @@
           <table class="w-full">
             <thead class="bg-gray-50">
               <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">鍏抽敭璇?/th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">关键词</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">棰勬祴鍒嗘暟</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">澧為暱鐜?/th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">增长率</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">骞冲彴</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">棣栨鍑虹幇</th>
               </tr>
@@ -190,9 +190,9 @@
           <table class="w-full">
             <thead class="bg-gray-50">
               <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">鍏抽敭璇?/th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">关键词</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">棰勬祴鍒嗘暟</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">澧為暱鐜?/th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">增长率</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">骞冲彴</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">棣栨鍑虹幇</th>
               </tr>
@@ -217,9 +217,9 @@
             <thead class="bg-gray-50">
               <tr>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">璇嶆眹</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">鏂伴搴?/th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">新颖度</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">杩戞湡鍑虹幇</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">鎬诲嚭鐜?/th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">总出现</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">骞冲彴</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">棣栨鍑虹幇</th>
               </tr>

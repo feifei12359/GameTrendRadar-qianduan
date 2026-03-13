@@ -90,7 +90,7 @@
           </div>
           <p class="text-3xl font-bold text-gray-800" id="exploding-count">0</p>
           <p class="text-xs text-green-500 flex items-center mt-2" id="exploding-subtext">
-            <i class="fas fa-arrow-up mr-1"></i> 鏈懆 +12%
+            <i class="fas fa-arrow-up mr-1"></i> 本周 +12%
           </p>
         </div>
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
@@ -100,7 +100,7 @@
           </div>
           <p class="text-3xl font-bold text-gray-800" id="early-count">0</p>
           <p class="text-xs text-green-500 flex items-center mt-2" id="early-subtext">
-            <i class="fas fa-arrow-up mr-1"></i> 鏈懆 +8%
+            <i class="fas fa-arrow-up mr-1"></i> 本周 +8%
           </p>
         </div>
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
@@ -110,7 +110,7 @@
           </div>
           <p class="text-3xl font-bold text-gray-800" id="all-count">0</p>
           <p class="text-xs text-green-500 flex items-center mt-2" id="all-subtext">
-            <i class="fas fa-arrow-up mr-1"></i> 鏈懆 +5%
+            <i class="fas fa-arrow-up mr-1"></i> 本周 +5%
           </p>
         </div>
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
@@ -120,7 +120,7 @@
           </div>
           <p class="text-3xl font-bold text-gray-800" id="new-words-count">0</p>
           <p class="text-xs text-green-500 flex items-center mt-2" id="new-words-subtext">
-            <i class="fas fa-arrow-up mr-1"></i> 鏈懆 +15%
+            <i class="fas fa-arrow-up mr-1"></i> 本周 +15%
           </p>
         </div>
       </div>
@@ -355,13 +355,54 @@
       }).join('');
     }
 
+    function normalizePlatformsValue(...values) {
+      for (const value of values) {
+        if (Array.isArray(value)) {
+          const parts = value
+            .map(item => String(item ?? '').trim())
+            .filter(Boolean);
+          if (parts.length) return parts.join(', ');
+        }
+
+        if (value && typeof value === 'object') {
+          const nested = normalizePlatformsValue(
+            value.platforms,
+            value.platform,
+            value.sources,
+            value.source,
+            value.channels,
+            value.channel,
+            value.names,
+            value.name
+          );
+          if (nested) return nested;
+        }
+
+        if (typeof value === 'string' && value.trim()) {
+          return value.trim();
+        }
+      }
+
+      return '';
+    }
+
     function normalizeNewWord(item) {
       return {
         token: item.token ?? '',
         novelty_score: Number(item.novelty_score ?? item.noveltyScore ?? 0),
         recent_count: Number(item.recent_count ?? item.recentCount ?? 0),
         total_count: Number(item.total_count ?? item.totalCount ?? 0),
-        platforms: item.platforms ?? item.platform ?? '',
+        platforms: normalizePlatformsValue(
+          item.platforms,
+          item.platform,
+          item.sources,
+          item.source,
+          item.channels,
+          item.channel,
+          item.platform_names,
+          item.platformNames,
+          item.metadata
+        ),
         first_seen_at: item.first_seen_at ?? item.firstSeenAt ?? null,
       };
     }
@@ -403,10 +444,10 @@
     }
 
     function setDefaultSummaryText() {
-      explodingSubtext.innerHTML = '<i class="fas fa-arrow-up mr-1"></i> 鏈懆 +12%';
-      earlySubtext.innerHTML = '<i class="fas fa-arrow-up mr-1"></i> 鏈懆 +8%';
-      allSubtext.innerHTML = '<i class="fas fa-arrow-up mr-1"></i> 鏈懆 +5%';
-      newWordsSubtext.innerHTML = '<i class="fas fa-arrow-up mr-1"></i> 鏈懆 +15%';
+      explodingSubtext.innerHTML = '<i class="fas fa-arrow-up mr-1"></i> 本周 +12%';
+      earlySubtext.innerHTML = '<i class="fas fa-arrow-up mr-1"></i> 本周 +8%';
+      allSubtext.innerHTML = '<i class="fas fa-arrow-up mr-1"></i> 本周 +5%';
+      newWordsSubtext.innerHTML = '<i class="fas fa-arrow-up mr-1"></i> 本周 +15%';
     }
 
     function updateCounts(explodingList, earlyList, allList, newWordsList, isFiltered = false) {
@@ -515,6 +556,30 @@
         if (b.prediction_score !== a.prediction_score) return b.prediction_score - a.prediction_score;
         return b.growth_rate - a.growth_rate;
       })[0];
+    }
+
+    function fillNewWordPlatformsFromTrends(newWordsList, trendLists) {
+      const platformByKeyword = new Map();
+
+      trendLists
+        .flat()
+        .forEach(item => {
+          const keyword = String(item.keyword ?? '').trim().toLowerCase();
+          const platforms = String(item.platforms ?? '').trim();
+
+          if (!keyword || !platforms || platformByKeyword.has(keyword)) return;
+          platformByKeyword.set(keyword, platforms);
+        });
+
+      return newWordsList.map(item => {
+        if (item.platforms) return item;
+
+        const fallbackPlatforms = platformByKeyword.get(String(item.token ?? '').trim().toLowerCase()) ?? 'YouTube, google_trends';
+        return {
+          ...item,
+          platforms: fallbackPlatforms
+        };
+      });
     }
 
     function updateExplodingTable(data) {
@@ -765,7 +830,10 @@
         allData = Array.isArray(all) ? all.map(normalizeTrend) : [];
 
         const rawNewWords = Array.isArray(newWords) ? newWords : (newWords?.items || []);
-        newWordsData = rawNewWords.map(normalizeNewWord);
+        newWordsData = fillNewWordPlatformsFromTrends(
+          rawNewWords.map(normalizeNewWord),
+          [explodingData, earlyData, allData]
+        );
 
         filteredExplodingData = [...explodingData];
         filteredEarlyData = [...earlyData];

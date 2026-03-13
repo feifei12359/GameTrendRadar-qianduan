@@ -4,12 +4,41 @@ const STAGE_STYLES = {
   normal: 'border-slate-200 bg-slate-100 text-slate-600',
 };
 
+const STAGE_LABELS = {
+  exploding: '爆发',
+  early: '早期',
+  normal: '普通',
+};
+
+const SOURCE_LABELS = {
+  youtube: 'YouTube',
+  roblox: 'Roblox',
+  google_trends: 'Google Trends',
+};
+
+const REGION_LABELS = {
+  global: '全球',
+  us: '美国',
+};
+
 function formatScore(score) {
   if (typeof score !== 'number') {
     return '0.0';
   }
 
   return score.toFixed(1);
+}
+
+function translateInsight(stage) {
+  if (stage === 'exploding') {
+    return '该关键词正在显示强劲的爆发势头，建议优先关注。';
+  }
+
+  if (stage === 'early') {
+    return '该关键词正处于早期增长阶段，建议持续观察。';
+  }
+
+  return '该关键词当前处于基础观察阶段，可继续跟踪后续变化。';
 }
 
 export default function TrendList({ trends }) {
@@ -25,13 +54,13 @@ export default function TrendList({ trends }) {
 
   return (
     <div className="overflow-hidden rounded-3xl border border-slate-200">
-      <div className="grid grid-cols-[1.2fr_0.5fr_0.6fr_0.7fr_0.7fr_1.5fr] gap-4 bg-slate-50 px-6 py-4 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-        <span>Keyword</span>
-        <span>Score</span>
-        <span>Stage</span>
-        <span>Source</span>
-        <span>Region</span>
-        <span>AI Insight</span>
+      <div className="grid grid-cols-[1.2fr_0.5fr_0.6fr_0.7fr_0.7fr_1.5fr] gap-4 bg-slate-50 px-6 py-4 text-xs font-semibold tracking-[0.12em] text-slate-500">
+        <span>关键词</span>
+        <span>分数</span>
+        <span>阶段</span>
+        <span>来源</span>
+        <span>地区</span>
+        <span>AI 洞察</span>
       </div>
 
       <div className="divide-y divide-slate-100 bg-white">
@@ -44,16 +73,20 @@ export default function TrendList({ trends }) {
             <div className="font-semibold text-slate-900">{formatScore(trend.score)}</div>
             <div>
               <span
-                className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold capitalize ${
+                className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold ${
                   STAGE_STYLES[trend.stage] || STAGE_STYLES.normal
                 }`}
               >
-                {trend.stage}
+                {STAGE_LABELS[trend.stage] || '普通'}
               </span>
             </div>
-            <div className="capitalize text-slate-600">{trend.source || '-'}</div>
-            <div className="text-slate-600">{trend.region || '-'}</div>
-            <div className="leading-6 text-slate-600">{trend.aiInsight || '-'}</div>
+            <div className="text-slate-600">
+              {SOURCE_LABELS[trend.source] || trend.source || '-'}
+            </div>
+            <div className="text-slate-600">
+              {REGION_LABELS[trend.region] || trend.region || '-'}
+            </div>
+            <div className="leading-6 text-slate-600">{translateInsight(trend.stage)}</div>
           </div>
         ))}
       </div>

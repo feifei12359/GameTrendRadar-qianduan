@@ -1,20 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { API_BASE, analyzeNewWords, getNewWords, getTrends, runDailyJob } from './lib/api';
+import { analyzeNewWords, getNewWords, getTrends, runDailyJob } from './lib/api';
+import InsightPanel from './components/InsightPanel';
+import StatsCards from './components/StatsCards';
 import TrendList from './components/TrendList';
-
-function StatCard({ label, value, accent, description }) {
-  return (
-    <div className="flex min-h-[168px] flex-col justify-between rounded-3xl border border-slate-200/80 bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.05)]">
-      <div className="space-y-3">
-        <p className="text-sm font-medium tracking-[0.08em] text-slate-500">{label}</p>
-        <p className={`text-5xl font-semibold tracking-tight ${accent}`}>{value}</p>
-      </div>
-      <p className="text-sm leading-6 text-slate-500">{description}</p>
-    </div>
-  );
-}
 
 export default function Home() {
   const [trends, setTrends] = useState([]);
@@ -34,8 +24,10 @@ export default function Home() {
       const trendsData = await getTrends();
       const newWordsData = await getNewWords();
 
-      console.log('trends:', trendsData);
-      console.log('newWords:', newWordsData);
+      if (import.meta.env.DEV) {
+        console.log('trends:', trendsData);
+        console.log('newWords:', newWordsData);
+      }
 
       setTrends(Array.isArray(trendsData) ? trendsData : []);
       setNewWords(Array.isArray(newWordsData) ? newWordsData : []);
@@ -56,7 +48,7 @@ export default function Home() {
       await loadData();
     } catch (err) {
       console.error(err);
-      setError('加载仪表盘数据失败');
+      setError('运行分析失败');
     } finally {
       setActionLoading('');
     }
@@ -70,7 +62,7 @@ export default function Home() {
       await loadData();
     } catch (err) {
       console.error(err);
-      setError('加载仪表盘数据失败');
+      setError('运行日常任务失败');
     } finally {
       setActionLoading('');
     }
@@ -115,42 +107,12 @@ export default function Home() {
           </div>
         </header>
 
-        {import.meta.env.DEV ? (
-          <div className="rounded-2xl border border-amber-300 bg-amber-50 px-5 py-4 text-sm text-slate-800">
-            <div className="font-semibold">Debug Panel</div>
-            <div className="mt-2">API_BASE: {API_BASE}</div>
-            <div>trends.length: {trends.length}</div>
-            <div>newWords.length: {newWords.length}</div>
-            <div>trends[0]?.keyword: {trends[0]?.keyword || '-'}</div>
-          </div>
-        ) : null}
-
-        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          <StatCard
-            label="爆发趋势"
-            value={exploding}
-            accent="text-red-600"
-            description="当前检测到的爆发趋势"
-          />
-          <StatCard
-            label="早期趋势"
-            value={early}
-            accent="text-orange-500"
-            description="当前检测到的早期趋势"
-          />
-          <StatCard
-            label="全部趋势"
-            value={total}
-            accent="text-sky-700"
-            description="当前趋势总数"
-          />
-          <StatCard
-            label="新词"
-            value={newWordCount}
-            accent="text-emerald-600"
-            description="当前新词总数"
-          />
-        </section>
+        <StatsCards
+          exploding={exploding}
+          early={early}
+          total={total}
+          newWordCount={newWordCount}
+        />
 
         {loading ? (
           <div className="rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm text-slate-700 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
@@ -164,21 +126,25 @@ export default function Home() {
           </div>
         ) : null}
 
-        <section className="rounded-[28px] border border-slate-200/80 bg-white p-6 shadow-[0_14px_40px_rgba(15,23,42,0.05)]">
-          <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h2 className="text-2xl font-semibold text-slate-950">趋势排行榜</h2>
-              <p className="mt-2 text-sm text-slate-600">
-                按趋势分数从高到低展示当前信号强度与来源信息
-              </p>
+        <div className="grid gap-6 lg:grid-cols-[1.8fr_1fr]">
+          <section className="rounded-[28px] border border-slate-200/80 bg-white p-6 shadow-[0_14px_40px_rgba(15,23,42,0.05)]">
+            <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h2 className="text-2xl font-semibold text-slate-950">趋势排行榜</h2>
+                <p className="mt-2 text-sm text-slate-600">
+                  按趋势分数从高到低展示当前信号强度与来源信息
+                </p>
+              </div>
+              <div className="inline-flex w-fit items-center rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-semibold tracking-[0.18em] text-slate-500">
+                {`${trends.length} 条记录`}
+              </div>
             </div>
-            <div className="inline-flex w-fit items-center rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
-              {`${trends.length} Records`}
-            </div>
-          </div>
 
-          <TrendList trends={trends} />
-        </section>
+            <TrendList trends={trends} />
+          </section>
+
+          <InsightPanel exploding={exploding} early={early} />
+        </div>
       </div>
     </div>
   );

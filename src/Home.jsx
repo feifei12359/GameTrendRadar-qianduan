@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react';
 import {
   analyzeNewWords,
   getAllTrends,
-  getEarlyTrends,
-  getExplodingTrends,
   getNewWords,
   runDailyJob,
 } from './api/client';
@@ -21,39 +19,32 @@ function StatCard({ label, value, accent }) {
 export default function Home() {
   const [newWords, setNewWords] = useState([]);
   const [trends, setTrends] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [actionLoading, setActionLoading] = useState('');
   const [error, setError] = useState('');
-  const [lastUpdated, setLastUpdated] = useState('');
 
   useEffect(() => {
     loadData();
   }, []);
 
   async function loadData() {
+    setLoading(true);
     try {
-      setLoading(true);
-      setError('');
-
-      const [words, allTrends, exploding, early] = await Promise.all([
+      const [newWordsData, trendsData] = await Promise.all([
         getNewWords(),
         getAllTrends(),
-        getExplodingTrends(),
-        getEarlyTrends(),
       ]);
 
-      const safeNewWords = Array.isArray(words) ? words : [];
-      const safeTrends = Array.isArray(allTrends) ? allTrends : [];
+      console.log('newWordsData:', newWordsData);
+      console.log('trendsData:', trendsData);
+      console.log('trends:', trendsData);
 
-      console.log('trends:', safeTrends);
-      console.log('exploding trends:', exploding);
-      console.log('early trends:', early);
-
-      setNewWords(safeNewWords);
-      setTrends(safeTrends);
-      setLastUpdated(new Date().toLocaleString());
+      setNewWords(Array.isArray(newWordsData) ? newWordsData : []);
+      setTrends(Array.isArray(trendsData) ? trendsData : []);
+      setError('');
     } catch (loadError) {
-      setError(loadError.message || 'Failed to load dashboard data.');
+      console.error(loadError);
+      setError('Failed to load dashboard data');
     } finally {
       setLoading(false);
     }
@@ -87,8 +78,8 @@ export default function Home() {
 
   const explodingCount = trends.filter((trend) => trend.stage === 'exploding').length;
   const earlyCount = trends.filter((trend) => trend.stage === 'early').length;
-  const totalCount = trends.length;
-  const newWordsCount = newWords.length;
+  const totalTrends = trends.length;
+  const totalNewWords = newWords.length;
 
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,#f8fafc_0%,#e2e8f0_100%)] text-slate-900">
@@ -138,9 +129,15 @@ export default function Home() {
         <div className="mb-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <StatCard label="Exploding Trends" value={explodingCount} accent="text-red-600" />
           <StatCard label="Early Trends" value={earlyCount} accent="text-orange-500" />
-          <StatCard label="Total Trends" value={totalCount} accent="text-sky-700" />
-          <StatCard label="New Words" value={newWordsCount} accent="text-emerald-600" />
+          <StatCard label="Total Trends" value={totalTrends} accent="text-sky-700" />
+          <StatCard label="New Words" value={totalNewWords} accent="text-emerald-600" />
         </div>
+
+        {loading ? (
+          <div className="mb-6 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm text-slate-700">
+            Loading dashboard...
+          </div>
+        ) : null}
 
         {error ? (
           <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-700">
@@ -163,7 +160,13 @@ export default function Home() {
             </div>
 
             <div className="mt-6">
-              <TrendList trends={trends} />
+              {trends.length === 0 && !loading ? (
+                <div className="rounded-3xl border border-dashed border-slate-300 bg-white/70 px-6 py-12 text-center text-sm text-slate-500">
+                  No trends yet. Run analysis or daily job.
+                </div>
+              ) : (
+                <TrendList trends={trends} />
+              )}
             </div>
           </div>
 
@@ -203,7 +206,7 @@ export default function Home() {
                 <p>Early trends: {earlyCount} items</p>
                 <p>All trends endpoint: {trends.length} items</p>
                 <p>New words endpoint: {newWords.length} items</p>
-                <p>Last updated: {lastUpdated || 'Not loaded yet'}</p>
+                <p>Action state: {actionLoading || 'idle'}</p>
               </div>
             </div>
           </div>

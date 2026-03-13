@@ -21,8 +21,6 @@ function StatCard({ label, value, accent }) {
 export default function Home() {
   const [newWords, setNewWords] = useState([]);
   const [trends, setTrends] = useState([]);
-  const [explodingTrends, setExplodingTrends] = useState([]);
-  const [earlyTrends, setEarlyTrends] = useState([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState('');
   const [error, setError] = useState('');
@@ -44,10 +42,15 @@ export default function Home() {
         getEarlyTrends(),
       ]);
 
-      setNewWords(Array.isArray(words) ? words : []);
-      setTrends(Array.isArray(allTrends) ? allTrends : []);
-      setExplodingTrends(Array.isArray(exploding) ? exploding : []);
-      setEarlyTrends(Array.isArray(early) ? early : []);
+      const safeNewWords = Array.isArray(words) ? words : [];
+      const safeTrends = Array.isArray(allTrends) ? allTrends : [];
+
+      console.log('trends:', safeTrends);
+      console.log('exploding trends:', exploding);
+      console.log('early trends:', early);
+
+      setNewWords(safeNewWords);
+      setTrends(safeTrends);
       setLastUpdated(new Date().toLocaleString());
     } catch (loadError) {
       setError(loadError.message || 'Failed to load dashboard data.');
@@ -82,10 +85,8 @@ export default function Home() {
     }
   }
 
-  const explodingCount =
-    explodingTrends.length || trends.filter((trend) => trend.stage === 'exploding').length;
-  const earlyCount =
-    earlyTrends.length || trends.filter((trend) => trend.stage === 'early').length;
+  const explodingCount = trends.filter((trend) => trend.stage === 'exploding').length;
+  const earlyCount = trends.filter((trend) => trend.stage === 'early').length;
   const totalCount = trends.length;
   const newWordsCount = newWords.length;
 
@@ -198,8 +199,8 @@ export default function Home() {
             <div className="rounded-3xl border border-slate-200 bg-slate-950 p-6 text-white shadow-sm">
               <h2 className="text-xl font-semibold">Dashboard Status</h2>
               <div className="mt-4 space-y-3 text-sm text-slate-300">
-                <p>Exploding endpoint: {explodingTrends.length} items</p>
-                <p>Early endpoint: {earlyTrends.length} items</p>
+                <p>Exploding trends: {explodingCount} items</p>
+                <p>Early trends: {earlyCount} items</p>
                 <p>All trends endpoint: {trends.length} items</p>
                 <p>New words endpoint: {newWords.length} items</p>
                 <p>Last updated: {lastUpdated || 'Not loaded yet'}</p>

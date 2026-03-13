@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { analyzeNewWords, getNewWords, getTrends, runDailyJob } from './lib/api';
 import InsightPanel from './components/InsightPanel';
 import StatsCards from './components/StatsCards';
@@ -72,6 +73,7 @@ export default function Home() {
   const early = trends.filter((trend) => trend.stage === 'early').length;
   const total = trends.length;
   const newWordCount = newWords.length;
+  const topTrends = [...trends].sort((a, b) => b.score - a.score).slice(0, 10);
 
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,#f8fafc_0%,#eef2f7_100%)] text-slate-900">
@@ -132,15 +134,24 @@ export default function Home() {
               <div>
                 <h2 className="text-2xl font-semibold text-slate-950">趋势排行榜</h2>
                 <p className="mt-2 text-sm text-slate-600">
-                  按趋势分数从高到低展示当前信号强度与来源信息
+                  首页展示当前分数最高的前 10 条趋势
                 </p>
               </div>
               <div className="inline-flex w-fit items-center rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-semibold tracking-[0.18em] text-slate-500">
-                {`${trends.length} 条记录`}
+                {`${topTrends.length} 条记录`}
               </div>
             </div>
 
-            <TrendList trends={trends} />
+            <TrendList trends={topTrends} />
+
+            <div className="mt-6 flex justify-center">
+              <Link
+                to="/trends"
+                className="inline-flex items-center rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
+              >
+                查看更多趋势
+              </Link>
+            </div>
           </section>
 
           <InsightPanel exploding={exploding} early={early} />

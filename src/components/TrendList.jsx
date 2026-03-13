@@ -41,13 +41,13 @@ function translateInsight(stage) {
   return '该关键词当前处于基础观察阶段，可继续跟踪后续变化。';
 }
 
-export default function TrendList({ trends }) {
+export default function TrendList({ trends, emptyMessage = '暂无趋势数据，请先运行分析或日常任务。' }) {
   const sortedTrends = [...trends].sort((a, b) => b.score - a.score);
 
   if (!sortedTrends.length) {
     return (
       <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50/80 px-6 py-14 text-center text-sm text-slate-500">
-        暂无趋势数据，请先运行分析或日常任务。
+        {emptyMessage}
       </div>
     );
   }

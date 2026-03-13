@@ -1,7 +1,7 @@
 const STAGE_STYLES = {
-  exploding: 'bg-red-100 text-red-700 border-red-200',
-  early: 'bg-orange-100 text-orange-700 border-orange-200',
-  normal: 'bg-gray-100 text-gray-700 border-gray-200',
+  exploding: 'border-red-200 bg-red-50 text-red-700',
+  early: 'border-orange-200 bg-orange-50 text-orange-700',
+  normal: 'border-slate-200 bg-slate-100 text-slate-600',
 };
 
 function formatScore(score) {
@@ -17,15 +17,15 @@ export default function TrendList({ trends }) {
 
   if (!sortedTrends.length) {
     return (
-      <div className="rounded-3xl border border-dashed border-slate-300 bg-white/70 px-6 py-12 text-center text-sm text-slate-500">
-        No trends loaded from API
+      <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50/80 px-6 py-14 text-center text-sm text-slate-500">
+        暂无趋势数据，请先运行分析或日常任务。
       </div>
     );
   }
 
   return (
-    <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
-      <div className="grid grid-cols-[1.2fr_0.5fr_0.6fr_0.7fr_0.7fr_1.5fr] gap-4 border-b border-slate-200 bg-slate-50 px-6 py-4 text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
+    <div className="overflow-hidden rounded-3xl border border-slate-200">
+      <div className="grid grid-cols-[1.2fr_0.5fr_0.6fr_0.7fr_0.7fr_1.5fr] gap-4 bg-slate-50 px-6 py-4 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
         <span>Keyword</span>
         <span>Score</span>
         <span>Stage</span>
@@ -34,16 +34,14 @@ export default function TrendList({ trends }) {
         <span>AI Insight</span>
       </div>
 
-      <div className="divide-y divide-slate-100">
+      <div className="divide-y divide-slate-100 bg-white">
         {sortedTrends.map((trend) => (
           <div
             key={trend.id}
             className="grid grid-cols-[1.2fr_0.5fr_0.6fr_0.7fr_0.7fr_1.5fr] gap-4 px-6 py-5 text-sm text-slate-700"
           >
             <div className="font-semibold text-slate-900">{trend.keyword}</div>
-
             <div className="font-semibold text-slate-900">{formatScore(trend.score)}</div>
-
             <div>
               <span
                 className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold capitalize ${
@@ -53,12 +51,9 @@ export default function TrendList({ trends }) {
                 {trend.stage}
               </span>
             </div>
-
             <div className="capitalize text-slate-600">{trend.source || '-'}</div>
-
             <div className="text-slate-600">{trend.region || '-'}</div>
-
-            <div className="text-slate-600">{trend.aiInsight || '-'}</div>
+            <div className="leading-6 text-slate-600">{trend.aiInsight || '-'}</div>
           </div>
         ))}
       </div>

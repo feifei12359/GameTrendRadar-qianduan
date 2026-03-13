@@ -15,6 +15,14 @@ function formatScore(score) {
 export default function TrendList({ trends }) {
   const sortedTrends = [...trends].sort((a, b) => b.score - a.score);
 
+  if (!sortedTrends.length) {
+    return (
+      <div className="rounded-3xl border border-dashed border-slate-300 bg-white/70 px-6 py-12 text-center text-sm text-slate-500">
+        No trends loaded from API
+      </div>
+    );
+  }
+
   return (
     <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
       <div className="grid grid-cols-[1.2fr_0.5fr_0.6fr_0.7fr_0.7fr_1.5fr] gap-4 border-b border-slate-200 bg-slate-50 px-6 py-4 text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">

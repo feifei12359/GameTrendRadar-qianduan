@@ -1,5 +1,8 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 import {
+  API_BASE,
   analyzeNewWords,
   getAllTrends,
   getNewWords,
@@ -30,10 +33,19 @@ export default function Home() {
   async function loadData() {
     setLoading(true);
     try {
-      const [newWordsData, trendsData] = await Promise.all([
-        getNewWords(),
-        getAllTrends(),
+      const [trendsRes, newWordsRes] = await Promise.all([
+        fetch(`${API_BASE}/trend/all`, { cache: 'no-store' }),
+        fetch(`${API_BASE}/new-words`, { cache: 'no-store' }),
       ]);
+
+      const trendsJson = await trendsRes.json();
+      const newWordsJson = await newWordsRes.json();
+
+      console.log('trends raw response', trendsJson);
+      console.log('new words raw response', newWordsJson);
+
+      const trendsData = trendsJson.data ?? [];
+      const newWordsData = newWordsJson.data ?? [];
 
       console.log('newWordsData:', newWordsData);
       console.log('trendsData:', trendsData);
@@ -133,6 +145,18 @@ export default function Home() {
           <StatCard label="New Words" value={totalNewWords} accent="text-emerald-600" />
         </div>
 
+        <div className="mb-6 rounded-2xl border border-amber-300 bg-amber-50 px-5 py-4 text-sm text-slate-800">
+          <div className="font-semibold">Debug Panel</div>
+          <div className="mt-2">API_BASE: {API_BASE}</div>
+          <div>trends.length: {trends.length}</div>
+          <div>newWords.length: {newWords.length}</div>
+          <div>trends[0]?.keyword: {trends[0]?.keyword || '-'}</div>
+          <div>newWords[0]?.keyword: {newWords[0]?.keyword || '-'}</div>
+          <pre className="mt-3 overflow-x-auto rounded-lg bg-slate-950 p-4 text-xs text-slate-100">
+            {JSON.stringify(trends.slice(0, 2), null, 2)}
+          </pre>
+        </div>
+
         {loading ? (
           <div className="mb-6 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm text-slate-700">
             Loading dashboard...
@@ -160,13 +184,7 @@ export default function Home() {
             </div>
 
             <div className="mt-6">
-              {trends.length === 0 && !loading ? (
-                <div className="rounded-3xl border border-dashed border-slate-300 bg-white/70 px-6 py-12 text-center text-sm text-slate-500">
-                  No trends yet. Run analysis or daily job.
-                </div>
-              ) : (
-                <TrendList trends={trends} />
-              )}
+              <TrendList trends={trends} />
             </div>
           </div>
 

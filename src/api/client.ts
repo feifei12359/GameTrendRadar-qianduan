@@ -1,4 +1,4 @@
-const API_BASE = 'https://gametrenradar-backend-production.up.railway.app/api';
+export const API_BASE = 'https://gametrenradar-backend-production.up.railway.app/api';
 
 export async function getNewWords() {
   const res = await fetch(`${API_BASE}/new-words`, { cache: 'no-store' });

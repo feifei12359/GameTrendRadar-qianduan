@@ -5,9 +5,9 @@ const STAGE_STYLES = {
 };
 
 const STAGE_LABELS = {
-  exploding: '爆发趋势',
-  early: '早期趋势',
-  normal: '普通趋势',
+  exploding: '爆发',
+  early: '早期',
+  normal: '普通',
 };
 
 const TYPE_STYLES = {
@@ -85,9 +85,9 @@ function renderType(type) {
 
 function SignalMetric({ label, value, valueClassName = 'text-slate-900' }) {
   return (
-    <div className="rounded-2xl bg-slate-50 px-4 py-3">
+    <div className="rounded-2xl bg-slate-50 px-4 py-4">
       <div className="text-xs font-semibold tracking-[0.08em] text-slate-400">{label}</div>
-      <div className={`mt-1 text-sm font-semibold ${valueClassName}`}>{value}</div>
+      <div className={`mt-2 text-base font-semibold ${valueClassName}`}>{value}</div>
     </div>
   );
 }
@@ -112,38 +112,36 @@ function CompactTrendList({ trends, emptyMessage }) {
         >
           <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div className="min-w-0">
-              <h3 className="text-xl font-semibold text-slate-950">{trend.keyword}</h3>
+              <div className="flex flex-wrap items-center gap-3">
+                <h3 className="text-2xl font-bold tracking-tight text-slate-950">{trend.keyword}</h3>
+                <span className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1.5 text-sm font-semibold text-slate-800">
+                  评分 {formatScore(getPrimaryScore(trend))}
+                </span>
+              </div>
               <div className="mt-3 flex flex-wrap gap-2">
                 {renderStage(trend.stage)}
                 {renderType(trend.type)}
               </div>
             </div>
-
-            <div className="rounded-2xl bg-slate-950 px-5 py-4 text-white lg:min-w-[160px]">
-              <div className="text-xs font-semibold tracking-[0.12em] text-slate-300">趋势评分</div>
-              <div className="mt-2 text-3xl font-semibold leading-none">
-                {formatScore(getPrimaryScore(trend))}
-              </div>
-            </div>
           </div>
 
           <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-5">
-            <SignalMetric label="24小时提及" value={trend.current24hCount ?? 0} />
+            <SignalMetric label="提及量" value={trend.current24hCount ?? 0} />
             <SignalMetric
               label="增长率"
               value={formatPercent(trend.growth_rate ?? trend.growthRate)}
               valueClassName="text-emerald-700"
             />
-            <SignalMetric label="增长加速度" value={formatAcceleration(trend.acceleration)} />
+            <SignalMetric label="加速度" value={formatAcceleration(trend.acceleration)} />
             <SignalMetric
-              label="Roblox游戏"
+              label="Roblox"
               value={formatRobloxStatus(trend.robloxExists)}
               valueClassName={trend.robloxExists ? 'text-emerald-700' : 'text-slate-500'}
             />
             <SignalMetric
-              label="Discover推荐"
+              label="Discover"
               value={formatDiscoverStatus(trend.discoverMatch)}
-              valueClassName={trend.discoverMatch ? 'text-emerald-700' : 'text-slate-500'}
+              valueClassName={trend.discoverMatch ? 'text-sky-700' : 'text-slate-500'}
             />
           </div>
         </article>
@@ -170,17 +168,16 @@ function DetailedTrendList({ trends, emptyMessage }) {
         >
           <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
             <div className="min-w-0 xl:max-w-[38%]">
-              <h3 className="text-2xl font-semibold tracking-tight text-slate-950">
-                {trend.keyword}
-              </h3>
+              <div className="flex flex-wrap items-center gap-3">
+                <h3 className="text-3xl font-bold tracking-tight text-slate-950">
+                  {trend.keyword}
+                </h3>
+                <span className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1.5 text-sm font-semibold text-slate-800">
+                  评分 {formatScore(getPrimaryScore(trend))}
+                </span>
+              </div>
 
               <div className="mt-4 space-y-2 text-sm text-slate-700">
-                <div>
-                  <span className="text-slate-500">趋势评分：</span>
-                  <span className="font-semibold text-slate-950">
-                    {formatScore(getPrimaryScore(trend))}
-                  </span>
-                </div>
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="text-slate-500">趋势阶段：</span>
                   {renderStage(trend.stage)}
@@ -193,22 +190,22 @@ function DetailedTrendList({ trends, emptyMessage }) {
             </div>
 
             <div className="grid flex-1 gap-3 sm:grid-cols-2 xl:grid-cols-5">
-              <SignalMetric label="24小时提及" value={trend.current24hCount ?? 0} />
+              <SignalMetric label="提及量" value={trend.current24hCount ?? 0} />
               <SignalMetric
                 label="增长率"
                 value={formatPercent(trend.growth_rate ?? trend.growthRate)}
                 valueClassName="text-emerald-700"
               />
-              <SignalMetric label="增长加速度" value={formatAcceleration(trend.acceleration)} />
+              <SignalMetric label="加速度" value={formatAcceleration(trend.acceleration)} />
               <SignalMetric
-                label="Roblox游戏"
+                label="Roblox"
                 value={formatRobloxStatus(trend.robloxExists)}
                 valueClassName={trend.robloxExists ? 'text-emerald-700' : 'text-slate-500'}
               />
               <SignalMetric
-                label="Discover推荐"
+                label="Discover"
                 value={formatDiscoverStatus(trend.discoverMatch)}
-                valueClassName={trend.discoverMatch ? 'text-emerald-700' : 'text-slate-500'}
+                valueClassName={trend.discoverMatch ? 'text-sky-700' : 'text-slate-500'}
               />
             </div>
           </div>

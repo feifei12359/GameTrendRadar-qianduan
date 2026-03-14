@@ -18,9 +18,16 @@ const TYPE_FILTER_OPTIONS = [
   { value: 'rng', label: '随机抽取 (RNG)' },
 ];
 
+const STAGE_FILTER_OPTIONS = [
+  { value: 'all', label: '全部' },
+  { value: 'exploding', label: '爆发趋势' },
+  { value: 'early', label: '早期趋势' },
+  { value: 'normal', label: '普通趋势' },
+];
+
 const SORT_OPTIONS = {
   score: {
-    label: '分数',
+    label: '趋势评分',
     getValue: (trend) =>
       typeof trend.prediction_score === 'number' ? trend.prediction_score : trend.score ?? 0,
   },
@@ -30,7 +37,7 @@ const SORT_OPTIONS = {
       typeof trend.growth_rate === 'number' ? trend.growth_rate : trend.growthRate ?? 0,
   },
   acceleration: {
-    label: '加速度',
+    label: '增长加速度',
     getValue: (trend) => trend.acceleration ?? 0,
   },
   current24hCount: {
@@ -151,13 +158,13 @@ export default function TrendsPage() {
         <header className="flex flex-col gap-4 rounded-[28px] border border-slate-200/80 bg-white px-6 py-6 shadow-[0_14px_40px_rgba(15,23,42,0.05)] sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.24em] text-sky-700">
-              Game Trend Radar
+              游戏趋势雷达
             </p>
             <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">
-              趋势详情
+              今日趋势
             </h1>
             <p className="mt-2 text-sm leading-6 text-slate-600">
-              查看真实趋势指标，并按阶段、类型、存在性和关键词进行筛选。
+              查看真实趋势指标，并按关键词、趋势阶段、游戏类型与 Roblox 信号进行筛选。
             </p>
           </div>
 
@@ -189,61 +196,62 @@ export default function TrendsPage() {
                 type="text"
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
-                placeholder="例如：simulator"
+                placeholder="输入关键词，例如：ninja simulator"
                 className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
               />
             </label>
 
             <label className="flex flex-col gap-2 text-sm font-medium text-slate-700">
-              阶段筛选
+              趋势阶段
               <select
                 value={stageFilter}
                 onChange={(event) => setStageFilter(event.target.value)}
                 className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
               >
-                <option value="all">全部</option>
-                <option value="exploding">爆发</option>
-                <option value="early">早期</option>
-                <option value="normal">普通</option>
-              </select>
-            </label>
-
-            <label className="flex flex-col gap-2 text-sm font-medium text-slate-700">
-              类型筛选
-              <select
-                value={typeFilter}
-                onChange={(event) => setTypeFilter(event.target.value)}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
-              >
-                {TYPE_FILTER_OPTIONS.map((type) => (
-                  <option key={type.value} value={type.value}>
-                    {type.label}
+                {STAGE_FILTER_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
                   </option>
                 ))}
               </select>
             </label>
 
             <label className="flex flex-col gap-2 text-sm font-medium text-slate-700">
-              Roblox 存在性
+              游戏类型
+              <select
+                value={typeFilter}
+                onChange={(event) => setTypeFilter(event.target.value)}
+                className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
+              >
+                {TYPE_FILTER_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className="flex flex-col gap-2 text-sm font-medium text-slate-700">
+              Roblox游戏
               <select
                 value={robloxFilter}
                 onChange={(event) => setRobloxFilter(event.target.value)}
                 className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
               >
                 <option value="all">全部</option>
-                <option value="only_existing">仅 Roblox 已存在</option>
+                <option value="only_existing">仅已存在</option>
               </select>
             </label>
 
             <label className="flex flex-col gap-2 text-sm font-medium text-slate-700">
-              Discover 命中
+              Discover推荐
               <select
                 value={discoverFilter}
                 onChange={(event) => setDiscoverFilter(event.target.value)}
                 className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
               >
                 <option value="all">全部</option>
-                <option value="only_discover">仅命中 Roblox Discover</option>
+                <option value="only_discover">仅已命中</option>
               </select>
             </label>
 
@@ -267,10 +275,8 @@ export default function TrendsPage() {
         <section className="rounded-[28px] border border-slate-200/80 bg-white p-6 shadow-[0_14px_40px_rgba(15,23,42,0.05)]">
           <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h2 className="text-2xl font-semibold text-slate-950">全部趋势</h2>
-              <p className="mt-2 text-sm text-slate-600">
-                共 {sortedTrends.length} 条记录，每页展示 {PAGE_SIZE} 条
-              </p>
+              <h2 className="text-2xl font-semibold text-slate-950">今日趋势</h2>
+              <p className="mt-2 text-sm text-slate-600">共 {sortedTrends.length} 个趋势</p>
             </div>
             <div className="inline-flex w-fit items-center rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-semibold tracking-[0.18em] text-slate-500">
               第 {currentPage} / {totalPages} 页
@@ -280,7 +286,7 @@ export default function TrendsPage() {
           <TrendList
             detailed
             trends={paginatedTrends}
-            emptyMessage="暂无符合筛选条件的趋势数据。"
+            emptyMessage="当前没有符合条件的趋势"
           />
 
           <div className="mt-6 flex items-center justify-between">

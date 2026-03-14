@@ -29,13 +29,13 @@ export default function StatsCards({ trendingNow, exploding, early, total }) {
         label="早期趋势"
         value={`${early} 个`}
         accent="text-orange-500"
-        description="已出现增长信号，仍在持续观察中的趋势。"
+        description="出现增长信号但尚未进入爆发阶段。"
       />
       <StatCard
         label="趋势总数"
         value={`${total} 个`}
         accent="text-sky-700"
-        description="当前纳入趋势雷达的全部信号数量。"
+        description="当前已纳入趋势雷达的全部趋势。"
       />
     </section>
   );

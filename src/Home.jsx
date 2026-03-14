@@ -40,7 +40,7 @@ function DashboardSkeleton() {
           />
         ))}
       </div>
-      <div className="h-52 animate-pulse rounded-[28px] border border-slate-200/80 bg-white shadow-[0_14px_40px_rgba(15,23,42,0.05)]" />
+      <div className="h-56 animate-pulse rounded-[28px] border border-slate-200/80 bg-white shadow-[0_14px_40px_rgba(15,23,42,0.05)]" />
       <div className="h-[520px] animate-pulse rounded-[28px] border border-slate-200/80 bg-white shadow-[0_14px_40px_rgba(15,23,42,0.05)]" />
     </div>
   );
@@ -142,8 +142,6 @@ export default function Home() {
     });
   }, [topTrends, sortKey]);
 
-  const trendingNow = summary.explodingCount;
-
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,#f8fafc_0%,#eef2f7_100%)] text-slate-900">
       <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-8 lg:px-8 lg:py-10">
@@ -156,7 +154,7 @@ export default function Home() {
               趋势雷达仪表盘
             </h1>
             <p className="max-w-2xl text-sm leading-6 text-slate-600">
-              聚合 YouTube 趋势、Roblox 搜索与 Discover 信号，帮助你快速发现正在增长的 Roblox 游戏趋势。
+              聚合 YouTube 视频趋势、Roblox 搜索结果与 Discover 推荐信号，帮助你快速识别正在增长的 Roblox 游戏趋势。
             </p>
           </div>
 
@@ -181,7 +179,7 @@ export default function Home() {
         </header>
 
         <StatsCards
-          trendingNow={trendingNow}
+          trendingNow={summary.explodingCount}
           exploding={summary.explodingCount}
           early={summary.earlyCount}
           total={summary.totalTrends}
@@ -197,10 +195,7 @@ export default function Home() {
           <DashboardSkeleton />
         ) : (
           <>
-            <InsightPanel
-              exploding={summary.explodingCount}
-              early={summary.earlyCount}
-            />
+            <InsightPanel exploding={summary.explodingCount} early={summary.earlyCount} />
 
             <section className="rounded-[28px] border border-slate-200/80 bg-white p-6 shadow-[0_14px_40px_rgba(15,23,42,0.05)]">
               <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
@@ -208,10 +203,9 @@ export default function Home() {
                   <p className="text-sm font-semibold uppercase tracking-[0.24em] text-sky-700">
                     今日趋势
                   </p>
-                  <h2 className="mt-2 text-2xl font-semibold text-slate-950">趋势排行榜</h2>
+                  <h2 className="mt-2 text-2xl font-semibold text-slate-950">今日趋势</h2>
                   <p className="mt-2 text-sm text-slate-600">
-                    共 {sortedTopTrends.length} 个趋势，默认展示当前评分最高的前{' '}
-                    {DISCOVERY_CONFIG.filtering.dashboardTopLimit} 条。
+                    共 {sortedTopTrends.length} 个趋势
                   </p>
                 </div>
 
@@ -242,7 +236,7 @@ export default function Home() {
                   to="/trends"
                   className="inline-flex items-center rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
                 >
-                  查看完整趋势页
+                  查看更多趋势
                 </Link>
               </div>
             </section>

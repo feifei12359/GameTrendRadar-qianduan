@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { DISCOVERY_CONFIG } from './config/discovery.config';
 import { analyzeNewWords, getStatsSummary, getTopTrends, runDailyJob } from './lib/api';
@@ -8,26 +8,40 @@ import InsightPanel from './components/InsightPanel';
 import StatsCards from './components/StatsCards';
 import TrendList from './components/TrendList';
 
+const SORT_OPTIONS = {
+  score: {
+    label: '趋势评分',
+    getValue: (trend) =>
+      typeof trend.prediction_score === 'number' ? trend.prediction_score : trend.score ?? 0,
+  },
+  growth_rate: {
+    label: '增长率',
+    getValue: (trend) =>
+      typeof trend.growth_rate === 'number' ? trend.growth_rate : trend.growthRate ?? 0,
+  },
+  acceleration: {
+    label: '增长加速度',
+    getValue: (trend) => trend.acceleration ?? 0,
+  },
+  current24hCount: {
+    label: '24小时提及',
+    getValue: (trend) => trend.current24hCount ?? 0,
+  },
+};
+
 function DashboardSkeleton() {
   return (
-    <div className="grid gap-6 lg:grid-cols-[1.8fr_1fr]">
-      <div className="rounded-[28px] border border-slate-200/80 bg-white p-6 shadow-[0_14px_40px_rgba(15,23,42,0.05)]">
-        <div className="h-7 w-40 animate-pulse rounded-xl bg-slate-200" />
-        <div className="mt-3 h-4 w-72 animate-pulse rounded-xl bg-slate-100" />
-        <div className="mt-6 space-y-3">
-          {Array.from({ length: 5 }).map((_, index) => (
-            <div key={index} className="h-16 animate-pulse rounded-2xl bg-slate-100" />
-          ))}
-        </div>
+    <div className="space-y-6">
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <div
+            key={index}
+            className="h-[168px] animate-pulse rounded-[28px] border border-slate-200/80 bg-white shadow-[0_14px_40px_rgba(15,23,42,0.05)]"
+          />
+        ))}
       </div>
-      <div className="rounded-[28px] border border-slate-200/80 bg-white p-6 shadow-[0_14px_40px_rgba(15,23,42,0.05)]">
-        <div className="h-7 w-32 animate-pulse rounded-xl bg-slate-200" />
-        <div className="mt-4 h-24 animate-pulse rounded-3xl bg-slate-900/10" />
-        <div className="mt-4 space-y-3">
-          <div className="h-16 animate-pulse rounded-2xl bg-slate-100" />
-          <div className="h-16 animate-pulse rounded-2xl bg-slate-100" />
-        </div>
-      </div>
+      <div className="h-52 animate-pulse rounded-[28px] border border-slate-200/80 bg-white shadow-[0_14px_40px_rgba(15,23,42,0.05)]" />
+      <div className="h-[520px] animate-pulse rounded-[28px] border border-slate-200/80 bg-white shadow-[0_14px_40px_rgba(15,23,42,0.05)]" />
     </div>
   );
 }
@@ -43,6 +57,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState('');
   const [error, setError] = useState('');
+  const [sortKey, setSortKey] = useState('score');
 
   useEffect(() => {
     loadData();
@@ -106,17 +121,42 @@ export default function Home() {
     }
   }
 
+  const sortedTopTrends = useMemo(() => {
+    const sorter = SORT_OPTIONS[sortKey] || SORT_OPTIONS.score;
+
+    return [...topTrends].sort((a, b) => {
+      const diff = sorter.getValue(b) - sorter.getValue(a);
+      if (diff !== 0) {
+        return diff;
+      }
+
+      const fallbackScore =
+        (typeof b.prediction_score === 'number' ? b.prediction_score : b.score ?? 0) -
+        (typeof a.prediction_score === 'number' ? a.prediction_score : a.score ?? 0);
+
+      if (fallbackScore !== 0) {
+        return fallbackScore;
+      }
+
+      return String(a.keyword ?? '').localeCompare(String(b.keyword ?? ''));
+    });
+  }, [topTrends, sortKey]);
+
+  const trendingNow = summary.explodingCount;
+
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,#f8fafc_0%,#eef2f7_100%)] text-slate-900">
       <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-8 lg:px-8 lg:py-10">
         <header className="flex flex-col gap-5 rounded-[28px] border border-slate-200/80 bg-white px-6 py-6 shadow-[0_14px_40px_rgba(15,23,42,0.05)] md:flex-row md:items-center md:justify-between">
           <div className="space-y-2">
             <p className="text-sm font-semibold uppercase tracking-[0.24em] text-sky-700">
-              Game Trend Radar
+              游戏趋势雷达
             </p>
-            <h1 className="text-3xl font-semibold tracking-tight text-slate-950">趋势仪表盘</h1>
+            <h1 className="text-3xl font-semibold tracking-tight text-slate-950">
+              趋势雷达仪表盘
+            </h1>
             <p className="max-w-2xl text-sm leading-6 text-slate-600">
-              发现 Roblox 新游戏趋势与爆发信号
+              聚合 YouTube 趋势、Roblox 搜索与 Discover 信号，帮助你快速发现正在增长的 Roblox 游戏趋势。
             </p>
           </div>
 
@@ -141,10 +181,10 @@ export default function Home() {
         </header>
 
         <StatsCards
+          trendingNow={trendingNow}
           exploding={summary.explodingCount}
           early={summary.earlyCount}
           total={summary.totalTrends}
-          newWordCount={summary.totalNewWords}
         />
 
         {error ? (
@@ -156,37 +196,57 @@ export default function Home() {
         {loading ? (
           <DashboardSkeleton />
         ) : (
-          <div className="grid gap-6 lg:grid-cols-[1.8fr_1fr]">
+          <>
+            <InsightPanel
+              exploding={summary.explodingCount}
+              early={summary.earlyCount}
+            />
+
             <section className="rounded-[28px] border border-slate-200/80 bg-white p-6 shadow-[0_14px_40px_rgba(15,23,42,0.05)]">
-              <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                 <div>
-                  <h2 className="text-2xl font-semibold text-slate-950">趋势排行榜</h2>
+                  <p className="text-sm font-semibold uppercase tracking-[0.24em] text-sky-700">
+                    今日趋势
+                  </p>
+                  <h2 className="mt-2 text-2xl font-semibold text-slate-950">趋势排行榜</h2>
                   <p className="mt-2 text-sm text-slate-600">
-                    {`首页展示当前分数最高的前 ${DISCOVERY_CONFIG.filtering.dashboardTopLimit} 条趋势`}
+                    共 {sortedTopTrends.length} 个趋势，默认展示当前评分最高的前{' '}
+                    {DISCOVERY_CONFIG.filtering.dashboardTopLimit} 条。
                   </p>
                 </div>
-                <div className="inline-flex w-fit items-center rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-semibold tracking-[0.18em] text-slate-500">
-                  {`${topTrends.length} 条记录`}
+
+                <div className="flex flex-col gap-2 sm:min-w-[220px]">
+                  <label className="text-sm font-medium text-slate-700">排序方式</label>
+                  <select
+                    value={sortKey}
+                    onChange={(event) => setSortKey(event.target.value)}
+                    className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
+                  >
+                    {Object.entries(SORT_OPTIONS).map(([key, option]) => (
+                      <option key={key} value={key}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
 
-              <TrendList trends={topTrends} />
+              <TrendList
+                detailed
+                trends={sortedTopTrends}
+                emptyMessage="当前没有符合条件的趋势"
+              />
 
               <div className="mt-6 flex justify-center">
                 <Link
                   to="/trends"
                   className="inline-flex items-center rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
                 >
-                  查看更多趋势
+                  查看完整趋势页
                 </Link>
               </div>
             </section>
-
-            <InsightPanel
-              exploding={summary.explodingCount}
-              early={summary.earlyCount}
-            />
-          </div>
+          </>
         )}
       </div>
     </div>

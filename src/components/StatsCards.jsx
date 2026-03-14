@@ -10,32 +10,32 @@ function StatCard({ label, value, accent, description }) {
   );
 }
 
-export default function StatsCards({ exploding, early, total, newWordCount }) {
+export default function StatsCards({ trendingNow, exploding, early, total }) {
   return (
     <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
       <StatCard
+        label="正在爆发"
+        value={`${trendingNow} 个`}
+        accent="text-rose-600"
+        description="当前最值得优先关注的趋势信号。"
+      />
+      <StatCard
         label="爆发趋势"
-        value={exploding}
+        value={`${exploding} 个`}
         accent="text-red-600"
-        description="当前检测到的爆发趋势"
+        description="近期提及量快速上升的趋势数量。"
       />
       <StatCard
         label="早期趋势"
-        value={early}
+        value={`${early} 个`}
         accent="text-orange-500"
-        description="当前检测到的早期趋势"
+        description="已出现增长信号，仍在持续观察中的趋势。"
       />
       <StatCard
-        label="全部趋势"
-        value={total}
+        label="趋势总数"
+        value={`${total} 个`}
         accent="text-sky-700"
-        description="当前趋势总数"
-      />
-      <StatCard
-        label="新词"
-        value={newWordCount}
-        accent="text-emerald-600"
-        description="当前新词总数"
+        description="当前纳入趋势雷达的全部信号数量。"
       />
     </section>
   );

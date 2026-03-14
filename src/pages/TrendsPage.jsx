@@ -9,13 +9,13 @@ import { getTrends } from '../lib/api';
 const PAGE_SIZE = DISCOVERY_CONFIG.filtering.trendsPageSize;
 
 const TYPE_FILTER_OPTIONS = [
-  'all',
-  'tycoon',
-  'simulator',
-  'survival',
-  'defense',
-  'battlegrounds',
-  'rng',
+  { value: 'all', label: '全部' },
+  { value: 'tycoon', label: '经营类 (Tycoon)' },
+  { value: 'simulator', label: '模拟类 (Simulator)' },
+  { value: 'survival', label: '生存类 (Survival)' },
+  { value: 'defense', label: '防御类 (Defense)' },
+  { value: 'battlegrounds', label: '战场对战 (Battlegrounds)' },
+  { value: 'rng', label: '随机抽取 (RNG)' },
 ];
 
 const SORT_OPTIONS = {
@@ -216,8 +216,8 @@ export default function TrendsPage() {
                 className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
               >
                 {TYPE_FILTER_OPTIONS.map((type) => (
-                  <option key={type} value={type}>
-                    {type === 'all' ? '全部' : type}
+                  <option key={type.value} value={type.value}>
+                    {type.label}
                   </option>
                 ))}
               </select>
@@ -231,7 +231,7 @@ export default function TrendsPage() {
                 className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
               >
                 <option value="all">全部</option>
-                <option value="only_existing">仅已存在</option>
+                <option value="only_existing">仅 Roblox 已存在</option>
               </select>
             </label>
 
@@ -243,7 +243,7 @@ export default function TrendsPage() {
                 className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
               >
                 <option value="all">全部</option>
-                <option value="only_discover">仅命中 Discover</option>
+                <option value="only_discover">仅命中 Roblox Discover</option>
               </select>
             </label>
 

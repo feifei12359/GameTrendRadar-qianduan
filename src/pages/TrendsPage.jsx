@@ -3,9 +3,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import TrendList from '../components/TrendList';
+import { DISCOVERY_CONFIG } from '../config/discovery.config';
 import { getTrends } from '../lib/api';
 
-const PAGE_SIZE = 20;
+const PAGE_SIZE = DISCOVERY_CONFIG.filtering.trendsPageSize;
 
 export default function TrendsPage() {
   const [trends, setTrends] = useState([]);
@@ -105,7 +106,7 @@ export default function TrendsPage() {
             </div>
           </div>
 
-          <TrendList trends={paginatedTrends} emptyMessage="No trends loaded from API" />
+          <TrendList trends={paginatedTrends} emptyMessage="暂无趋势数据，请先运行分析或日常任务。" />
 
           <div className="mt-6 flex items-center justify-between">
             <button

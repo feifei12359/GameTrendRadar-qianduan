@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { DISCOVERY_CONFIG } from './config/discovery.config';
 import { analyzeNewWords, getStatsSummary, getTopTrends, runDailyJob } from './lib/api';
 import InsightPanel from './components/InsightPanel';
 import StatsCards from './components/StatsCards';
@@ -53,7 +54,7 @@ export default function Home() {
     try {
       const [summaryData, topTrendsData] = await Promise.all([
         getStatsSummary(),
-        getTopTrends(10),
+        getTopTrends(DISCOVERY_CONFIG.filtering.dashboardTopLimit),
       ]);
 
       if (import.meta.env.DEV) {
@@ -161,7 +162,7 @@ export default function Home() {
                 <div>
                   <h2 className="text-2xl font-semibold text-slate-950">趋势排行榜</h2>
                   <p className="mt-2 text-sm text-slate-600">
-                    首页展示当前分数最高的前 10 条趋势
+                    {`首页展示当前分数最高的前 ${DISCOVERY_CONFIG.filtering.dashboardTopLimit} 条趋势`}
                   </p>
                 </div>
                 <div className="inline-flex w-fit items-center rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-semibold tracking-[0.18em] text-slate-500">

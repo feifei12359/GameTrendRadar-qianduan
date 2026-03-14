@@ -1,3 +1,5 @@
+import { DISCOVERY_CONFIG } from '../config/discovery.config';
+
 export const API_BASE = 'https://gametrenradar-backend-production.up.railway.app/api';
 
 export async function getNewWords() {
@@ -12,7 +14,7 @@ export async function getTrends() {
   return json.data ?? [];
 }
 
-export async function getTopTrends(limit = 10) {
+export async function getTopTrends(limit = DISCOVERY_CONFIG.filtering.dashboardTopLimit) {
   const res = await fetch(`${API_BASE}/trend/top?limit=${limit}`, { cache: 'no-store' });
   const json = await res.json();
   return json.data ?? [];

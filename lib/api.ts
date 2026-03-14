@@ -1,31 +1,50 @@
-const API = "https://gametrendradar-backend-production.up.railway.app";
+import { DISCOVERY_CONFIG } from '../config/discovery.config';
 
-export async function getExplodingTrends() {
-  const res = await fetch(`${API}/api/trend/exploding`);
-  if (!res.ok) throw new Error("Failed to fetch exploding trends");
-  return res.json();
-}
-
-export async function getEarlyTrends() {
-  const res = await fetch(`${API}/api/trend/early`);
-  if (!res.ok) throw new Error("Failed to fetch early trends");
-  return res.json();
-}
-
-export async function getAllTrends() {
-  const res = await fetch(`${API}/api/trend/all`);
-  if (!res.ok) throw new Error("Failed to fetch all trends");
-  return res.json();
-}
+export const API_BASE = 'https://gametrenradar-backend-production.up.railway.app/api';
 
 export async function getNewWords() {
-  const res = await fetch(`${API}/api/new-words`);
-  if (!res.ok) throw new Error("Failed to fetch new words");
+  const res = await fetch(`${API_BASE}/new-words`, { cache: 'no-store' });
+  const json = await res.json();
+  return json.data ?? [];
+}
+
+export async function getTrends() {
+  const res = await fetch(`${API_BASE}/trend/all`, { cache: 'no-store' });
+  const json = await res.json();
+  return json.data ?? [];
+}
+
+export async function getTopTrends(limit = DISCOVERY_CONFIG.filtering.dashboardTopLimit) {
+  const res = await fetch(`${API_BASE}/trend/top?limit=${limit}`, { cache: 'no-store' });
+  const json = await res.json();
+  return json.data ?? [];
+}
+
+export async function getStatsSummary() {
+  const res = await fetch(`${API_BASE}/stats/summary`, { cache: 'no-store' });
+  const json = await res.json();
+  return (
+    json.data ?? {
+      explodingCount: 0,
+      earlyCount: 0,
+      totalTrends: 0,
+      totalNewWords: 0,
+    }
+  );
+}
+
+export async function analyzeNewWords() {
+  const res = await fetch(`${API_BASE}/new-words/analyze`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+  });
   return res.json();
 }
 
 export async function runDailyJob() {
-  const res = await fetch(`${API}/api/daily-job`, { method: "POST" });
-  if (!res.ok) throw new Error("Failed to run daily job");
+  const res = await fetch(`${API_BASE}/daily-job`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+  });
   return res.json();
 }

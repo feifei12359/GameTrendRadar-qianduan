@@ -5,44 +5,33 @@ const STAGE_STYLES = {
 };
 
 const STAGE_LABELS = {
-  exploding: '爆发',
-  early: '早期',
-  normal: '普通',
+  exploding: '爆发趋势',
+  early: '早期趋势',
+  normal: '普通趋势',
 };
 
 const TYPE_STYLES = {
   tycoon: 'border-sky-200 bg-sky-50 text-sky-700',
   simulator: 'border-violet-200 bg-violet-50 text-violet-700',
-  obby: 'border-fuchsia-200 bg-fuchsia-50 text-fuchsia-700',
   survival: 'border-emerald-200 bg-emerald-50 text-emerald-700',
   defense: 'border-orange-200 bg-orange-50 text-orange-700',
   battlegrounds: 'border-red-200 bg-red-50 text-red-700',
   rng: 'border-cyan-200 bg-cyan-50 text-cyan-700',
+  obby: 'border-fuchsia-200 bg-fuchsia-50 text-fuchsia-700',
 };
 
 const TYPE_LABELS = {
-  tycoon: '经营类 (Tycoon)',
-  simulator: '模拟类 (Simulator)',
-  obby: '跑酷类 (Obby)',
-  survival: '生存类 (Survival)',
-  defense: '防御类 (Defense)',
-  battlegrounds: '战场对战 (Battlegrounds)',
-  rng: '随机抽取 (RNG)',
-};
-
-const SOURCE_LABELS = {
-  youtube: 'YouTube',
-  roblox: 'Roblox',
-  google_trends: 'Google Trends',
-};
-
-const REGION_LABELS = {
-  global: '全球',
-  us: '美国',
+  tycoon: '经营类',
+  simulator: '模拟类',
+  survival: '生存类',
+  defense: '防御类',
+  battlegrounds: '战场对战',
+  rng: '随机抽取',
+  obby: '跑酷类',
 };
 
 function formatScore(score) {
-  return (typeof score === 'number' ? score : 0).toFixed(1);
+  return Math.round(typeof score === 'number' ? score : 0);
 }
 
 function formatPercent(value) {
@@ -50,7 +39,8 @@ function formatPercent(value) {
 }
 
 function formatAcceleration(value) {
-  return (typeof value === 'number' ? value : 0).toFixed(2);
+  const numericValue = typeof value === 'number' ? value : 0;
+  return numericValue.toFixed(1);
 }
 
 function formatRobloxStatus(value) {
@@ -58,7 +48,7 @@ function formatRobloxStatus(value) {
 }
 
 function formatDiscoverStatus(value) {
-  return value ? '已命中' : '未命中';
+  return value ? '已推荐' : '未命中';
 }
 
 function getPrimaryScore(trend) {
@@ -72,7 +62,7 @@ function renderStage(stage) {
         STAGE_STYLES[stage] || STAGE_STYLES.normal
       }`}
     >
-      {STAGE_LABELS[stage] || '普通'}
+      {STAGE_LABELS[stage] || '普通趋势'}
     </span>
   );
 }
@@ -93,6 +83,15 @@ function renderType(type) {
   );
 }
 
+function SignalMetric({ label, value, valueClassName = 'text-slate-900' }) {
+  return (
+    <div className="rounded-2xl bg-slate-50 px-4 py-3">
+      <div className="text-xs font-semibold tracking-[0.08em] text-slate-400">{label}</div>
+      <div className={`mt-1 text-sm font-semibold ${valueClassName}`}>{value}</div>
+    </div>
+  );
+}
+
 function CompactTrendList({ trends, emptyMessage }) {
   const sortedTrends = [...trends].sort((a, b) => getPrimaryScore(b) - getPrimaryScore(a));
 
@@ -105,35 +104,50 @@ function CompactTrendList({ trends, emptyMessage }) {
   }
 
   return (
-    <div className="overflow-hidden rounded-3xl border border-slate-200">
-      <div className="grid grid-cols-[1.4fr_0.8fr_0.8fr_0.8fr_0.8fr_1.2fr] gap-4 bg-slate-50 px-6 py-4 text-xs font-semibold tracking-[0.12em] text-slate-500">
-        <span>关键词</span>
-        <span>趋势评分</span>
-        <span>趋势阶段</span>
-        <span>数据来源</span>
-        <span>地区</span>
-        <span>趋势分析</span>
-      </div>
+    <div className="space-y-4">
+      {sortedTrends.map((trend) => (
+        <article
+          key={trend.id}
+          className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-[0_10px_30px_rgba(15,23,42,0.04)]"
+        >
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+            <div className="min-w-0">
+              <h3 className="text-xl font-semibold text-slate-950">{trend.keyword}</h3>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {renderStage(trend.stage)}
+                {renderType(trend.type)}
+              </div>
+            </div>
 
-      <div className="divide-y divide-slate-100 bg-white">
-        {sortedTrends.map((trend) => (
-          <div
-            key={trend.id}
-            className="grid grid-cols-[1.4fr_0.8fr_0.8fr_0.8fr_0.8fr_1.2fr] gap-4 px-6 py-5 text-sm text-slate-700"
-          >
-            <div className="font-semibold text-slate-900">{trend.keyword}</div>
-            <div className="font-semibold text-slate-900">{formatScore(getPrimaryScore(trend))}</div>
-            <div>{renderStage(trend.stage)}</div>
-            <div className="text-slate-600">
-              {SOURCE_LABELS[trend.source] || trend.source || '-'}
+            <div className="rounded-2xl bg-slate-950 px-5 py-4 text-white lg:min-w-[160px]">
+              <div className="text-xs font-semibold tracking-[0.12em] text-slate-300">趋势评分</div>
+              <div className="mt-2 text-3xl font-semibold leading-none">
+                {formatScore(getPrimaryScore(trend))}
+              </div>
             </div>
-            <div className="text-slate-600">
-              {REGION_LABELS[trend.region] || trend.region || '-'}
-            </div>
-            <div className="leading-6 text-slate-600">{trend.aiInsight || '-'}</div>
           </div>
-        ))}
-      </div>
+
+          <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-5">
+            <SignalMetric label="24小时提及" value={trend.current24hCount ?? 0} />
+            <SignalMetric
+              label="增长率"
+              value={formatPercent(trend.growth_rate ?? trend.growthRate)}
+              valueClassName="text-emerald-700"
+            />
+            <SignalMetric label="增长加速度" value={formatAcceleration(trend.acceleration)} />
+            <SignalMetric
+              label="Roblox游戏"
+              value={formatRobloxStatus(trend.robloxExists)}
+              valueClassName={trend.robloxExists ? 'text-emerald-700' : 'text-slate-500'}
+            />
+            <SignalMetric
+              label="Discover推荐"
+              value={formatDiscoverStatus(trend.discoverMatch)}
+              valueClassName={trend.discoverMatch ? 'text-emerald-700' : 'text-slate-500'}
+            />
+          </div>
+        </article>
+      ))}
     </div>
   );
 }
@@ -148,123 +162,59 @@ function DetailedTrendList({ trends, emptyMessage }) {
   }
 
   return (
-    <>
-      <div className="space-y-4 lg:hidden">
-        {trends.map((trend) => (
-          <article
-            key={trend.id}
-            className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-[0_10px_30px_rgba(15,23,42,0.04)]"
-          >
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <h3 className="text-lg font-semibold text-slate-950">{trend.keyword}</h3>
-                <div className="mt-3 flex flex-wrap gap-2">
+    <div className="space-y-4">
+      {trends.map((trend) => (
+        <article
+          key={trend.id}
+          className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-[0_10px_30px_rgba(15,23,42,0.04)]"
+        >
+          <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
+            <div className="min-w-0 xl:max-w-[38%]">
+              <h3 className="text-2xl font-semibold tracking-tight text-slate-950">
+                {trend.keyword}
+              </h3>
+
+              <div className="mt-4 space-y-2 text-sm text-slate-700">
+                <div>
+                  <span className="text-slate-500">趋势评分：</span>
+                  <span className="font-semibold text-slate-950">
+                    {formatScore(getPrimaryScore(trend))}
+                  </span>
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-slate-500">趋势阶段：</span>
                   {renderStage(trend.stage)}
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-slate-500">游戏类型：</span>
                   {renderType(trend.type)}
                 </div>
               </div>
-              <div className="text-right">
-                <div className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">
-                  趋势评分
-                </div>
-                <div className="text-2xl font-semibold text-slate-950">
-                  {formatScore(getPrimaryScore(trend))}
-                </div>
-              </div>
             </div>
 
-            <div className="mt-5 grid grid-cols-2 gap-3 text-sm">
-              <div className="rounded-2xl bg-slate-50 px-4 py-3">
-                <div className="text-xs uppercase tracking-[0.12em] text-slate-400">24小时提及</div>
-                <div className="mt-1 font-semibold text-slate-900">{trend.current24hCount ?? 0}</div>
-              </div>
-              <div className="rounded-2xl bg-slate-50 px-4 py-3">
-                <div className="text-xs uppercase tracking-[0.12em] text-slate-400">前24小时提及</div>
-                <div className="mt-1 font-semibold text-slate-900">{trend.previous24hCount ?? 0}</div>
-              </div>
-              <div className="rounded-2xl bg-slate-50 px-4 py-3">
-                <div className="text-xs uppercase tracking-[0.12em] text-slate-400">总提及次数</div>
-                <div className="mt-1 font-semibold text-slate-900">{trend.totalCount ?? 0}</div>
-              </div>
-              <div className="rounded-2xl bg-slate-50 px-4 py-3">
-                <div className="text-xs uppercase tracking-[0.12em] text-slate-400">增长率</div>
-                <div className="mt-1 font-semibold text-slate-900">
-                  {formatPercent(trend.growth_rate ?? trend.growthRate)}
-                </div>
-              </div>
-              <div className="rounded-2xl bg-slate-50 px-4 py-3">
-                <div className="text-xs uppercase tracking-[0.12em] text-slate-400">增长加速度</div>
-                <div className="mt-1 font-semibold text-slate-900">
-                  {formatAcceleration(trend.acceleration)}
-                </div>
-              </div>
-              <div className="rounded-2xl bg-slate-50 px-4 py-3">
-                <div className="text-xs uppercase tracking-[0.12em] text-slate-400">游戏类型</div>
-                <div className="mt-1 font-semibold text-slate-900">
-                  {TYPE_LABELS[trend.type] || trend.type || '-'}
-                </div>
-              </div>
-              <div className="rounded-2xl bg-slate-50 px-4 py-3">
-                <div className="text-xs uppercase tracking-[0.12em] text-slate-400">Roblox游戏</div>
-                <div className="mt-1 font-semibold text-slate-900">
-                  {formatRobloxStatus(trend.robloxExists)}
-                </div>
-              </div>
-              <div className="rounded-2xl bg-slate-50 px-4 py-3">
-                <div className="text-xs uppercase tracking-[0.12em] text-slate-400">Discover推荐</div>
-                <div className="mt-1 font-semibold text-slate-900">
-                  {formatDiscoverStatus(trend.discoverMatch)}
-                </div>
-              </div>
+            <div className="grid flex-1 gap-3 sm:grid-cols-2 xl:grid-cols-5">
+              <SignalMetric label="24小时提及" value={trend.current24hCount ?? 0} />
+              <SignalMetric
+                label="增长率"
+                value={formatPercent(trend.growth_rate ?? trend.growthRate)}
+                valueClassName="text-emerald-700"
+              />
+              <SignalMetric label="增长加速度" value={formatAcceleration(trend.acceleration)} />
+              <SignalMetric
+                label="Roblox游戏"
+                value={formatRobloxStatus(trend.robloxExists)}
+                valueClassName={trend.robloxExists ? 'text-emerald-700' : 'text-slate-500'}
+              />
+              <SignalMetric
+                label="Discover推荐"
+                value={formatDiscoverStatus(trend.discoverMatch)}
+                valueClassName={trend.discoverMatch ? 'text-emerald-700' : 'text-slate-500'}
+              />
             </div>
-          </article>
-        ))}
-      </div>
-
-      <div className="hidden overflow-hidden rounded-3xl border border-slate-200 lg:block">
-        <div className="grid grid-cols-[1.4fr_0.9fr_0.95fr_0.85fr_0.85fr_0.95fr_0.95fr_1fr_1fr] gap-4 bg-slate-50 px-6 py-4 text-[11px] font-semibold tracking-[0.12em] text-slate-500">
-          <span>关键词</span>
-          <span>趋势评分</span>
-          <span>趋势阶段</span>
-          <span>游戏类型</span>
-          <span>24小时提及</span>
-          <span>增长率</span>
-          <span>增长加速度</span>
-          <span>Roblox游戏</span>
-          <span>Discover推荐</span>
-        </div>
-
-        <div className="divide-y divide-slate-100 bg-white">
-          {trends.map((trend) => (
-            <div
-              key={trend.id}
-              className="grid grid-cols-[1.4fr_0.9fr_0.95fr_0.85fr_0.85fr_0.95fr_0.95fr_1fr_1fr] gap-4 px-6 py-5 text-sm text-slate-700"
-            >
-              <div>
-                <div className="font-semibold text-slate-950">{trend.keyword}</div>
-                <div className="mt-1 text-xs text-slate-500">
-                  {SOURCE_LABELS[trend.source] || trend.source || '-'} · {REGION_LABELS[trend.region] || trend.region || '-'}
-                </div>
-              </div>
-              <div className="font-semibold text-slate-950">{formatScore(getPrimaryScore(trend))}</div>
-              <div>{renderStage(trend.stage)}</div>
-              <div>{renderType(trend.type)}</div>
-              <div className="font-semibold text-slate-900">{trend.current24hCount ?? 0}</div>
-              <div className="font-semibold text-emerald-700">
-                {formatPercent(trend.growth_rate ?? trend.growthRate)}
-              </div>
-              <div className="font-semibold text-slate-900">{formatAcceleration(trend.acceleration)}</div>
-              <div className={trend.robloxExists ? 'font-semibold text-emerald-700' : 'text-slate-500'}>
-                {formatRobloxStatus(trend.robloxExists)}
-              </div>
-              <div className={trend.discoverMatch ? 'font-semibold text-emerald-700' : 'text-slate-500'}>
-                {formatDiscoverStatus(trend.discoverMatch)}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </>
+          </div>
+        </article>
+      ))}
+    </div>
   );
 }
 

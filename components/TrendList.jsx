@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   formatAcceleration,
   formatDiscoverStatus,
@@ -50,14 +50,44 @@ function SignalMetric({ label, value, valueClassName = 'text-slate-900' }) {
 }
 
 function TrendCard({ trend, detailed = false }) {
-  const cardContent = (
-    <article className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-[0_10px_30px_rgba(15,23,42,0.04)] transition hover:-translate-y-0.5 hover:shadow-[0_16px_40px_rgba(15,23,42,0.08)]">
-      <div className={`flex flex-col gap-5 ${detailed ? 'xl:flex-row xl:items-start xl:justify-between' : ''}`}>
+  const navigate = useNavigate();
+  const targetPath = `/trends/${encodeURIComponent(trend.keyword ?? '')}`;
+
+  function handleOpenDetail() {
+    navigate(targetPath);
+  }
+
+  function handleKeyDown(event) {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      navigate(targetPath);
+    }
+  }
+
+  return (
+    <article
+      role="link"
+      tabIndex={0}
+      onClick={handleOpenDetail}
+      onKeyDown={handleKeyDown}
+      className="cursor-pointer rounded-[24px] border border-slate-200 bg-white p-5 shadow-[0_10px_30px_rgba(15,23,42,0.04)] transition hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-[0_16px_40px_rgba(15,23,42,0.08)] focus:outline-none focus-visible:ring-4 focus-visible:ring-sky-100"
+    >
+      <div
+        className={`flex flex-col gap-5 ${
+          detailed ? 'xl:flex-row xl:items-start xl:justify-between' : ''
+        }`}
+      >
         <div className={`min-w-0 ${detailed ? 'xl:max-w-[38%]' : ''}`}>
           <div className="flex flex-wrap items-center gap-3">
-            <h3 className={`${detailed ? 'text-3xl' : 'text-2xl'} font-bold tracking-tight text-slate-950`}>
+            <Link
+              to={targetPath}
+              onClick={(event) => event.stopPropagation()}
+              className={`${
+                detailed ? 'text-3xl' : 'text-2xl'
+              } font-bold tracking-tight text-slate-950 transition hover:text-sky-700 hover:underline underline-offset-4`}
+            >
               {trend.keyword}
-            </h3>
+            </Link>
             <span className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1.5 text-sm font-semibold text-slate-800">
               评分 {formatScore(getPrimaryScore(trend))}
             </span>
@@ -96,15 +126,6 @@ function TrendCard({ trend, detailed = false }) {
         </div>
       </div>
     </article>
-  );
-
-  return (
-    <Link
-      to={`/trends/${encodeURIComponent(trend.keyword ?? '')}`}
-      className="block focus:outline-none focus-visible:ring-4 focus-visible:ring-sky-100"
-    >
-      {cardContent}
-    </Link>
   );
 }
 

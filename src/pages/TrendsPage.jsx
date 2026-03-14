@@ -8,15 +8,54 @@ import { getTrends } from '../lib/api';
 
 const PAGE_SIZE = DISCOVERY_CONFIG.filtering.trendsPageSize;
 
+const TYPE_FILTER_OPTIONS = [
+  'all',
+  'tycoon',
+  'simulator',
+  'survival',
+  'defense',
+  'battlegrounds',
+  'rng',
+];
+
+const SORT_OPTIONS = {
+  score: {
+    label: 'Score',
+    getValue: (trend) => (typeof trend.prediction_score === 'number' ? trend.prediction_score : trend.score ?? 0),
+  },
+  growth_rate: {
+    label: 'Growth Rate',
+    getValue: (trend) => (typeof trend.growth_rate === 'number' ? trend.growth_rate : trend.growthRate ?? 0),
+  },
+  acceleration: {
+    label: 'Acceleration',
+    getValue: (trend) => trend.acceleration ?? 0,
+  },
+  current24hCount: {
+    label: '24h Mentions',
+    getValue: (trend) => trend.current24hCount ?? 0,
+  },
+};
+
 export default function TrendsPage() {
   const [trends, setTrends] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState('');
+  const [stageFilter, setStageFilter] = useState('all');
+  const [typeFilter, setTypeFilter] = useState('all');
+  const [robloxFilter, setRobloxFilter] = useState('all');
+  const [discoverFilter, setDiscoverFilter] = useState('all');
+  const [sortKey, setSortKey] = useState('score');
 
   useEffect(() => {
     loadData();
   }, []);
+
+  useEffect(() => {
+    setPage(1);
+  }, [search, stageFilter, typeFilter, robloxFilter, discoverFilter, sortKey]);
 
   async function loadData() {
     setLoading(true);
@@ -38,9 +77,56 @@ export default function TrendsPage() {
     }
   }
 
+  const filteredTrends = useMemo(() => {
+    const normalizedSearch = search.trim().toLowerCase();
+
+    return trends.filter((trend) => {
+      const keyword = String(trend.keyword ?? '').toLowerCase();
+
+      if (normalizedSearch && !keyword.includes(normalizedSearch)) {
+        return false;
+      }
+
+      if (stageFilter !== 'all' && trend.stage !== stageFilter) {
+        return false;
+      }
+
+      if (typeFilter !== 'all' && trend.type !== typeFilter) {
+        return false;
+      }
+
+      if (robloxFilter === 'only_existing' && !trend.robloxExists) {
+        return false;
+      }
+
+      if (discoverFilter === 'only_discover' && !trend.discoverMatch) {
+        return false;
+      }
+
+      return true;
+    });
+  }, [trends, search, stageFilter, typeFilter, robloxFilter, discoverFilter]);
+
   const sortedTrends = useMemo(() => {
-    return [...trends].sort((a, b) => b.score - a.score);
-  }, [trends]);
+    const sorter = SORT_OPTIONS[sortKey] || SORT_OPTIONS.score;
+
+    return [...filteredTrends].sort((a, b) => {
+      const diff = sorter.getValue(b) - sorter.getValue(a);
+      if (diff !== 0) {
+        return diff;
+      }
+
+      const fallbackScore =
+        (typeof b.prediction_score === 'number' ? b.prediction_score : b.score ?? 0) -
+        (typeof a.prediction_score === 'number' ? a.prediction_score : a.score ?? 0);
+
+      if (fallbackScore !== 0) {
+        return fallbackScore;
+      }
+
+      return String(a.keyword ?? '').localeCompare(String(b.keyword ?? ''));
+    });
+  }, [filteredTrends, sortKey]);
 
   const totalPages = Math.max(1, Math.ceil(sortedTrends.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
@@ -69,7 +155,7 @@ export default function TrendsPage() {
               趋势详情
             </h1>
             <p className="mt-2 text-sm leading-6 text-slate-600">
-              查看全部趋势数据，并按前端分页浏览
+              查看真实趋势指标，并按阶段、类型、存在性和关键词进行筛选。
             </p>
           </div>
 
@@ -94,6 +180,89 @@ export default function TrendsPage() {
         ) : null}
 
         <section className="rounded-[28px] border border-slate-200/80 bg-white p-6 shadow-[0_14px_40px_rgba(15,23,42,0.05)]">
+          <div className="grid gap-4 xl:grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr]">
+            <label className="flex flex-col gap-2 text-sm font-medium text-slate-700">
+              Search keyword
+              <input
+                type="text"
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                placeholder="例如：simulator"
+                className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
+              />
+            </label>
+
+            <label className="flex flex-col gap-2 text-sm font-medium text-slate-700">
+              Stage
+              <select
+                value={stageFilter}
+                onChange={(event) => setStageFilter(event.target.value)}
+                className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
+              >
+                <option value="all">all</option>
+                <option value="exploding">exploding</option>
+                <option value="early">early</option>
+                <option value="normal">normal</option>
+              </select>
+            </label>
+
+            <label className="flex flex-col gap-2 text-sm font-medium text-slate-700">
+              Type
+              <select
+                value={typeFilter}
+                onChange={(event) => setTypeFilter(event.target.value)}
+                className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
+              >
+                {TYPE_FILTER_OPTIONS.map((type) => (
+                  <option key={type} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className="flex flex-col gap-2 text-sm font-medium text-slate-700">
+              Roblox Exists
+              <select
+                value={robloxFilter}
+                onChange={(event) => setRobloxFilter(event.target.value)}
+                className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
+              >
+                <option value="all">all</option>
+                <option value="only_existing">only existing</option>
+              </select>
+            </label>
+
+            <label className="flex flex-col gap-2 text-sm font-medium text-slate-700">
+              Discover Match
+              <select
+                value={discoverFilter}
+                onChange={(event) => setDiscoverFilter(event.target.value)}
+                className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
+              >
+                <option value="all">all</option>
+                <option value="only_discover">only discover</option>
+              </select>
+            </label>
+
+            <label className="flex flex-col gap-2 text-sm font-medium text-slate-700">
+              Sort by
+              <select
+                value={sortKey}
+                onChange={(event) => setSortKey(event.target.value)}
+                className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
+              >
+                {Object.entries(SORT_OPTIONS).map(([key, option]) => (
+                  <option key={key} value={key}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+        </section>
+
+        <section className="rounded-[28px] border border-slate-200/80 bg-white p-6 shadow-[0_14px_40px_rgba(15,23,42,0.05)]">
           <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h2 className="text-2xl font-semibold text-slate-950">全部趋势</h2>
@@ -102,11 +271,15 @@ export default function TrendsPage() {
               </p>
             </div>
             <div className="inline-flex w-fit items-center rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-semibold tracking-[0.18em] text-slate-500">
-              {`第 ${currentPage} / ${totalPages} 页`}
+              第 {currentPage} / {totalPages} 页
             </div>
           </div>
 
-          <TrendList trends={paginatedTrends} emptyMessage="暂无趋势数据，请先运行分析或日常任务。" />
+          <TrendList
+            detailed
+            trends={paginatedTrends}
+            emptyMessage="暂无符合筛选条件的趋势数据。"
+          />
 
           <div className="mt-6 flex items-center justify-between">
             <button
@@ -118,7 +291,9 @@ export default function TrendsPage() {
               上一页
             </button>
 
-            <div className="text-sm text-slate-600">{`当前第 ${currentPage} 页，共 ${totalPages} 页`}</div>
+            <div className="text-sm text-slate-600">
+              当前第 {currentPage} 页，共 {totalPages} 页
+            </div>
 
             <button
               type="button"

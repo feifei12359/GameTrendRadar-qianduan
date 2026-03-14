@@ -20,19 +20,21 @@ const TYPE_FILTER_OPTIONS = [
 
 const SORT_OPTIONS = {
   score: {
-    label: 'Score',
-    getValue: (trend) => (typeof trend.prediction_score === 'number' ? trend.prediction_score : trend.score ?? 0),
+    label: '分数',
+    getValue: (trend) =>
+      typeof trend.prediction_score === 'number' ? trend.prediction_score : trend.score ?? 0,
   },
   growth_rate: {
-    label: 'Growth Rate',
-    getValue: (trend) => (typeof trend.growth_rate === 'number' ? trend.growth_rate : trend.growthRate ?? 0),
+    label: '增长率',
+    getValue: (trend) =>
+      typeof trend.growth_rate === 'number' ? trend.growth_rate : trend.growthRate ?? 0,
   },
   acceleration: {
-    label: 'Acceleration',
+    label: '加速度',
     getValue: (trend) => trend.acceleration ?? 0,
   },
   current24hCount: {
-    label: '24h Mentions',
+    label: '24小时提及',
     getValue: (trend) => trend.current24hCount ?? 0,
   },
 };
@@ -182,7 +184,7 @@ export default function TrendsPage() {
         <section className="rounded-[28px] border border-slate-200/80 bg-white p-6 shadow-[0_14px_40px_rgba(15,23,42,0.05)]">
           <div className="grid gap-4 xl:grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr]">
             <label className="flex flex-col gap-2 text-sm font-medium text-slate-700">
-              Search keyword
+              搜索关键词
               <input
                 type="text"
                 value={search}
@@ -193,21 +195,21 @@ export default function TrendsPage() {
             </label>
 
             <label className="flex flex-col gap-2 text-sm font-medium text-slate-700">
-              Stage
+              阶段筛选
               <select
                 value={stageFilter}
                 onChange={(event) => setStageFilter(event.target.value)}
                 className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
               >
-                <option value="all">all</option>
-                <option value="exploding">exploding</option>
-                <option value="early">early</option>
-                <option value="normal">normal</option>
+                <option value="all">全部</option>
+                <option value="exploding">爆发</option>
+                <option value="early">早期</option>
+                <option value="normal">普通</option>
               </select>
             </label>
 
             <label className="flex flex-col gap-2 text-sm font-medium text-slate-700">
-              Type
+              类型筛选
               <select
                 value={typeFilter}
                 onChange={(event) => setTypeFilter(event.target.value)}
@@ -215,38 +217,38 @@ export default function TrendsPage() {
               >
                 {TYPE_FILTER_OPTIONS.map((type) => (
                   <option key={type} value={type}>
-                    {type}
+                    {type === 'all' ? '全部' : type}
                   </option>
                 ))}
               </select>
             </label>
 
             <label className="flex flex-col gap-2 text-sm font-medium text-slate-700">
-              Roblox Exists
+              Roblox 存在性
               <select
                 value={robloxFilter}
                 onChange={(event) => setRobloxFilter(event.target.value)}
                 className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
               >
-                <option value="all">all</option>
-                <option value="only_existing">only existing</option>
+                <option value="all">全部</option>
+                <option value="only_existing">仅已存在</option>
               </select>
             </label>
 
             <label className="flex flex-col gap-2 text-sm font-medium text-slate-700">
-              Discover Match
+              Discover 命中
               <select
                 value={discoverFilter}
                 onChange={(event) => setDiscoverFilter(event.target.value)}
                 className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
               >
-                <option value="all">all</option>
-                <option value="only_discover">only discover</option>
+                <option value="all">全部</option>
+                <option value="only_discover">仅命中 Discover</option>
               </select>
             </label>
 
             <label className="flex flex-col gap-2 text-sm font-medium text-slate-700">
-              Sort by
+              排序方式
               <select
                 value={sortKey}
                 onChange={(event) => setSortKey(event.target.value)}

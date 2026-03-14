@@ -5,9 +5,9 @@ const STAGE_STYLES = {
 };
 
 const STAGE_LABELS = {
-  exploding: 'Exploding',
-  early: 'Early',
-  normal: 'Normal',
+  exploding: '爆发',
+  early: '早期',
+  normal: '普通',
 };
 
 const TYPE_STYLES = {
@@ -27,8 +27,8 @@ const SOURCE_LABELS = {
 };
 
 const REGION_LABELS = {
-  global: 'Global',
-  us: 'US',
+  global: '全球',
+  us: '美国',
 };
 
 function formatScore(score) {
@@ -118,7 +118,7 @@ function CompactTrendList({ trends, emptyMessage }) {
                   STAGE_STYLES[trend.stage] || STAGE_STYLES.normal
                 }`}
               >
-                {STAGE_LABELS[trend.stage] || 'Normal'}
+                {STAGE_LABELS[trend.stage] || '普通'}
               </span>
             </div>
             <div className="text-slate-600">
@@ -161,14 +161,14 @@ function DetailedTrendList({ trends, emptyMessage }) {
                       STAGE_STYLES[trend.stage] || STAGE_STYLES.normal
                     }`}
                   >
-                    {STAGE_LABELS[trend.stage] || 'Normal'}
+                    {STAGE_LABELS[trend.stage] || '普通'}
                   </span>
                   {renderType(trend.type)}
                 </div>
               </div>
               <div className="text-right">
                 <div className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">
-                  Score
+                  分数
                 </div>
                 <div className="text-2xl font-semibold text-slate-950">
                   {formatScore(getPrimaryScore(trend))}
@@ -178,27 +178,31 @@ function DetailedTrendList({ trends, emptyMessage }) {
 
             <div className="mt-5 grid grid-cols-2 gap-3 text-sm">
               <div className="rounded-2xl bg-slate-50 px-4 py-3">
-                <div className="text-xs uppercase tracking-[0.12em] text-slate-400">24h Mentions</div>
+                <div className="text-xs uppercase tracking-[0.12em] text-slate-400">24小时提及</div>
                 <div className="mt-1 font-semibold text-slate-900">{trend.current24hCount ?? 0}</div>
               </div>
               <div className="rounded-2xl bg-slate-50 px-4 py-3">
-                <div className="text-xs uppercase tracking-[0.12em] text-slate-400">Prev 24h</div>
+                <div className="text-xs uppercase tracking-[0.12em] text-slate-400">前24小时</div>
                 <div className="mt-1 font-semibold text-slate-900">{trend.previous24hCount ?? 0}</div>
               </div>
               <div className="rounded-2xl bg-slate-50 px-4 py-3">
-                <div className="text-xs uppercase tracking-[0.12em] text-slate-400">Total</div>
+                <div className="text-xs uppercase tracking-[0.12em] text-slate-400">总提及</div>
                 <div className="mt-1 font-semibold text-slate-900">{trend.totalCount ?? 0}</div>
               </div>
               <div className="rounded-2xl bg-slate-50 px-4 py-3">
-                <div className="text-xs uppercase tracking-[0.12em] text-slate-400">Growth</div>
-                <div className="mt-1 font-semibold text-slate-900">{formatPercent(trend.growth_rate ?? trend.growthRate)}</div>
+                <div className="text-xs uppercase tracking-[0.12em] text-slate-400">增长率</div>
+                <div className="mt-1 font-semibold text-slate-900">
+                  {formatPercent(trend.growth_rate ?? trend.growthRate)}
+                </div>
               </div>
               <div className="rounded-2xl bg-slate-50 px-4 py-3">
-                <div className="text-xs uppercase tracking-[0.12em] text-slate-400">Acceleration</div>
-                <div className="mt-1 font-semibold text-slate-900">{formatAcceleration(trend.acceleration)}</div>
+                <div className="text-xs uppercase tracking-[0.12em] text-slate-400">加速度</div>
+                <div className="mt-1 font-semibold text-slate-900">
+                  {formatAcceleration(trend.acceleration)}
+                </div>
               </div>
               <div className="rounded-2xl bg-slate-50 px-4 py-3">
-                <div className="text-xs uppercase tracking-[0.12em] text-slate-400">Signals</div>
+                <div className="text-xs uppercase tracking-[0.12em] text-slate-400">信号</div>
                 <div className="mt-1 font-semibold text-slate-900">
                   Roblox {formatBoolean(trend.robloxExists)} / Discover {formatBoolean(trend.discoverMatch)}
                 </div>
@@ -210,15 +214,15 @@ function DetailedTrendList({ trends, emptyMessage }) {
 
       <div className="hidden overflow-hidden rounded-3xl border border-slate-200 lg:block">
         <div className="grid grid-cols-[1.45fr_0.8fr_0.8fr_0.7fr_0.8fr_0.9fr_0.85fr_0.9fr_0.9fr_0.75fr_0.85fr] gap-4 bg-slate-50 px-6 py-4 text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">
-          <span>Keyword</span>
-          <span>Stage</span>
-          <span>Type</span>
-          <span>Score</span>
-          <span>24h Mentions</span>
-          <span>Prev 24h</span>
-          <span>Total</span>
-          <span>Growth</span>
-          <span>Acceleration</span>
+          <span>关键词</span>
+          <span>阶段</span>
+          <span>类型</span>
+          <span>分数</span>
+          <span>24小时提及</span>
+          <span>前24小时</span>
+          <span>总提及</span>
+          <span>增长率</span>
+          <span>加速度</span>
           <span>Roblox</span>
           <span>Discover</span>
         </div>
@@ -241,7 +245,7 @@ function DetailedTrendList({ trends, emptyMessage }) {
                     STAGE_STYLES[trend.stage] || STAGE_STYLES.normal
                   }`}
                 >
-                  {STAGE_LABELS[trend.stage] || 'Normal'}
+                  {STAGE_LABELS[trend.stage] || '普通'}
                 </span>
               </div>
               <div>{renderType(trend.type)}</div>
@@ -249,7 +253,9 @@ function DetailedTrendList({ trends, emptyMessage }) {
               <div className="font-semibold text-slate-900">{trend.current24hCount ?? 0}</div>
               <div className="text-slate-700">{trend.previous24hCount ?? 0}</div>
               <div className="text-slate-700">{trend.totalCount ?? 0}</div>
-              <div className="font-semibold text-emerald-700">{formatPercent(trend.growth_rate ?? trend.growthRate)}</div>
+              <div className="font-semibold text-emerald-700">
+                {formatPercent(trend.growth_rate ?? trend.growthRate)}
+              </div>
               <div className="font-semibold text-slate-900">{formatAcceleration(trend.acceleration)}</div>
               <div className={trend.robloxExists ? 'font-semibold text-emerald-700' : 'text-slate-400'}>
                 {formatBoolean(trend.robloxExists)}

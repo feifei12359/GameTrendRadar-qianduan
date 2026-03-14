@@ -72,11 +72,6 @@ export default function Home() {
         getTopTrends(DISCOVERY_CONFIG.filtering.dashboardTopLimit),
       ]);
 
-      if (import.meta.env.DEV) {
-        console.log('summary:', summaryData);
-        console.log('topTrends:', topTrendsData);
-      }
-
       setSummary({
         explodingCount: summaryData.explodingCount ?? 0,
         earlyCount: summaryData.earlyCount ?? 0,
@@ -154,7 +149,7 @@ export default function Home() {
               趋势雷达仪表盘
             </h1>
             <p className="max-w-2xl text-sm leading-6 text-slate-600">
-              聚合 YouTube 视频趋势、Roblox 搜索结果与 Discover 推荐信号，帮助你快速识别正在增长的 Roblox 游戏趋势。
+              聚合 YouTube 视频标题趋势、Roblox 搜索结果与 Discover 推荐信号，帮助你快速识别正在增长的 Roblox 游戏趋势。
             </p>
           </div>
 
@@ -204,9 +199,7 @@ export default function Home() {
                     今日趋势
                   </p>
                   <h2 className="mt-2 text-2xl font-semibold text-slate-950">今日趋势</h2>
-                  <p className="mt-2 text-sm text-slate-600">
-                    共 {sortedTopTrends.length} 个趋势
-                  </p>
+                  <p className="mt-2 text-sm text-slate-600">共 {sortedTopTrends.length} 个趋势</p>
                 </div>
 
                 <div className="flex flex-col gap-2 sm:min-w-[220px]">
@@ -225,11 +218,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <TrendList
-                detailed
-                trends={sortedTopTrends}
-                emptyMessage="当前没有符合条件的趋势"
-              />
+              <TrendList detailed trends={sortedTopTrends} emptyMessage="当前没有符合条件的趋势" />
 
               <div className="mt-6 flex justify-center">
                 <Link

@@ -71,11 +71,6 @@ export default function TrendsPage() {
 
     try {
       const trendsData = await getTrends();
-
-      if (import.meta.env.DEV) {
-        console.log('all trends:', trendsData);
-      }
-
       setTrends(Array.isArray(trendsData) ? trendsData : []);
       setError('');
     } catch (err) {

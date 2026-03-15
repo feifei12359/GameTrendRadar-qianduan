@@ -61,7 +61,11 @@ export function formatOpportunityScore(value) {
   return Math.round(typeof value === 'number' ? value : 0);
 }
 
-export function getOpportunityBadgeClass(score) {
+export function formatExplosionProbability(value) {
+  return Math.round(typeof value === 'number' ? value : 0);
+}
+
+export function getScoreBadgeClass(score) {
   if (score >= 80) {
     return 'bg-red-50 text-red-700 border border-red-200';
   }
@@ -77,12 +81,32 @@ export function getOpportunityBadgeClass(score) {
   return 'bg-slate-100 text-slate-600 border border-slate-200';
 }
 
+export function getExplosionProbabilityHint(score) {
+  if (score >= 80) {
+    return '高概率爆发';
+  }
+
+  if (score >= 60) {
+    return '较高爆发概率';
+  }
+
+  if (score >= 40) {
+    return '中等爆发概率';
+  }
+
+  return '低爆发概率';
+}
+
 export function getPrimaryScore(trend) {
   return typeof trend.prediction_score === 'number' ? trend.prediction_score : trend.score ?? 0;
 }
 
 export function getOpportunityScore(trend) {
   return typeof trend.opportunityScore === 'number' ? trend.opportunityScore : 0;
+}
+
+export function getExplosionProbability(trend) {
+  return typeof trend.explosionProbability === 'number' ? trend.explosionProbability : 0;
 }
 
 export function getStageLabel(stage, short = false) {

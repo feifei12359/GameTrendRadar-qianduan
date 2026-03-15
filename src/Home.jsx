@@ -48,6 +48,7 @@ function DashboardSkeleton() {
       </div>
       <div className="h-56 animate-pulse rounded-[28px] border border-slate-200/80 bg-white shadow-[0_14px_40px_rgba(15,23,42,0.05)]" />
       <div className="h-[360px] animate-pulse rounded-[28px] border border-slate-200/80 bg-white shadow-[0_14px_40px_rgba(15,23,42,0.05)]" />
+      <div className="h-[360px] animate-pulse rounded-[28px] border border-slate-200/80 bg-white shadow-[0_14px_40px_rgba(15,23,42,0.05)]" />
       <div className="h-[520px] animate-pulse rounded-[28px] border border-slate-200/80 bg-white shadow-[0_14px_40px_rgba(15,23,42,0.05)]" />
     </div>
   );
@@ -168,6 +169,27 @@ export default function Home() {
       .slice(0, 5);
   }, [allTrends]);
 
+  const topExplosionTrends = useMemo(() => {
+    return [...allTrends]
+      .sort((a, b) => {
+        const explosionDiff = (b.explosionProbability ?? 0) - (a.explosionProbability ?? 0);
+        if (explosionDiff !== 0) {
+          return explosionDiff;
+        }
+
+        const scoreDiff =
+          (typeof b.prediction_score === 'number' ? b.prediction_score : b.score ?? 0) -
+          (typeof a.prediction_score === 'number' ? a.prediction_score : a.score ?? 0);
+
+        if (scoreDiff !== 0) {
+          return scoreDiff;
+        }
+
+        return String(a.keyword ?? '').localeCompare(String(b.keyword ?? ''));
+      })
+      .slice(0, 5);
+  }, [allTrends]);
+
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,#f8fafc_0%,#eef2f7_100%)] text-slate-900">
       <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-8 lg:px-8 lg:py-10">
@@ -235,6 +257,20 @@ export default function Home() {
               </div>
 
               <TrendList trends={topOpportunityTrends} emptyMessage="当前没有可关注的趋势" />
+            </section>
+
+            <section className="rounded-[28px] border border-slate-200/80 bg-white p-6 shadow-[0_14px_40px_rgba(15,23,42,0.05)]">
+              <div className="mb-6 flex flex-col gap-2">
+                <p className="text-sm font-semibold uppercase tracking-[0.24em] text-orange-600">
+                  最可能爆发
+                </p>
+                <h2 className="text-2xl font-semibold text-slate-950">最可能爆发</h2>
+                <p className="text-sm text-slate-600">
+                  按爆发概率排序，优先展示短期内最可能进入爆发阶段的前 5 个趋势。
+                </p>
+              </div>
+
+              <TrendList trends={topExplosionTrends} emptyMessage="当前没有高爆发概率趋势" />
             </section>
 
             <section className="rounded-[28px] border border-slate-200/80 bg-white p-6 shadow-[0_14px_40px_rgba(15,23,42,0.05)]">

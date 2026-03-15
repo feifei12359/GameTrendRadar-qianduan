@@ -2,13 +2,16 @@ import { Link, useNavigate } from 'react-router-dom';
 import {
   formatAcceleration,
   formatDiscoverStatus,
+  formatExplosionProbability,
   formatOpportunityScore,
   formatPercent,
   formatRobloxStatus,
   formatScore,
-  getOpportunityBadgeClass,
+  getExplosionProbability,
+  getExplosionProbabilityHint,
   getOpportunityScore,
   getPrimaryScore,
+  getScoreBadgeClass,
   getStageLabel,
   getTypeLabel,
   STAGE_STYLES,
@@ -52,17 +55,19 @@ function SignalMetric({ label, value, valueClassName = 'text-slate-900' }) {
   );
 }
 
-function OpportunityBadge({ score }) {
-  const formattedScore = formatOpportunityScore(score);
+function ScoreBadge({ icon, label, score, suffix = '', title }) {
+  const formattedScore = Math.round(typeof score === 'number' ? score : 0);
 
   return (
     <span
-      className={`inline-flex items-center rounded-full px-3 py-1.5 text-sm font-semibold ${getOpportunityBadgeClass(
+      title={title}
+      className={`inline-flex items-center rounded-full px-3 py-1.5 text-sm font-semibold ${getScoreBadgeClass(
         formattedScore,
       )}`}
     >
-      <span className="mr-1">★</span>
-      机会评分 {formattedScore}
+      <span className="mr-1">{icon}</span>
+      {label} {formattedScore}
+      {suffix}
     </span>
   );
 }
@@ -70,6 +75,8 @@ function OpportunityBadge({ score }) {
 function TrendCard({ trend, detailed = false }) {
   const navigate = useNavigate();
   const targetPath = `/trends/${encodeURIComponent(trend.keyword ?? '')}`;
+  const opportunityScore = getOpportunityScore(trend);
+  const explosionProbability = getExplosionProbability(trend);
 
   function handleOpenDetail() {
     navigate(targetPath);
@@ -95,7 +102,7 @@ function TrendCard({ trend, detailed = false }) {
           detailed ? 'xl:flex-row xl:items-start xl:justify-between' : ''
         }`}
       >
-        <div className={`min-w-0 ${detailed ? 'xl:max-w-[38%]' : ''}`}>
+        <div className={`min-w-0 ${detailed ? 'xl:max-w-[42%]' : ''}`}>
           <div className="flex flex-wrap items-center gap-3">
             <Link
               to={targetPath}
@@ -109,7 +116,17 @@ function TrendCard({ trend, detailed = false }) {
             <span className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1.5 text-sm font-semibold text-slate-800">
               评分 {formatScore(getPrimaryScore(trend))}
             </span>
-            <OpportunityBadge score={getOpportunityScore(trend)} />
+          </div>
+
+          <div className="mt-3 flex flex-wrap gap-2">
+            <ScoreBadge icon="★" label="机会评分" score={formatOpportunityScore(opportunityScore)} />
+            <ScoreBadge
+              icon="🔥"
+              label="爆发概率"
+              score={formatExplosionProbability(explosionProbability)}
+              suffix="%"
+              title={getExplosionProbabilityHint(explosionProbability)}
+            />
           </div>
 
           <div className="mt-4 space-y-2 text-sm text-slate-700">

@@ -3,7 +3,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { DISCOVERY_CONFIG } from './config/discovery.config';
-import { analyzeNewWords, getStatsSummary, getTopTrends, runDailyJob } from './lib/api';
+import {
+  analyzeNewWords,
+  getStatsSummary,
+  getTopTrends,
+  getTrends,
+  runDailyJob,
+} from './lib/api';
 import InsightPanel from './components/InsightPanel';
 import StatsCards from './components/StatsCards';
 import TrendList from './components/TrendList';
@@ -41,6 +47,7 @@ function DashboardSkeleton() {
         ))}
       </div>
       <div className="h-56 animate-pulse rounded-[28px] border border-slate-200/80 bg-white shadow-[0_14px_40px_rgba(15,23,42,0.05)]" />
+      <div className="h-[360px] animate-pulse rounded-[28px] border border-slate-200/80 bg-white shadow-[0_14px_40px_rgba(15,23,42,0.05)]" />
       <div className="h-[520px] animate-pulse rounded-[28px] border border-slate-200/80 bg-white shadow-[0_14px_40px_rgba(15,23,42,0.05)]" />
     </div>
   );
@@ -48,6 +55,7 @@ function DashboardSkeleton() {
 
 export default function Home() {
   const [topTrends, setTopTrends] = useState([]);
+  const [allTrends, setAllTrends] = useState([]);
   const [summary, setSummary] = useState({
     explodingCount: 0,
     earlyCount: 0,
@@ -67,9 +75,10 @@ export default function Home() {
     setLoading(true);
 
     try {
-      const [summaryData, topTrendsData] = await Promise.all([
+      const [summaryData, topTrendsData, allTrendsData] = await Promise.all([
         getStatsSummary(),
         getTopTrends(DISCOVERY_CONFIG.filtering.dashboardTopLimit),
+        getTrends(),
       ]);
 
       setSummary({
@@ -79,6 +88,7 @@ export default function Home() {
         totalNewWords: summaryData.totalNewWords ?? 0,
       });
       setTopTrends(Array.isArray(topTrendsData) ? topTrendsData : []);
+      setAllTrends(Array.isArray(allTrendsData) ? allTrendsData : []);
       setError('');
     } catch (err) {
       console.error(err);
@@ -137,6 +147,27 @@ export default function Home() {
     });
   }, [topTrends, sortKey]);
 
+  const topOpportunityTrends = useMemo(() => {
+    return [...allTrends]
+      .sort((a, b) => {
+        const opportunityDiff = (b.opportunityScore ?? 0) - (a.opportunityScore ?? 0);
+        if (opportunityDiff !== 0) {
+          return opportunityDiff;
+        }
+
+        const scoreDiff =
+          (typeof b.prediction_score === 'number' ? b.prediction_score : b.score ?? 0) -
+          (typeof a.prediction_score === 'number' ? a.prediction_score : a.score ?? 0);
+
+        if (scoreDiff !== 0) {
+          return scoreDiff;
+        }
+
+        return String(a.keyword ?? '').localeCompare(String(b.keyword ?? ''));
+      })
+      .slice(0, 5);
+  }, [allTrends]);
+
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,#f8fafc_0%,#eef2f7_100%)] text-slate-900">
       <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-8 lg:px-8 lg:py-10">
@@ -191,6 +222,20 @@ export default function Home() {
         ) : (
           <>
             <InsightPanel exploding={summary.explodingCount} early={summary.earlyCount} />
+
+            <section className="rounded-[28px] border border-slate-200/80 bg-white p-6 shadow-[0_14px_40px_rgba(15,23,42,0.05)]">
+              <div className="mb-6 flex flex-col gap-2">
+                <p className="text-sm font-semibold uppercase tracking-[0.24em] text-rose-600">
+                  最值得关注
+                </p>
+                <h2 className="text-2xl font-semibold text-slate-950">最值得关注</h2>
+                <p className="text-sm text-slate-600">
+                  按机会评分排序，优先展示当前最值得投入关注的前 5 个趋势。
+                </p>
+              </div>
+
+              <TrendList trends={topOpportunityTrends} emptyMessage="当前没有可关注的趋势" />
+            </section>
 
             <section className="rounded-[28px] border border-slate-200/80 bg-white p-6 shadow-[0_14px_40px_rgba(15,23,42,0.05)]">
               <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">

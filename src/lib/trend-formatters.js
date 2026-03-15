@@ -57,8 +57,32 @@ export function formatDiscoverStatus(value) {
   return value ? '已推荐' : '未命中';
 }
 
+export function formatOpportunityScore(value) {
+  return Math.round(typeof value === 'number' ? value : 0);
+}
+
+export function getOpportunityBadgeClass(score) {
+  if (score >= 80) {
+    return 'bg-red-50 text-red-700 border border-red-200';
+  }
+
+  if (score >= 60) {
+    return 'bg-orange-50 text-orange-700 border border-orange-200';
+  }
+
+  if (score >= 40) {
+    return 'bg-amber-50 text-amber-700 border border-amber-200';
+  }
+
+  return 'bg-slate-100 text-slate-600 border border-slate-200';
+}
+
 export function getPrimaryScore(trend) {
   return typeof trend.prediction_score === 'number' ? trend.prediction_score : trend.score ?? 0;
+}
+
+export function getOpportunityScore(trend) {
+  return typeof trend.opportunityScore === 'number' ? trend.opportunityScore : 0;
 }
 
 export function getStageLabel(stage, short = false) {

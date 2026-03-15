@@ -2,9 +2,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import {
   formatAcceleration,
   formatDiscoverStatus,
+  formatOpportunityScore,
   formatPercent,
   formatRobloxStatus,
   formatScore,
+  getOpportunityBadgeClass,
+  getOpportunityScore,
   getPrimaryScore,
   getStageLabel,
   getTypeLabel,
@@ -46,6 +49,21 @@ function SignalMetric({ label, value, valueClassName = 'text-slate-900' }) {
       <div className="text-xs font-semibold tracking-[0.08em] text-slate-400">{label}</div>
       <div className={`mt-2 text-base font-semibold ${valueClassName}`}>{value}</div>
     </div>
+  );
+}
+
+function OpportunityBadge({ score }) {
+  const formattedScore = formatOpportunityScore(score);
+
+  return (
+    <span
+      className={`inline-flex items-center rounded-full px-3 py-1.5 text-sm font-semibold ${getOpportunityBadgeClass(
+        formattedScore,
+      )}`}
+    >
+      <span className="mr-1">★</span>
+      机会评分 {formattedScore}
+    </span>
   );
 }
 
@@ -91,6 +109,7 @@ function TrendCard({ trend, detailed = false }) {
             <span className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1.5 text-sm font-semibold text-slate-800">
               评分 {formatScore(getPrimaryScore(trend))}
             </span>
+            <OpportunityBadge score={getOpportunityScore(trend)} />
           </div>
 
           <div className="mt-4 space-y-2 text-sm text-slate-700">

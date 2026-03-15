@@ -25,6 +25,68 @@ function MetricCard({ label, value, valueClassName = 'text-slate-950' }) {
   );
 }
 
+function formatSourceLabel(source) {
+  const normalizedSource = String(source ?? '').trim().toLowerCase();
+  if (normalizedSource === 'youtube') {
+    return 'YouTube';
+  }
+
+  return source || 'YouTube';
+}
+
+function formatAiInsight(aiInsight, keyword) {
+  const rawInsight = String(aiInsight ?? '').trim();
+  if (!rawInsight) {
+    return '该趋势当前暂无更多分析说明。';
+  }
+
+  const containsChinese = /[\u4e00-\u9fff]/.test(rawInsight);
+  if (containsChinese) {
+    return rawInsight;
+  }
+
+  let translated = rawInsight;
+  const safeKeyword = keyword || '该关键词';
+
+  translated = translated.replace(
+    /Roblox search confirms it exists\./gi,
+    'Roblox 搜索已确认该游戏存在。',
+  );
+  translated = translated.replace(
+    /Roblox search has no strong match yet\./gi,
+    'Roblox 搜索暂未确认该游戏。',
+  );
+  translated = translated.replace(
+    /It is visible in Roblox Discover\./gi,
+    '该关键词已命中 Roblox Discover。',
+  );
+  translated = translated.replace(
+    /It is not matched in Roblox Discover\./gi,
+    '该关键词暂未命中 Roblox Discover。',
+  );
+  translated = translated.replace(
+    /is showing strong breakout momentum with (\d+)% growth concentration\./gi,
+    '当前呈现明显爆发趋势，近 24 小时增长占比约 $1%。',
+  );
+  translated = translated.replace(
+    /is emerging with (\d+)% growth concentration\./gi,
+    '当前处于早期增长阶段，近 24 小时增长占比约 $1%。',
+  );
+  translated = translated.replace(
+    /is currently a baseline signal with (\d+)% growth concentration\./gi,
+    '当前仍属于基础观察信号，近 24 小时增长占比约 $1%。',
+  );
+
+  translated = translated.replace(new RegExp(`^${safeKeyword}\\s+`, 'i'), '');
+  translated = translated.replace(/\s+/g, ' ').trim();
+
+  if (!/[\u4e00-\u9fff]/.test(translated)) {
+    return '该趋势当前暂无更多分析说明。';
+  }
+
+  return translated;
+}
+
 function StatusCard({ label, value, tone }) {
   const toneClassName =
     tone === 'green'
@@ -156,6 +218,28 @@ export default function TrendDetailPage() {
                   <h2 className="text-4xl font-bold tracking-tight text-slate-950">
                     {trend.keyword}
                   </h2>
+                  <div className="mt-4 flex flex-wrap gap-3">
+                    <a
+                      href={`https://www.youtube.com/results?search_query=${encodeURIComponent(
+                        trend.keyword ?? '',
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center rounded-full bg-red-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-400"
+                    >
+                      YouTube 视频
+                    </a>
+                    <a
+                      href={`https://trends.google.com/trends/explore?date=today%2012-m&q=${encodeURIComponent(
+                        trend.keyword ?? '',
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center rounded-full bg-sky-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-500"
+                    >
+                      Google Trends
+                    </a>
+                  </div>
                   <div className="mt-4 flex flex-wrap items-center gap-3">
                     <span className="inline-flex items-center rounded-full bg-slate-100 px-4 py-2 text-base font-semibold text-slate-800">
                       评分 {formatScore(trend.prediction_score ?? trend.score)}
@@ -191,7 +275,7 @@ export default function TrendDetailPage() {
                   valueClassName="text-emerald-700"
                 />
                 <MetricCard label="增长加速度" value={formatAcceleration(trend.acceleration)} />
-                <MetricCard label="数据来源" value={trend.source || 'YouTube'} />
+                <MetricCard label="数据来源" value={formatSourceLabel(trend.source)} />
               </div>
             </section>
 
@@ -214,7 +298,7 @@ export default function TrendDetailPage() {
             <section className="rounded-[28px] border border-slate-200/80 bg-white p-6 shadow-[0_14px_40px_rgba(15,23,42,0.05)]">
               <h3 className="text-xl font-semibold text-slate-950">趋势分析</h3>
               <p className="mt-4 whitespace-pre-line text-base leading-8 text-slate-700">
-                {trend.aiInsight?.trim() || '该趋势当前暂无更多分析说明。'}
+                {formatAiInsight(trend.aiInsight, trend.keyword)}
               </p>
             </section>
           </>

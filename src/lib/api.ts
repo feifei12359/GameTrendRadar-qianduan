@@ -20,6 +20,16 @@ export async function getTopTrends(limit = DISCOVERY_CONFIG.filtering.dashboardT
   return json.data ?? [];
 }
 
+export async function getTrendTimeline(keyword, days = 7) {
+  const query = new URLSearchParams({
+    keyword,
+    days: String(days),
+  });
+  const res = await fetch(`${API_BASE}/trend/timeline?${query.toString()}`, { cache: 'no-store' });
+  const json = await res.json();
+  return json.data ?? { keyword, days, points: [] };
+}
+
 export async function getStatsSummary() {
   const res = await fetch(`${API_BASE}/stats/summary`, { cache: 'no-store' });
   const json = await res.json();
